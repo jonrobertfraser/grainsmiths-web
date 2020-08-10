@@ -1,5 +1,16 @@
 # grainsmiths-vue
 
+# Additional packages I installed:
+
+* `$ npm i --save vue-router`
+* `$ npm i --save bootstrap-vue`
+* `$ npm i --save jquery`
+* `$ npm i --save @fortawesome/fontawesome-svg-core`
+* `$ npm i --save @fortawesome/free-solid-svg-icons`
+* `$ npm i --save @fortawesome/vue-fontawesome`
+* `$ npm i --save @fortawesome/free-brands-svg-icons`
+
+
 ## Project setup
 ```
 npm install
