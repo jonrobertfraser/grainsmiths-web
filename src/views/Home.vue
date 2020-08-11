@@ -1,13 +1,18 @@
 <template>
   <div class="container">
-    <div class="row"><p></p></div>
+    <tileview />
   </div>
 </template>
 
 <script>
 
+import Tileview from '../components/Tileview.vue'
+
 export default {
   name: "home",
+  components: {
+    Tileview
+  }
 };
 </script>
 

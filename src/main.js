@@ -11,6 +11,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 library.add(faInstagram)
 library.add(faRedditAlien)
 
+
 import 'bootstrap';
 import BootstrapVue from "bootstrap-vue"
 import "bootstrap/dist/css/bootstrap.min.css"
