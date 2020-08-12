@@ -4,10 +4,11 @@
       <!-- Spacer -->
     </div>
     <div class="card-columns">
-      <div v-for="n in 30" v-bind:key="n" class="card p-3 m-1 ">
+      <div v-for="product in products" v-bind:key="product.id" class="card p-0 mb-2">
+        <img v-bind:src="product.thumbnail_url" class="card-img-top" v-bind:alt="product.title">
         <blockquote class="card-block card-blockquote">
-          <p>Item #{{ n }}</p>
-          <p>Eleifend vehicula curabitur tortor litora suspendisse a a sociosqu molestie?</p>
+        <p>{{ product.title }}</p>
+
         </blockquote>
       </div>
     </div>
@@ -15,11 +16,36 @@
 </template>
 
 <script>
+import axios from 'axios'
 // https://grainsmiths-images.s3.amazonaws.com/thumbnails/
 
 export default {
   name: "tileview",
-  methods: {}
+  methods: {
+    refreshData() {
+      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/get_active_products'
+      console.log(url)
+
+      axios
+        .get(url, {headers: {
+    'Authorization': process.env.VUE_APP_GRAINSMITHS_API_KEY
+        }})
+        .then(response => {
+          this.products = response.data.products
+          console.log(this.products)
+        })
+    }
+  },
+  data () {
+    return {
+      products: []
+    }
+  },
+  mounted() {
+    this.refreshData()
+    console.log(process.env.VUE_APP_GRAINSMITHS_API_HOST)
+    console.log("Hello")
+  }
 };
 </script>
 
