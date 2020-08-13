@@ -13,7 +13,16 @@ const router = new VueRouter({
       meta: {
         title: 'Grainsmiths',
       }
-    }
+    },
+    {
+      path: '/explore/',
+      name: 'explore',
+      component: Home,
+      meta: {
+        title: 'Grainsmiths',
+      }
+    },
+
   ]
 })
 
