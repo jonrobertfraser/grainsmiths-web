@@ -6,11 +6,14 @@ import router from './router'
 // https://github.com/FortAwesome/vue-fontawesome#using-brand-icons
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faInstagram, faRedditAlien } from '@fortawesome/free-brands-svg-icons'
+import { faLink, faBookmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
+
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 library.add(faInstagram)
 library.add(faRedditAlien)
-
+library.add(faLink)
+library.add(faBookmark)
 
 import 'bootstrap';
 import BootstrapVue from "bootstrap-vue"
