@@ -1,23 +1,33 @@
 import Vue from "vue"
 import VueRouter from "vue-router"
-import Home from "./views/Home.vue"
+import ExploreView from "./views/ExploreView.vue"
 
 Vue.use(VueRouter)
 
 const router = new VueRouter({
+  mode: 'history',
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home,
+      name: 'Home',
+      component: ExploreView,
+      meta: {
+        title: 'Grainsmiths',
+      },
+      alias: '/explore/'
+    },
+    {
+      path: '/explore/:species',
+      name: 'ExploreViewSpecies',
+      component: ExploreView,
       meta: {
         title: 'Grainsmiths',
       }
     },
     {
-      path: '/explore/',
-      name: 'explore',
-      component: Home,
+      path: '/explore/:species/:tags',
+      name: 'ExploreViewSpeciesTags',
+      component: ExploreView,
       meta: {
         title: 'Grainsmiths',
       }

@@ -1,29 +1,30 @@
 <template>
   <div id="app">
-    <navbar />
+    <NavBar />
     <router-view />
   </div>
 </template>
 
 <script>
 
-import Navbar from './components/Navbar.vue'
+import NavBar from './components/NavBar.vue'
 
 export default {
   name: 'App',
   components: {
-    Navbar
+    NavBar
   }
 }
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Proxima Nova', helvetica, arial, sans-serif;
+  font-weight: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  font-size: 0.8em;
+  font-size: 1em;
 }
 
 @import 'http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css';
