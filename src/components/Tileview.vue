@@ -1,18 +1,21 @@
 <template>
   <div class="container-fluid">
+    Offset: {{ offset }}<br />
+    Length: {{ products.length }}<br />
+
     <!-- FILTER AREA -->
     <div class="text-center py-2 my-5">
       <div v-if="species_filters.length == 0 && tag_filters.length == 0"  class="badge filter-badge py-3 px-5 mx-3">
         click species or tags to filter
       </div>
       <div v-for="species in species_filters" v-bind:key="species" class="badge filter-badge py-3 px-5 mx-3">
-          <router-link v-on:click.native="removeSpecies(species)" v-bind:to="removeSpeciesForUrl(species)">
+          <router-link v-bind:to="removeSpeciesForUrl(species)">
             <font-awesome-icon :icon="['fas', 'window-close']" size="lg" class="remove-filter-button"/>
           </router-link>
           {{ cleanTagSpecies(species) }}
       </div>
       <div v-for="tag in tag_filters" v-bind:key="tag" class="badge filter-badge py-3 px-5 mx-3">
-          <router-link v-on:click.native="removeTag(tag)" v-bind:to="removeTagForUrl(tag)"><font-awesome-icon :icon="['fas', 'window-close']" size="lg" class="remove-filter-button"/>
+          <router-link v-bind:to="removeTagForUrl(tag)"><font-awesome-icon :icon="['fas', 'window-close']" size="lg" class="remove-filter-button"/>
           </router-link>
           {{ cleanTagSpecies(tag) }}
       </div>
@@ -23,29 +26,34 @@
     <div class="card-columns mx-0 mt-2">
       <div v-for="product in products" v-bind:key="product.id" class="card mx-0 p-0 mb-4">
 
+          <!-- PRODUCT IMAGE AND COUNT -->
           <div href="#" class="content text-center inline">
-
             <img v-bind:src="product.thumbnail_url" class="card-img-top rounded mb-1" v-bind:alt="product.title">
             <span v-if="product.count > 1" class="gs-badge badge count-badge position-absolute">
                 {{ product.count }} pieces
             </span>
           </div>
+          <!-- PRODUCT IMAGE AND COUNT -->
+
+          <!-- SPECIES, SUBSPECIES -->
           <p class="my-0 mx-1">
-            <router-link v-if="product.subspecies" v-bind:key="product.subspecies" @click.native="addSpecies(product.subspecies)" class="gs-badge badge species-badge" :to="addSpeciesForUrl(product.subspecies)">
-              {{ cleanTagSpecies(product.subspecies) }}
+            <span v-for="species in [product.subspecies, product.species]" v-bind:key="species">
+              <router-link v-if="species" v-bind:key="species" class="gs-badge badge species-badge" :to="addSpeciesForUrl(species)">
+              {{ cleanTagSpecies(species) }}
             </router-link>
-            <router-link v-if="product.species" v-bind:key="product.species" @click.native="addSpecies(product.species)" class="gs-badge badge species-badge" :to="addSpeciesForUrl(product.species)">
-              {{ cleanTagSpecies(product.species) }}
-            </router-link>
+            </span>
           </p>
+          <!-- SPECIES, SUBSPECIES -->
+
+          <!-- TAGS -->
           <p class="my-0 mx-1">
-            <router-link v-for="tag in product.gs_tags" v-bind:key="tag" @click.native="addTag(tag)" class="gs-badge badge tag-badge" :to="addTagForUrl(tag)">
+            <router-link v-for="tag in product.gs_tags" v-bind:key="tag" class="gs-badge badge tag-badge" :to="addTagForUrl(tag)">
                 {{ cleanTagSpecies(tag) }}
             </router-link>
           </p>
-          <p class="my-0 mx-1">
+          <!-- TAGS -->
 
-          </p>
+          <!-- DIMENSIONS -->
           <p class="my-1 mx-1">
             <span v-if="product.max_length" class="dimension-block">
               <span class="dimension-badge gs-badge badge">
@@ -64,19 +72,27 @@
             </span>
             <span v-if="product.diameter" class="dimension-block">
               <span class="gs-badge badge dimension-badge">
-                  {{ product.diameter }} in dia.
+                  {{ product.diameter }} in diam.
               </span>
             </span>
           </p>
+          <!-- DIMENSIONS -->
 
+          <!-- STORE LINK -->
           <p class="my-1 mx-1">
             <a class="store-link" v-bind:href="product.url" target="_blank">
-              <font-awesome-icon :icon="['fas', 'link']" size="1x"/>&nbsp;{{ product.company_name }}
+              <font-awesome-icon :icon="['fas', 'link']" size="1x"/>&nbsp;{{ product.company_name }} {{ product.score }}
             </a>
           </p>
+          <!-- STORE LINK -->
+
       </div>
+      <div class="card mx-0 p-0 mb-4">Hello world</div>
     </div>
     <!-- CARDS AREA -->
+    <div class="text-center">
+      <button v-on:click="addMore()" type="button" class="btn btn-light">More...</button>
+    </div>
   </div>
 </template>
 
@@ -86,46 +102,72 @@ import axios from 'axios'
 export default {
   name: "TileView",
   methods: {
+    refreshData() {
+      console.log("Refresh Data.")
+      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/get_active_products'
+      //let url = 'http://localhost:5000/get_active_products'
+      axios
+        .post(url, {
+          'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY,
+          'convert_dims_to_fractions': true,
+          'tag_filters': this.tag_filters,
+          'species_filters': this.species_filters,
+          'offset': this.offset,
+          'limit': 5
+        })
+        .then(response => {
+
+          console.log("Cur products: "+this.products.length)
+          console.log("Found products: "+response.data.products.length)
+          console.log(response.data.products)
+          if (this.products.length == 0) {
+            this.products = response.data.products
+          } else {
+            this.products = [...this.products.concat(response.data.products)]
+          }
+
+          console.log("Cur products: "+this.products.length)
+        })
+    },
     cleanTagSpecies(thing) {
       return thing.replace("_"," ").replace("-"," ")
     },
+    addMore() {
+      this.offset += 5;
+      this.refreshData();
+    },
+    /* NOT NECESSARY WHEN REFRESHING BASED ON ROUTE WATCHER */
+    /*
     addTag(tag) {
       const index = this.tag_filters.indexOf(tag);
       if (index == -1) {
         this.tag_filters.push(tag);
       }
+      // this.refreshData()
     },
     removeTag(tag) {
       const index = this.tag_filters.indexOf(tag);
       if (index > -1) {
         this.tag_filters.splice(index, 1);
       }
+      // this.refreshData()
     },
     addSpecies(species) {
       const index = this.species_filters.indexOf(species);
       if (index == -1) {
         this.species_filters.push(species);
       }
+      // this.refreshData()
     },
     removeSpecies(species) {
       const index = this.species_filters.indexOf(species);
       if (index > -1) {
         this.species_filters.splice(index, 1);
       }
+      // this.refreshData()
     },
-    refreshData() {
-      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/get_active_products'
-      //let url = 'http://localhost:5000/get_active_products'
-
-      axios
-        .post(url, {
-          'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY,
-          'convert_dims_to_fractions': true,
-        })
-        .then(response => {
-          this.products = response.data.products
-        })
-    },
+    */
+    /* NOT NECESSARY WHEN REFRESHING BASED ON ROUTE WATCHER */
     makeUrl(species_filters, tag_filters) {
       if (species_filters.length == 0) {
         return '/explore/all-species/'+tag_filters.join("+")
@@ -166,29 +208,45 @@ export default {
       }
       return this.makeUrl(new_species_filters, this.tag_filters)
     },
+    updateDataFromRoute(params) {
+      console.log("updateDataFromRoute")
+      if (params.species) {
+        this.species_filters = params.species.split("+")
+      }
+      const index = this.species_filters.indexOf('all-species');
+      if (index > -1) {
+        this.species_filters.splice(index, 1);
+      }
+      if (params.tags) {
+        this.tag_filters = params.tags.split("+")
+      } else {
+        this.tag_filters.length = 0
+      }
+    },
   },
   data () {
     return {
       products: [],
       species_filters: [],
-      tag_filters: []
+      tag_filters: [],
+      offset: 0
     }
   },
   mounted() {
+    console.log("Initial mounting...")
+    this.updateDataFromRoute(this.$router.currentRoute.params)
     this.refreshData()
-    if (this.$router.currentRoute.params.species) {
-      this.species_filters = this.$router.currentRoute.params.species.split("+")
-    }
-    const index = this.species_filters.indexOf('all-species');
-    if (index > -1) {
-      this.species_filters.splice(index, 1);
-    }
-
-    if (this.$router.currentRoute.params.tags) {
-      this.tag_filters = this.$router.currentRoute.params.tags.split("+")
+  },
+  watch: {
+    '$route'(to) {
+      console.log("Route changed...")
+      this.updateDataFromRoute(to.params)
+      this.refreshData()
     }
   }
 };
+
+
 </script>
 
 
@@ -283,7 +341,8 @@ export default {
     padding-right: 0.6em!important;
   }
   .dimension-block + .dimension-block:before {
-    content: " x ";
+    color: rgb(170,170,170);
+    content: "\00A0\00D7\00A0";
   }
   .gs-badge {
     margin-top: 0.25em;
