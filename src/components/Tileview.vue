@@ -107,15 +107,19 @@ export default {
       console.log("Refresh Data.")
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/get_active_products'
       //let url = 'http://localhost:5000/get_active_products'
+
+      let query_params = {
+        'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY,
+        'convert_dims_to_fractions': true,
+        'tag_filters': this.tag_filters,
+        'species_filters': this.species_filters,
+        'offset': this.offset,
+        'limit': this.api_call_limit,
+        'seed': this.seed
+      }
+
       axios
-        .post(url, {
-          'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY,
-          'convert_dims_to_fractions': true,
-          'tag_filters': this.tag_filters,
-          'species_filters': this.species_filters,
-          'offset': this.offset,
-          'limit': this.api_call_limit
-        })
+        .post(url, query_params)
         .then(response => {
           this.last_call_count = response.data.products.length
           if (this.products.length == 0) {
@@ -125,6 +129,7 @@ export default {
           }
         })
     },
+
     cleanTagSpecies(thing) {
       return thing.replace("_"," ").replace("-"," ")
     },
@@ -195,11 +200,13 @@ export default {
       tag_filters: [],
       offset: 0,
       api_call_limit: 10,
-      last_call_count: 0
+      last_call_count: 0,
+      seed: 0
     }
   },
   mounted() {
     console.log("Initial mounting...")
+    this.seed = Math.ceil(Math.random() * 10)
     this.updateDataFromRoute(this.$router.currentRoute.params)
     this.refreshData()
   },
