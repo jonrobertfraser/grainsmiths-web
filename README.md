@@ -12,6 +12,7 @@
 * `$ npm i --save @fortawesome/free-brands-svg-icons`
 * `$ npm i --save-dev node-sass sass-loader`
 * `$ npm i --save axios`
+* `$ npm i --save vue-masonry-css`
 
 
 

@@ -1,20 +1,18 @@
 <template>
   <div class="container-fluid">
-    Offset: {{ offset }}<br />
-    Length: {{ products.length }}<br />
 
     <!-- FILTER AREA -->
     <div class="text-center py-2 my-5">
-      <div v-if="species_filters.length == 0 && tag_filters.length == 0"  class="badge filter-badge py-3 px-5 mx-3">
+      <div v-if="species_filters.length == 0 && tag_filters.length == 0"  class="badge filter-badge py-3 px-4 mx-2 my-2">
         click species or tags to filter
       </div>
-      <div v-for="species in species_filters" v-bind:key="species" class="badge filter-badge py-3 px-5 mx-3">
+      <div v-for="species in species_filters" v-bind:key="species" class="badge filter-badge py-3 px-4 mx-2 my-2">
           <router-link v-bind:to="removeSpeciesForUrl(species)">
             <font-awesome-icon :icon="['fas', 'window-close']" size="lg" class="remove-filter-button"/>
           </router-link>
           {{ cleanTagSpecies(species) }}
       </div>
-      <div v-for="tag in tag_filters" v-bind:key="tag" class="badge filter-badge py-3 px-5 mx-3">
+      <div v-for="tag in tag_filters" v-bind:key="tag" class="badge filter-badge py-3 px-4 mx-2 my-2">
           <router-link v-bind:to="removeTagForUrl(tag)"><font-awesome-icon :icon="['fas', 'window-close']" size="lg" class="remove-filter-button"/>
           </router-link>
           {{ cleanTagSpecies(tag) }}
@@ -22,11 +20,13 @@
     </div>
     <!-- FILTER AREA -->
 
-    <!-- CARDS AREA -->
-    <div class="card-columns mx-0 mt-2">
-      <div v-for="product in products" v-bind:key="product.id" class="card mx-0 p-0 mb-4">
-
-          <!-- PRODUCT IMAGE AND COUNT -->
+    <!-- MASONRY AREA -->
+    <masonry
+      :cols="{default: 5, 1000: 4, 700: 3, 600: 2}"
+      :gutter="{default: '30px', 700: '15px'}"
+      >
+      <div v-for="(product, index) in products" :key="index" class="card mb-4">
+        <!-- PRODUCT IMAGE AND COUNT -->
           <div href="#" class="content text-center inline">
             <img v-bind:src="product.thumbnail_url" class="card-img-top rounded mb-1" v-bind:alt="product.title">
             <span v-if="product.count > 1" class="gs-badge badge count-badge position-absolute">
@@ -87,17 +87,18 @@
           <!-- STORE LINK -->
 
       </div>
-      <div class="card mx-0 p-0 mb-4">Hello world</div>
-    </div>
-    <!-- CARDS AREA -->
+    </masonry>
+    <!-- MASONRY AREA -->
+
     <div class="text-center">
-      <button v-on:click="addMore()" type="button" class="btn btn-light">More...</button>
+      <button v-if="last_call_count == api_call_limit" v-on:click="addMore()" type="button" class="btn btn-light mb-5">Load more...</button>
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+
 
 export default {
   name: "TileView",
@@ -113,61 +114,24 @@ export default {
           'tag_filters': this.tag_filters,
           'species_filters': this.species_filters,
           'offset': this.offset,
-          'limit': 5
+          'limit': this.api_call_limit
         })
         .then(response => {
-
-          console.log("Cur products: "+this.products.length)
-          console.log("Found products: "+response.data.products.length)
-          console.log(response.data.products)
+          this.last_call_count = response.data.products.length
           if (this.products.length == 0) {
             this.products = response.data.products
           } else {
             this.products = [...this.products.concat(response.data.products)]
           }
-
-          console.log("Cur products: "+this.products.length)
         })
     },
     cleanTagSpecies(thing) {
       return thing.replace("_"," ").replace("-"," ")
     },
     addMore() {
-      this.offset += 5;
+      this.offset += this.api_call_limit;
       this.refreshData();
     },
-    /* NOT NECESSARY WHEN REFRESHING BASED ON ROUTE WATCHER */
-    /*
-    addTag(tag) {
-      const index = this.tag_filters.indexOf(tag);
-      if (index == -1) {
-        this.tag_filters.push(tag);
-      }
-      // this.refreshData()
-    },
-    removeTag(tag) {
-      const index = this.tag_filters.indexOf(tag);
-      if (index > -1) {
-        this.tag_filters.splice(index, 1);
-      }
-      // this.refreshData()
-    },
-    addSpecies(species) {
-      const index = this.species_filters.indexOf(species);
-      if (index == -1) {
-        this.species_filters.push(species);
-      }
-      // this.refreshData()
-    },
-    removeSpecies(species) {
-      const index = this.species_filters.indexOf(species);
-      if (index > -1) {
-        this.species_filters.splice(index, 1);
-      }
-      // this.refreshData()
-    },
-    */
-    /* NOT NECESSARY WHEN REFRESHING BASED ON ROUTE WATCHER */
     makeUrl(species_filters, tag_filters) {
       if (species_filters.length == 0) {
         return '/explore/all-species/'+tag_filters.join("+")
@@ -226,10 +190,15 @@ export default {
   },
   data () {
     return {
+      species_list: [],
+      tag_list: [],
       products: [],
+      dummy_products: [],
       species_filters: [],
       tag_filters: [],
-      offset: 0
+      offset: 0,
+      api_call_limit: 10,
+      last_call_count: 0
     }
   },
   mounted() {
@@ -241,6 +210,8 @@ export default {
     '$route'(to) {
       console.log("Route changed...")
       this.updateDataFromRoute(to.params)
+      this.products.length = 0
+      this.offset = 0
       this.refreshData()
     }
   }
@@ -281,25 +252,6 @@ export default {
     color: rgb(0,0,0);
   }
 
-  .card-columns {
-    column-count: 5;
-
-    @include media-breakpoint-down(xl) {
-      column-count: 5;
-    }
-    @include media-breakpoint-down(lg) {
-      column-count: 4;
-    }
-    @include media-breakpoint-down(md) {
-      column-count: 3;
-    }
-    @include media-breakpoint-down(sm) {
-      column-count: 2;
-    }
-    @include media-breakpoint-down(xs) {
-      column-count: 2;
-    }
-  }
   .card {
     border: none;
   }
