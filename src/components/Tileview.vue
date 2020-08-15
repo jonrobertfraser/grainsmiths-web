@@ -190,10 +190,7 @@ export default {
   },
   data () {
     return {
-      species_list: [],
-      tag_list: [],
       products: [],
-      dummy_products: [],
       species_filters: [],
       tag_filters: [],
       offset: 0,
