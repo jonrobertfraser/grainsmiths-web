@@ -29,7 +29,7 @@
         <!-- PRODUCT IMAGE AND COUNT -->
           <div href="#" class="content text-center inline">
             <img v-bind:src="product.thumbnail_url" class="card-img-top rounded mb-1" v-bind:alt="product.title">
-            <span v-if="product.count > 1" class="gs-badge badge count-badge position-absolute">
+            <span v-if="product.count > 1" class="gs-badge badge count-badge white-badge">
                 {{ product.count }} pieces
             </span>
           </div>
@@ -56,22 +56,22 @@
           <!-- DIMENSIONS -->
           <p class="my-1 mx-1">
             <span v-if="product.max_length" class="dimension-block">
-              <span class="dimension-badge gs-badge badge">
+              <span class="gs-badge badge white-badge">
                   {{ product.max_length }} in
               </span>
             </span>
             <span v-if="product.max_width" class="dimension-block">
-              <span class="gs-badge badge dimension-badge">
+              <span class="gs-badge badge white-badge">
                   {{ product.max_width }} in
               </span>
             </span>
             <span v-if="product.max_thickness" class="dimension-block">
-              <span class="gs-badge badge dimension-badge">
+              <span class="gs-badge badge white-badge">
                   {{ product.max_thickness }} in
               </span>
             </span>
             <span v-if="product.diameter" class="dimension-block">
-              <span class="gs-badge badge dimension-badge">
+              <span class="gs-badge badge white-badge">
                   {{ product.diameter }} in diam.
               </span>
             </span>
@@ -81,7 +81,7 @@
           <!-- STORE LINK -->
           <p class="my-1 mx-1">
             <a class="store-link" v-bind:href="product.url" target="_blank">
-              <font-awesome-icon :icon="['fas', 'link']" size="1x"/>&nbsp;{{ product.company_name }} {{ product.score }}
+              <font-awesome-icon :icon="['fas', 'link']" size="1x"/>&nbsp;{{ product.company_name }}
             </a>
           </p>
           <!-- STORE LINK -->
@@ -265,53 +265,49 @@ export default {
   .rounded {
     border-radius:1rem!important
   }
-
-  .species-badge {
-    background-color: rgb(100,150,62);
+  .gs-badge {
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+    margin-right: 0.4em;
+    padding-top: 0.5em;
+    padding-bottom: 0.45em;
+    padding-left: 0.95em;
+    padding-right: 0.95em;
+    border-radius:.75rem!important;
     color: rgb(255,255,255);
     font-size: 0.75em;
+  }
+  .species-badge {
+    background-color: rgb(100,150,62);
   }
   .species-badge:hover {
     background-color: rgb(50,75,31);
   }
   .tag-badge {
     background-color: rgb(90,90,90);
-    color: rgb(255,255,255);
-    font-size: 0.75em;
   }
   .tag-badge:hover {
     background-color: rgb(40,40,40);
   }
-  .count-badge {
-    background-color: rgb(255,255,255);
+  .white-badge {
+    background-color: #FFFFFF;
+    color: #666;
     border: 1px solid #999;
-    top: 0.75em;
-    left: 0.75em;
-    font-size: 0.75em;
-  }
-  .dimension-badge {
-    border: 1px solid #999;
-    font-size: 0.75em;
-    margin-right: 0em!important;
-    padding-left: 0.6em!important;
-    padding-right: 0.6em!important;
+    padding-left: 0.6em;
+    padding-right: 0.6em;
   }
   .dimension-block + .dimension-block:before {
     color: rgb(170,170,170);
-    content: "\00A0\00D7\00A0";
+    content: "\00D7";
+    margin-right: 0.4em;
   }
-  .gs-badge {
-    margin-top: 0.25em;
-    margin-bottom: 0.25em;
-    margin-right: 0.5em;
-    padding-top: 0.5em;
-    padding-bottom: 0.45em;
-    padding-left: 0.95em;
-    padding-right: 0.95em;
-    border-radius:.75rem!important
+  .count-badge {
+    position: absolute;
+    top: 0.75em;
+    left: 0.75em;
   }
   .store-link {
-    font-size: 0.9em;
+    font-size: 0.8em;
     color: rgb(150,150,150);
     margin-left: 0.35em;
   }
@@ -326,7 +322,6 @@ export default {
     opacity: 0;
     background-color: #000000;
   }
-
   .content:hover img {
     opacity: 0.8;
     -webkit-transition: all 0.4s ease-in-out 0s;
