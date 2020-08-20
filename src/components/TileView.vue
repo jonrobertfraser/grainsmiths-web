@@ -35,6 +35,31 @@
           </div>
           <!-- PRODUCT IMAGE AND COUNT -->
 
+          <!-- DIMENSIONS -->
+          <p class="my-1 mx-1 text-center">
+            <span v-if="product.max_length && !product.diameter" class="dimension-block">
+              <span class="gs-badge badge white-badge">
+                  <span v-html="product.max_length"></span> in
+              </span>
+            </span>
+            <span v-if="product.max_width && !product.diameter" class="dimension-block">
+              <span class="gs-badge badge white-badge">
+                  <span v-html="product.max_width"></span> in
+              </span>
+            </span>
+            <span v-if="product.max_thickness" class="dimension-block">
+              <span class="gs-badge badge white-badge">
+                  <span v-html="product.max_thickness"></span> in
+              </span>
+            </span>
+            <span v-if="product.diameter" class="dimension-block">
+              <span class="gs-badge badge white-badge">
+                  <span v-html="product.diameter"></span> in (dia.)
+              </span>
+            </span>
+          </p>
+          <!-- DIMENSIONS -->
+
           <!-- SPECIES, SUBSPECIES -->
           <p class="my-0 mx-1">
             <span v-for="species in [product.subspecies, product.species]" v-bind:key="species">
@@ -52,31 +77,6 @@
             </router-link>
           </p>
           <!-- TAGS -->
-
-          <!-- DIMENSIONS -->
-          <p class="my-1 mx-1">
-            <span v-if="product.max_length" class="dimension-block">
-              <span class="gs-badge badge white-badge">
-                  {{ product.max_length }} in
-              </span>
-            </span>
-            <span v-if="product.max_width" class="dimension-block">
-              <span class="gs-badge badge white-badge">
-                  {{ product.max_width }} in
-              </span>
-            </span>
-            <span v-if="product.max_thickness" class="dimension-block">
-              <span class="gs-badge badge white-badge">
-                  {{ product.max_thickness }} in
-              </span>
-            </span>
-            <span v-if="product.diameter" class="dimension-block">
-              <span class="gs-badge badge white-badge">
-                  {{ product.diameter }} in diam.
-              </span>
-            </span>
-          </p>
-          <!-- DIMENSIONS -->
 
           <!-- STORE LINK -->
           <p class="my-1 mx-1">
@@ -295,11 +295,13 @@ export default {
     border: 1px solid #999;
     padding-left: 0.6em;
     padding-right: 0.6em;
+    margin-right: 0.1em;
+    font-size: 0.8em;
   }
   .dimension-block + .dimension-block:before {
     color: rgb(170,170,170);
     content: "\00D7";
-    margin-right: 0.4em;
+    margin-right: 0.1em;
   }
   .count-badge {
     position: absolute;
