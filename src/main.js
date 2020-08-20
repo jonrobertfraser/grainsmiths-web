@@ -6,7 +6,7 @@ import router from './router'
 // https://github.com/FortAwesome/vue-fontawesome#using-brand-icons
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faInstagram, faRedditAlien } from '@fortawesome/free-brands-svg-icons'
-import { faLink, faBookmark, faWindowClose } from '@fortawesome/free-solid-svg-icons'
+import { faFilter, faLink, faBookmark, faWindowClose } from '@fortawesome/free-solid-svg-icons'
 import {  } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 
@@ -16,6 +16,7 @@ library.add(faRedditAlien)
 library.add(faLink)
 library.add(faBookmark)
 library.add(faWindowClose)
+library.add(faFilter)
 
 import 'bootstrap';
 import BootstrapVue from "bootstrap-vue"
