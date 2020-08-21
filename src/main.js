@@ -27,6 +27,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap-vue/dist/bootstrap-vue.css"
 Vue.use(BootstrapVue)
 
+/* Masonry is for the organizing tiles */
 import VueMasonry from 'vue-masonry-css'
 Vue.use(VueMasonry)
 

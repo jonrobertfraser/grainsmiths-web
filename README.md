@@ -13,7 +13,7 @@
 * `$ npm i --save-dev node-sass sass-loader`
 * `$ npm i --save axios`
 * `$ npm i --save vue-masonry-css`
-
+* `$ npm install --save vue-cool-lightbox`
 
 
 ## Project setup

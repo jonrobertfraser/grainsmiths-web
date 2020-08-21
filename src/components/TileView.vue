@@ -1,25 +1,11 @@
 <template>
   <div class="container-fluid">
 
-    <!-- MODAL -->
-    <div class="modal fade" id="product-modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-full" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body p-4" id="result">
-                    Here
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- MODAL -->
+    <ImageLightbox
+      :items="lightboxImages"
+      :index="lightboxIndex"
+      @closeLightbox="closeLightbox"
+    />
 
     <!-- FILTER AREA -->
     <div class="text-center py-2 my-5">
@@ -47,7 +33,7 @@
       >
       <div v-for="(product, index) in products" :key="index" class="card mb-5 text-center">
         <!-- PRODUCT IMAGE AND COUNT -->
-          <a href="#product-modal" data-toggle="modal" class="content text-center inline">
+          <a v-on:click="updateLightboxImages(product.image_urls)" class="content text-center inline">
             <img v-bind:src="product.thumbnail_url" class="card-img-top rounded mb-1" v-bind:alt="product.title">
             <span v-if="product.count > 1" class="gs-badge badge count-badge white-badge">
                 {{ product.count }} pieces
@@ -139,12 +125,17 @@
   </div>
 </template>
 
-<script>
-import axios from 'axios'
 
+<script>
+
+import axios from 'axios'
+import ImageLightbox from '../components/ImageLightbox.vue'
 
 export default {
   name: "TileView",
+  components: {
+    ImageLightbox
+  },
   methods: {
     refreshData() {
       console.log("Refresh Data.")
@@ -171,6 +162,14 @@ export default {
             this.products = [...this.products.concat(response.data.products)]
           }
         })
+    },
+    updateLightboxImages(image_urls) {
+      this.lightboxIndex = 0
+      this.lightboxImages.length = 0;
+      image_urls.forEach(element => this.lightboxImages.push(element));
+    },
+    closeLightbox() {
+      this.lightboxIndex = null
     },
     toggleShowMore(id) {
       this.$set(this.showMore, id, true);
@@ -251,6 +250,11 @@ export default {
       last_call_count: 0,
       seed: 0,
       showMore: {},
+      lightboxIndex: null,
+      lightboxImages: [
+        "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/nature-quotes-1557340276.jpg?crop=0.666xw:1.00xh;0.168xw,0&resize=640:*",
+        "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/nature-quotes-1557340276.jpg?crop=0.666xw:1.00xh;0.168xw,0&resize=640:*",
+      ]
     }
   },
   mounted() {
@@ -409,17 +413,5 @@ export default {
     cursor: pointer;
   }
 
-
-  .modal-full {
-    min-width: 70%;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%)!important;
-  }
-
-  .modal-full .modal-content {
-    min-height: 80vh;
-    max-height: 75vh;
-  }
 
 </style>
