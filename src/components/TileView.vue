@@ -1,6 +1,5 @@
 <template>
   <div class="container-fluid">
-    <a href="#product-modal" role="button" class="btn btn-primary" data-toggle="modal">Launch modal</a>
 
     <!-- MODAL -->
     <div class="modal fade" id="product-modal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -413,7 +412,9 @@ export default {
 
   .modal-full {
     min-width: 70%;
-    margin-left: 80;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%)!important;
   }
 
   .modal-full .modal-content {
