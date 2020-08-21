@@ -19,12 +19,12 @@ export default {
 
 <style>
 #app {
-  font-family: 'Proxima Nova', helvetica, arial, sans-serif;
+  font-family: Helvetica,Arial, sans-serif;
   font-weight: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  font-size: 1em;
+  color: #666;
+  font-size: 0.9em;
 }
 
 @import 'http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css';

@@ -1,5 +1,26 @@
 <template>
   <div class="container-fluid">
+    <a href="#product-modal" role="button" class="btn btn-primary" data-toggle="modal">Launch modal</a>
+
+    <!-- MODAL -->
+    <div class="modal fade" id="product-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-full" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body p-4" id="result">
+                    Here
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL -->
 
     <!-- FILTER AREA -->
     <div class="text-center py-2 my-5">
@@ -25,44 +46,50 @@
       :cols="{default: 5, 1000: 4, 700: 3, 600: 2}"
       :gutter="{default: '30px', 700: '15px'}"
       >
-      <div v-for="(product, index) in products" :key="index" class="card mb-4">
+      <div v-for="(product, index) in products" :key="index" class="card mb-5 text-center">
         <!-- PRODUCT IMAGE AND COUNT -->
-          <div href="#" class="content text-center inline">
+          <a href="#product-modal" data-toggle="modal" class="content text-center inline">
             <img v-bind:src="product.thumbnail_url" class="card-img-top rounded mb-1" v-bind:alt="product.title">
             <span v-if="product.count > 1" class="gs-badge badge count-badge white-badge">
                 {{ product.count }} pieces
             </span>
-          </div>
+          </a>
           <!-- PRODUCT IMAGE AND COUNT -->
 
           <!-- DIMENSIONS -->
-          <p class="my-1 mx-1 text-center">
+          <p class="my-0 mx-1 text-center">
             <span v-if="product.max_length && !product.diameter" class="dimension-block">
               <span class="gs-badge badge white-badge">
-                  <span v-html="product.max_length"></span> in
+                 <span style="white-space: nowrap;"><span v-html="product.max_length"></span>&Prime;</span>
               </span>
             </span>
             <span v-if="product.max_width && !product.diameter" class="dimension-block">
               <span class="gs-badge badge white-badge">
-                  <span v-html="product.max_width"></span> in
+                  <span style="white-space: nowrap;"><span v-html="product.max_width"></span>&Prime;</span>
               </span>
             </span>
             <span v-if="product.max_thickness" class="dimension-block">
               <span class="gs-badge badge white-badge">
-                  <span v-html="product.max_thickness"></span> in
+                  <span style="white-space: nowrap;"><span v-html="product.max_thickness"></span>&Prime;</span>
               </span>
             </span>
             <span v-if="product.diameter" class="dimension-block">
               <span class="gs-badge badge white-badge">
-                  <span v-html="product.diameter"></span> in (dia.)
+                  <span style="white-space: nowrap;"><span v-html="product.diameter"></span>&Prime; (dia.)</span>
               </span>
             </span>
           </p>
           <!-- DIMENSIONS -->
 
+          <!-- PRICE -->
+          <p class="my-1 mx-1">
+            <span class="price">{{ Math.floor(product.price) }}</span>
+          </p>
+          <!-- PRICE -->
+
           <!-- SPECIES, SUBSPECIES -->
           <p class="my-0 mx-1">
-            <span v-for="species in [product.subspecies, product.species]" v-bind:key="species">
+            <span v-for="species in [product.species, product.subspecies]" v-bind:key="species">
               <router-link v-if="species" v-bind:key="species" class="gs-badge badge species-badge" :to="addSpeciesForUrl(species)">
                 {{ cleanTagSpecies(species) }}
             </router-link>
@@ -78,13 +105,30 @@
           </p>
           <!-- TAGS -->
 
+
+
           <!-- STORE LINK -->
-          <p class="my-1 mx-1">
+          <p class="mt-2 mb-1 mx-1">
             <a class="store-link" v-bind:href="product.url" target="_blank">
               <font-awesome-icon :icon="['fas', 'link']" size="1x"/>&nbsp;{{ product.company_name }}
             </a>
           </p>
           <!-- STORE LINK -->
+
+
+
+          <!-- MORE DETAIL -->
+          <span v-if="showMore[product.id]" class="text-left more-detail">{{product.description.substring(0, 500) + "..."}}</span>
+          <!-- MORE DETAIL -->
+
+          <!-- SHOW MORE BUTTON -->
+          <span v-on:click="toggleShowMore(product.id)" v-if="!showMore[product.id]" class="show-more-button"><font-awesome-icon :icon="['fas', 'chevron-down']" size="sm" />&nbsp;Show more</span>
+          <!-- SHOW MORE BUTTON -->
+
+          <!-- SHOW LESS BUTTON -->
+          <span v-on:click="toggleShowLess(product.id)" v-if="showMore[product.id]" class="show-more-button"><font-awesome-icon :icon="['fas', 'chevron-up']" size="sm" />&nbsp;Show less</span>
+          <!-- SHOW LESS BUTTON -->
+
 
       </div>
     </masonry>
@@ -129,9 +173,14 @@ export default {
           }
         })
     },
-
+    toggleShowMore(id) {
+      this.$set(this.showMore, id, true);
+    },
+    toggleShowLess(id) {
+      this.$set(this.showMore, id, false);
+    },
     cleanTagSpecies(thing) {
-      return thing.replace("_"," ").replace("-"," ")
+      return thing.replace(/_/g," ").replace(/-/g," ")
     },
     addMore() {
       this.offset += this.api_call_limit;
@@ -154,7 +203,7 @@ export default {
     addTagForUrl(tag) {
       var new_tag_filters = [...this.tag_filters]
       if (!this.tag_filters.includes(tag)) {
-        new_tag_filters.push(tag.replace(" ","_"))
+        new_tag_filters.push(tag.replace(/\s/g,"_"))
       }
       return this.makeUrl(this.species_filters, new_tag_filters)
     },
@@ -201,7 +250,8 @@ export default {
       offset: 0,
       api_call_limit: 10,
       last_call_count: 0,
-      seed: 0
+      seed: 0,
+      showMore: {},
     }
   },
   mounted() {
@@ -259,9 +309,8 @@ export default {
   .card {
     border: none;
   }
-  .card.img:hover {
-    border-radius:2rem!important
-  }
+
+
   .rounded {
     border-radius:1rem!important
   }
@@ -271,11 +320,12 @@ export default {
     margin-right: 0.4em;
     padding-top: 0.5em;
     padding-bottom: 0.45em;
-    padding-left: 0.95em;
-    padding-right: 0.95em;
+    padding-left: 0.7em;
+    padding-right: 0.7em;
     border-radius:.75rem!important;
     color: rgb(255,255,255);
-    font-size: 0.75em;
+    font-size: 1em;
+    font-weight: 400;
   }
   .species-badge {
     background-color: rgb(100,150,62);
@@ -296,7 +346,7 @@ export default {
     padding-left: 0.6em;
     padding-right: 0.6em;
     margin-right: 0.1em;
-    font-size: 0.8em;
+
   }
   .dimension-block + .dimension-block:before {
     color: rgb(170,170,170);
@@ -307,11 +357,11 @@ export default {
     position: absolute;
     top: 0.75em;
     left: 0.75em;
+    font-size: 0.9em;
   }
   .store-link {
-    font-size: 0.8em;
     color: rgb(150,150,150);
-    margin-left: 0.35em;
+
   }
   .store-link:hover {
     color: rgb(100,100,100);
@@ -329,6 +379,46 @@ export default {
     -webkit-transition: all 0.4s ease-in-out 0s;
     -moz-transition: all 0.4s ease-in-out 0s;
     transition: all 0.4s ease-in-out 0s;
+  }
+  .content:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  .price {
+    font-size: 1em;
+    color: #666;
+    font-weight: 700;
+  }
+  .price:before {
+    color: #666;
+    content: '$';
+    font-size: 0.7em;
+    vertical-align:text-top;
+    color: rgb(100,100,100);
+  }
+  .more-detail {
+    padding-top: 0.5em;
+    padding-bottom: 0.8em;
+    font-size:0.9em;
+  }
+  .show-more-button {
+    color: rgb(150,150,150);
+
+  }
+  .show-more-button:hover {
+    color: rgb(100,100,100);
+    cursor: pointer;
+  }
+
+
+  .modal-full {
+    min-width: 70%;
+    margin-left: 80;
+  }
+
+  .modal-full .modal-content {
+    min-height: 80vh;
+    max-height: 75vh;
   }
 
 </style>
