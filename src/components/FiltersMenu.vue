@@ -3,36 +3,35 @@
 
 
     <!-- FILTER AREA -->
-    <div class="py-2 my-3 justify-content-center">
+    <div class="py-2 my-3">
 
-      <div class="d-flex flex-row justify-content-center my-2">
-        <multiselect class="w-50"
-          v-model="selected"
-          :options="options"
-          :multiple="true"
-          :close-on-select="true"
-          placeholder="Pick some"
-          label="name"
-          track-by="name"
-          >
-        </multiselect>
+      <div class="row my-3">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6 text-center">
+          <multiselect
+            v-model="multiValue"
+            :options="options"
+            :multiple="true"
+            :close-on-select="true"
+            placeholder="Pick one or more species"
+            track-by="name_for_url"
+            label="name"
+            @input="updateRouteOnSpecies"
+            >
+          </multiselect>
+        </div>
+        <div class="col-sm-3"></div>
       </div>
 
-      <div class="d-flex flex-row justify-content-center">
-        <div v-if="species_filters.length == 0 && tag_filters.length == 0"  class="badge filter-badge py-3 px-4 mx-2 my-2">
-          click species or tags to filter
-        </div>
-        <div v-for="species in species_filters" v-bind:key="species" class="badge filter-badge py-3 px-4 mx-2 my-2">
-            <router-link v-bind:to="removeSpeciesForUrl(species)">
-              <font-awesome-icon :icon="['fas', 'window-close']" size="lg" class="remove-filter-button"/>
-            </router-link>
-            {{ cleanTagSpecies(species) }}
-        </div>
-        <div v-for="tag in tag_filters" v-bind:key="tag" class="badge filter-badge py-3 px-4 mx-2 my-2">
-            <router-link v-bind:to="removeTagForUrl(tag)"><font-awesome-icon :icon="['fas', 'window-close']" size="lg" class="remove-filter-button"/>
-            </router-link>
+      <div class="flex-row justify-content-center text-center">
+        <span v-for="tag in tag_list" v-bind:key="tag">
+          <div v-if="tag_filters.includes(tag)" v-on:click="removeTagFilter(tag)" class="badge filter-badge selected-filter-badge py-1 px-4 mx-2 my-2">
             {{ cleanTagSpecies(tag) }}
-        </div>
+          </div>
+          <div v-else v-on:click="addTagFilter(tag)" class="badge filter-badge py-1 px-4 mx-2 my-1">
+            {{ cleanTagSpecies(tag) }}
+          </div>
+        </span>
       </div>
 
     </div>
@@ -40,7 +39,7 @@
 </template>
 
 <script>
-
+import axios from 'axios'
 import Multiselect from 'vue-multiselect'
 
 export default {
@@ -49,6 +48,21 @@ export default {
     Multiselect
   },
   methods: {
+    populateSpeciesMenu() {
+      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/get_species_menu'
+      let query_params = {'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY}
+      axios
+        .post(url, query_params)
+        .then(response => {
+            this.options = [...response.data.menu]
+        })
+    },
+    updateRouteOnSpecies() {
+      var new_species_filters = []
+      this.multiValue.forEach(element => new_species_filters.push(element.name_for_url));
+      let new_url = this.makeUrl(new_species_filters, this.tag_filters)
+      this.$router.push({ path: new_url })
+    },
     cleanTagSpecies(thing) {
       return thing.replace(/_/g," ").replace(/-/g," ")
     },
@@ -59,39 +73,13 @@ export default {
         return '/explore/'+species_filters.join("+")+'/'+tag_filters.join("+")
       }
     },
-    addSpeciesForUrl(species) {
-      var new_species_filters = [...this.species_filters]
-      if (!this.species_filters.includes(species)) {
-        new_species_filters.push(species)
-      }
-      return this.makeUrl(new_species_filters, this.tag_filters)
+    addTagFilter(tag) {
+      this.$emit('addTagFilter',tag)
     },
-    addTagForUrl(tag) {
-      var new_tag_filters = [...this.tag_filters]
-      if (!this.tag_filters.includes(tag)) {
-        new_tag_filters.push(tag.replace(/\s/g,"_"))
-      }
-      return this.makeUrl(this.species_filters, new_tag_filters)
+    removeTagFilter(tag) {
+      this.$emit('removeTagFilter',tag)
     },
-    removeTagForUrl(tag) {
-      const index = this.tag_filters.indexOf(tag);
-      var new_tag_filters = [...this.tag_filters]
-      if (index > -1) {
-        new_tag_filters.splice(index, 1);
-      }
-      return this.makeUrl(this.species_filters, new_tag_filters)
-    },
-    removeSpeciesForUrl(species) {
-      const index = this.species_filters.indexOf(species);
-      var new_species_filters = [...this.species_filters] // shallow copy the list
-      if (index > -1) {
-        new_species_filters.splice(index, 1);
-      }
-      if (new_species_filters.length == 0) {
-        new_species_filters = ['all-species']
-      }
-      return this.makeUrl(new_species_filters, this.tag_filters)
-    },
+
   },
   props: {
     tag_filters: Array,
@@ -99,12 +87,39 @@ export default {
   },
   data () {
     return {
-      selected: null,
-      options: ['list', 'of', 'options']
+      multiValue: [],
+      allSpecies: {},
+      options: [],
+      tag_list: [
+        'burl', 'bowl_blank', 'tree_slice', 'instrument_making',
+        'stump', 'pen_blank', 'dimensional', 'lumber', 'knife_making',
+        'bookmatched', 'turning_blank', 'blank', 'leg_blank',
+        'live_edge', 'guitar', 'veneer', 'figured'
+      ]
+    }
+  },
+  watch: {
+    /*
+    When parent (tileview) updates species list based on URL
+    then it propagates down to this property and thus we should
+    watch it and update the search menu accordingly. We can't
+    do it on 'mounted' since this components gets mounted before
+    the tileview gets to update its data based on the URL.
+    */
+    species_filters: function () {
+      this.multiValue.length = 0
+      this.species_filters.forEach(element => {
+        this.multiValue.push({
+          'name': this.cleanTagSpecies(element),
+          'name_for_url': element
+        })
+      })
     }
   },
   mounted() {
     console.log("Initial filters menu mounting...")
+    this.populateSpeciesMenu()
+    console.log()
   }
 };
 
@@ -125,6 +140,7 @@ export default {
     color: rgb(100,100,100);
     background-color: rgb(255,255,255);
     border-radius:2rem;
+    cursor: pointer;
 
   }
   .filter-badge:hover {
@@ -139,6 +155,10 @@ export default {
   }
   .filter-badge:hover .remove-filter-button{
     color: rgb(0,0,0);
+  }
+  .selected-filter-badge {
+    background-color: rgb(90,90,90);
+    color: rgb(255,255,255);
   }
 
 

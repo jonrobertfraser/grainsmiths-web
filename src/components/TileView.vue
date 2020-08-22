@@ -10,6 +10,8 @@
     <FiltersMenu
       :tag_filters="tag_filters"
       :species_filters="species_filters"
+      @addTagFilter="addTagFilter"
+      @removeTagFilter="removeTagFilter"
     />
 
     <!-- MASONRY AREA -->
@@ -61,9 +63,9 @@
 
           <!-- TAGS -->
           <div class="my-0 mx-1">
-            <router-link v-for="tag in product.gs_tags" v-bind:key="tag" class="gs-badge badge tag-badge" :to="addTagForUrl(tag)">
+            <div v-for="tag in product.gs_tags" v-bind:key="tag" class="gs-badge badge tag-badge" v-on:click="addTagFilter(tag)">
                 {{ cleanTagSpecies(tag) }}
-            </router-link>
+            </div>
           </div>
           <!-- TAGS -->
 
@@ -179,20 +181,21 @@ export default {
       }
       return this.makeUrl(new_species_filters, this.tag_filters)
     },
-    addTagForUrl(tag) {
-      var new_tag_filters = [...this.tag_filters]
+    addTagFilter(tag) {
+
       if (!this.tag_filters.includes(tag)) {
-        new_tag_filters.push(tag.replace(/\s/g,"_"))
+        this.tag_filters.push(tag.replace(/\s/g,"_"))
       }
-      return this.makeUrl(this.species_filters, new_tag_filters)
+      let new_url = this.makeUrl(this.species_filters, this.tag_filters)
+      this.$router.push({ path: new_url })
     },
-    removeTagForUrl(tag) {
+    removeTagFilter(tag) {
       const index = this.tag_filters.indexOf(tag);
-      var new_tag_filters = [...this.tag_filters]
       if (index > -1) {
-        new_tag_filters.splice(index, 1);
+        this.tag_filters.splice(index, 1);
       }
-      return this.makeUrl(this.species_filters, new_tag_filters)
+      let new_url = this.makeUrl(this.species_filters, this.tag_filters)
+      this.$router.push({ path: new_url })
     },
     removeSpeciesForUrl(species) {
       const index = this.species_filters.indexOf(species);
@@ -303,6 +306,7 @@ export default {
   .tag-badge:hover {
     background-color: rgb(40,40,40);
     color: #FFFFFF;
+    cursor: pointer;
   }
 
   .count-badge {
