@@ -18,7 +18,8 @@
       :gutter="{default: '30px', 700: '15px'}"
       >
       <div v-for="(product, index) in products" :key="index" class="card mb-5 text-center">
-        <!-- PRODUCT IMAGE AND COUNT -->
+
+          <!-- PRODUCT IMAGE AND COUNT -->
           <a v-on:click="updateLightboxImages(product.image_urls)" class="content text-center inline">
             <img v-bind:src="product.thumbnail_url" class="card-img-top rounded mb-1" v-bind:alt="product.title">
             <span v-if="product.count > 1" class="gs-badge badge count-badge white-badge">
@@ -26,6 +27,7 @@
             </span>
           </a>
           <!-- PRODUCT IMAGE AND COUNT -->
+
 
           <!-- DIMENSIONS -->
           <div class="my-0 mx-1 text-center">
@@ -38,38 +40,41 @@
           </div>
           <!-- DIMENSIONS -->
 
+
           <!-- PRICE -->
-          <p class="my-1 mx-1">
+          <div class="my-1 mx-1">
             <span class="price">{{ Math.floor(product.price) }}</span>
-          </p>
+          </div>
           <!-- PRICE -->
 
+
           <!-- SPECIES, SUBSPECIES -->
-          <p class="my-0 mx-1">
+          <div class="my-0 mx-1">
             <span v-for="species in [product.species, product.subspecies]" v-bind:key="species">
               <router-link v-if="species" v-bind:key="species" class="gs-badge badge species-badge" :to="addSpeciesForUrl(species)">
                 {{ cleanTagSpecies(species) }}
             </router-link>
             </span>
-          </p>
+          </div>
           <!-- SPECIES, SUBSPECIES -->
 
+
           <!-- TAGS -->
-          <p class="my-0 mx-1">
+          <div class="my-0 mx-1">
             <router-link v-for="tag in product.gs_tags" v-bind:key="tag" class="gs-badge badge tag-badge" :to="addTagForUrl(tag)">
                 {{ cleanTagSpecies(tag) }}
             </router-link>
-          </p>
+          </div>
           <!-- TAGS -->
 
 
 
           <!-- STORE LINK -->
-          <p class="mt-2 mb-1 mx-1">
+          <div class="mt-2 mb-1 mx-1">
             <a class="store-link" v-bind:href="product.url" target="_blank">
               <font-awesome-icon :icon="['fas', 'link']" size="1x"/>&nbsp;{{ product.company_name }}
             </a>
-          </p>
+          </div>
           <!-- STORE LINK -->
 
 
@@ -265,6 +270,7 @@ export default {
     font-size: 1em;
     font-weight: 400;
   }
+
   .white-badge {
     background-color: #FFFFFF;
     color: #666;
@@ -289,12 +295,14 @@ export default {
   }
   .species-badge:hover {
     background-color: rgb(50,75,31);
+    color: #FFFFFF;
   }
   .tag-badge {
     background-color: rgb(90,90,90);
   }
   .tag-badge:hover {
     background-color: rgb(40,40,40);
+    color: #FFFFFF;
   }
 
   .count-badge {
