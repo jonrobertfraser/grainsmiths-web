@@ -7,24 +7,10 @@
       @closeLightbox="closeLightbox"
     />
 
-    <!-- FILTER AREA -->
-    <div class="text-center py-2 my-5">
-      <div v-if="species_filters.length == 0 && tag_filters.length == 0"  class="badge filter-badge py-3 px-4 mx-2 my-2">
-        click species or tags to filter
-      </div>
-      <div v-for="species in species_filters" v-bind:key="species" class="badge filter-badge py-3 px-4 mx-2 my-2">
-          <router-link v-bind:to="removeSpeciesForUrl(species)">
-            <font-awesome-icon :icon="['fas', 'window-close']" size="lg" class="remove-filter-button"/>
-          </router-link>
-          {{ cleanTagSpecies(species) }}
-      </div>
-      <div v-for="tag in tag_filters" v-bind:key="tag" class="badge filter-badge py-3 px-4 mx-2 my-2">
-          <router-link v-bind:to="removeTagForUrl(tag)"><font-awesome-icon :icon="['fas', 'window-close']" size="lg" class="remove-filter-button"/>
-          </router-link>
-          {{ cleanTagSpecies(tag) }}
-      </div>
-    </div>
-    <!-- FILTER AREA -->
+    <FiltersMenu
+      :tag_filters="tag_filters"
+      :species_filters="species_filters"
+    />
 
     <!-- MASONRY AREA -->
     <masonry
@@ -42,28 +28,14 @@
           <!-- PRODUCT IMAGE AND COUNT -->
 
           <!-- DIMENSIONS -->
-          <p class="my-0 mx-1 text-center">
-            <span v-if="product.max_length && !product.diameter" class="dimension-block">
-              <span class="gs-badge badge white-badge">
-                 <span style="white-space: nowrap;"><span v-html="product.max_length"></span>&Prime;</span>
-              </span>
-            </span>
-            <span v-if="product.max_width && !product.diameter" class="dimension-block">
-              <span class="gs-badge badge white-badge">
-                  <span style="white-space: nowrap;"><span v-html="product.max_width"></span>&Prime;</span>
-              </span>
-            </span>
-            <span v-if="product.max_thickness" class="dimension-block">
-              <span class="gs-badge badge white-badge">
-                  <span style="white-space: nowrap;"><span v-html="product.max_thickness"></span>&Prime;</span>
-              </span>
-            </span>
-            <span v-if="product.diameter" class="dimension-block">
-              <span class="gs-badge badge white-badge">
-                  <span style="white-space: nowrap;"><span v-html="product.diameter"></span>&Prime; (dia.)</span>
-              </span>
-            </span>
-          </p>
+          <div class="my-0 mx-1 text-center">
+            <DimensionSet
+              :length="product.max_length"
+              :width="product.max_width"
+              :thickness="product.max_thickness"
+              :diameter="product.max_diameter"
+            />
+          </div>
           <!-- DIMENSIONS -->
 
           <!-- PRICE -->
@@ -130,11 +102,15 @@
 
 import axios from 'axios'
 import ImageLightbox from '../components/ImageLightbox.vue'
+import FiltersMenu from '../components/FiltersMenu.vue'
+import DimensionSet from '../components/DimensionSet.vue'
 
 export default {
   name: "TileView",
   components: {
-    ImageLightbox
+    ImageLightbox,
+    FiltersMenu,
+    DimensionSet
   },
   methods: {
     refreshData() {
@@ -251,10 +227,7 @@ export default {
       seed: 0,
       showMore: {},
       lightboxIndex: null,
-      lightboxImages: [
-        "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/nature-quotes-1557340276.jpg?crop=0.666xw:1.00xh;0.168xw,0&resize=640:*",
-        "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/nature-quotes-1557340276.jpg?crop=0.666xw:1.00xh;0.168xw,0&resize=640:*",
-      ]
+      lightboxImages: []
     }
   },
   mounted() {
@@ -277,46 +250,8 @@ export default {
 
 </script>
 
-
-<style lang="scss" scoped>
-
-  @import 'bootstrap/scss/_functions.scss';
-  @import 'bootstrap/scss/_variables.scss';
-  @import 'bootstrap/scss/_mixins.scss';
-  @import "bootstrap/scss/mixins/_breakpoints";
-
-  .filter-badge {
-    position: relative;
-    border: 1px solid rgb(238,238,238);
-    font-size: 1em;
-    font-weight: normal;
-    color: rgb(100,100,100);
-    background-color: rgb(255,255,255);
-    border-radius:2rem;
-
-  }
-  .filter-badge:hover {
-    color: rgb(50,50,50);
-    background-color: rgb(238,238,238);
-  }
-  .remove-filter-button {
-    color: rgb(150,150,150);
-    position: absolute;
-    top: -0.3em;
-    left: -0.3em;
-  }
-  .filter-badge:hover .remove-filter-button{
-    color: rgb(0,0,0);
-  }
-
-  .card {
-    border: none;
-  }
-
-
-  .rounded {
-    border-radius:1rem!important
-  }
+<!-- Non scoped style passes style to children. -->
+<style>
   .gs-badge {
     margin-top: 0.25em;
     margin-bottom: 0.25em;
@@ -325,10 +260,29 @@ export default {
     padding-bottom: 0.45em;
     padding-left: 0.7em;
     padding-right: 0.7em;
-    border-radius:.75rem!important;
+    border-radius:.75rem;
     color: rgb(255,255,255);
     font-size: 1em;
     font-weight: 400;
+  }
+  .white-badge {
+    background-color: #FFFFFF;
+    color: #666;
+    border: 1px solid #999;
+    padding-left: 0.6em;
+    padding-right: 0.6em;
+    margin-right: 0.1em;
+  }
+</style>
+
+<!-- Scoped style doesn't pass style to children. -->
+<style lang="css" scoped>
+
+  .card {
+    border: none;
+  }
+  .rounded {
+    border-radius:1rem!important
   }
   .species-badge {
     background-color: rgb(100,150,62);
@@ -342,20 +296,7 @@ export default {
   .tag-badge:hover {
     background-color: rgb(40,40,40);
   }
-  .white-badge {
-    background-color: #FFFFFF;
-    color: #666;
-    border: 1px solid #999;
-    padding-left: 0.6em;
-    padding-right: 0.6em;
-    margin-right: 0.1em;
 
-  }
-  .dimension-block + .dimension-block:before {
-    color: rgb(170,170,170);
-    content: "\00D7";
-    margin-right: 0.1em;
-  }
   .count-badge {
     position: absolute;
     top: 0.75em;
@@ -412,6 +353,4 @@ export default {
     color: rgb(100,100,100);
     cursor: pointer;
   }
-
-
 </style>
