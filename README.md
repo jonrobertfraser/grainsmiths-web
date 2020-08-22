@@ -14,6 +14,7 @@
 * `$ npm i --save axios`
 * `$ npm i --save vue-masonry-css`
 * `$ npm install --save vue-cool-lightbox`
+* `$ npm install --save vue-multiselect`
 
 
 ## Project setup

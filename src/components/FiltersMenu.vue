@@ -1,29 +1,53 @@
 <template>
+
+
+
     <!-- FILTER AREA -->
-    <div class="text-center py-2 my-5">
-      <div v-if="species_filters.length == 0 && tag_filters.length == 0"  class="badge filter-badge py-3 px-4 mx-2 my-2">
-        click species or tags to filter
+    <div class="py-2 my-3 justify-content-center">
+
+      <div class="d-flex flex-row justify-content-center my-2">
+        <multiselect class="w-50"
+          v-model="selected"
+          :options="options"
+          :multiple="true"
+          :close-on-select="true"
+          placeholder="Pick some"
+          label="name"
+          track-by="name"
+          >
+        </multiselect>
       </div>
-      <div v-for="species in species_filters" v-bind:key="species" class="badge filter-badge py-3 px-4 mx-2 my-2">
-          <router-link v-bind:to="removeSpeciesForUrl(species)">
-            <font-awesome-icon :icon="['fas', 'window-close']" size="lg" class="remove-filter-button"/>
-          </router-link>
-          {{ cleanTagSpecies(species) }}
+
+      <div class="d-flex flex-row justify-content-center">
+        <div v-if="species_filters.length == 0 && tag_filters.length == 0"  class="badge filter-badge py-3 px-4 mx-2 my-2">
+          click species or tags to filter
+        </div>
+        <div v-for="species in species_filters" v-bind:key="species" class="badge filter-badge py-3 px-4 mx-2 my-2">
+            <router-link v-bind:to="removeSpeciesForUrl(species)">
+              <font-awesome-icon :icon="['fas', 'window-close']" size="lg" class="remove-filter-button"/>
+            </router-link>
+            {{ cleanTagSpecies(species) }}
+        </div>
+        <div v-for="tag in tag_filters" v-bind:key="tag" class="badge filter-badge py-3 px-4 mx-2 my-2">
+            <router-link v-bind:to="removeTagForUrl(tag)"><font-awesome-icon :icon="['fas', 'window-close']" size="lg" class="remove-filter-button"/>
+            </router-link>
+            {{ cleanTagSpecies(tag) }}
+        </div>
       </div>
-      <div v-for="tag in tag_filters" v-bind:key="tag" class="badge filter-badge py-3 px-4 mx-2 my-2">
-          <router-link v-bind:to="removeTagForUrl(tag)"><font-awesome-icon :icon="['fas', 'window-close']" size="lg" class="remove-filter-button"/>
-          </router-link>
-          {{ cleanTagSpecies(tag) }}
-      </div>
+
     </div>
     <!-- FILTER AREA -->
 </template>
 
 <script>
 
+import Multiselect from 'vue-multiselect'
+
 export default {
   name: "FiltersMenu",
-  components: {},
+  components: {
+    Multiselect
+  },
   methods: {
     cleanTagSpecies(thing) {
       return thing.replace(/_/g," ").replace(/-/g," ")
@@ -75,6 +99,8 @@ export default {
   },
   data () {
     return {
+      selected: null,
+      options: ['list', 'of', 'options']
     }
   },
   mounted() {
@@ -84,6 +110,9 @@ export default {
 
 
 </script>
+
+
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 
 <style lang="css" scoped>
