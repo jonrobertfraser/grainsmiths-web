@@ -5,9 +5,22 @@
     <!-- FILTER AREA -->
     <div class="py-2 mb-5 mt-3">
 
+      <!-- INSTRUCTIONS -->
+      <div class="row mt-2 mb-4" v-if="(tag_filters.length + species_filters.length) == 0">
+        <div class="col-sm-2"></div>
+          <div class="col-sm-8">
+            <div class="text-center gs-badge instruction px-4 mx-0">
+              Search by species in the search box or look for specific features by clicking the tags below.
+            </div>
+          </div>
+        <div class="col-sm-2"></div>
+      </div>
+      <!-- INSTRUCTIONS -->
+
       <div class="row mt-2 mb-4">
         <div class="col-sm-2"></div>
-        <div class="col-sm-8 text-center">
+        <div class="col-sm-8">
+
           <multiselect
             v-model="multiValue"
             :options="options"
@@ -136,6 +149,12 @@ export default {
 
 
 <style lang="css" scoped>
+
+  .instruction {
+    background-color: #000000;
+    color: #FFFFFF;
+  }
+
 
   .filter-badge {
     position: relative;
