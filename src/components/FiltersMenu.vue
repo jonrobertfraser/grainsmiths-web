@@ -5,9 +5,9 @@
     <!-- FILTER AREA -->
     <div class="py-2 mb-5 mt-3">
 
-      <div class="row my-2">
-        <div class="col-sm-3"></div>
-        <div class="col-sm-6 text-center">
+      <div class="row mt-2 mb-4">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8 text-center">
           <multiselect
             v-model="multiValue"
             :options="options"
@@ -20,7 +20,7 @@
             >
           </multiselect>
         </div>
-        <div class="col-sm-3"></div>
+        <div class="col-sm-2"></div>
       </div>
 
       <div class="flex-row justify-content-center text-center">
@@ -169,6 +169,11 @@ export default {
 </style>
 
 <style lang="css">
+  .multiselect__input, .multiselect__placeholder {
+    color: rgb(51,51,51);
+    padding: 0.2em;
+    font-size: 1em;
+  }
   .multiselect__tag {
     background-color: rgb(100,150,62);
     border-radius:.75rem;
@@ -176,11 +181,15 @@ export default {
     padding-bottom: 0.5em;
   }
   .multiselect__option:hover, .multiselect__option:after,
-  .multiselect__tag-icon:hover {
+  .multiselect__option--highlight, .multiselect__tag-icon:hover {
     background-color: rgb(100,150,62);
+  }
+  .multiselect__tag-icon {
+    padding-top: 0.2em;
   }
   .multiselect__tag-icon:after {
     color: #FFFFFF;
-    font-size: 1em;
+    font-size: 1.2em;
+    font-weight: 200;
   }
 </style>
