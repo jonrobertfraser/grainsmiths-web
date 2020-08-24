@@ -3,9 +3,9 @@
 
 
     <!-- FILTER AREA -->
-    <div class="py-2 my-3">
+    <div class="py-2 mb-5 mt-3">
 
-      <div class="row my-3">
+      <div class="row my-2">
         <div class="col-sm-3"></div>
         <div class="col-sm-6 text-center">
           <multiselect
@@ -13,7 +13,7 @@
             :options="options"
             :multiple="true"
             :close-on-select="true"
-            placeholder="Pick one or more species"
+            placeholder="Search for species"
             track-by="name_for_url"
             label="name"
             @input="updateRouteOnSpecies"
@@ -24,11 +24,11 @@
       </div>
 
       <div class="flex-row justify-content-center text-center">
-        <span v-for="tag in tag_list" v-bind:key="tag">
-          <div v-if="tag_filters.includes(tag)" v-on:click="removeTagFilter(tag)" class="badge filter-badge selected-filter-badge py-1 px-4 mx-2 my-2">
+        <span v-for="tag in tag_menu" v-bind:key="tag">
+          <div v-if="tag_filters.includes(tag)" v-on:click="removeTagFilter(tag)" class="gs-badge badge filter-badge selected-filter-badge py-1 px-4 mx-2 my-1">
             {{ cleanTagSpecies(tag) }}
           </div>
-          <div v-else v-on:click="addTagFilter(tag)" class="badge filter-badge py-1 px-4 mx-2 my-1">
+          <div v-else v-on:click="addTagFilter(tag)" class="gs-badge badge filter-badge py-1 px-4 mx-2 my-1">
             {{ cleanTagSpecies(tag) }}
           </div>
         </span>
@@ -55,6 +55,15 @@ export default {
         .post(url, query_params)
         .then(response => {
             this.options = [...response.data.menu]
+        })
+    },
+    populateTagMenu() {
+      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/get_tag_menu'
+      let query_params = {'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY}
+      axios
+        .post(url, query_params)
+        .then(response => {
+            this.tag_menu = [...response.data.menu]
         })
     },
     updateRouteOnSpecies() {
@@ -90,12 +99,7 @@ export default {
       multiValue: [],
       allSpecies: {},
       options: [],
-      tag_list: [
-        'burl', 'bowl_blank', 'tree_slice', 'instrument_making',
-        'stump', 'pen_blank', 'dimensional', 'lumber', 'knife_making',
-        'bookmatched', 'turning_blank', 'blank', 'leg_blank',
-        'live_edge', 'guitar', 'veneer', 'figured'
-      ]
+      tag_menu: []
     }
   },
   watch: {
@@ -119,6 +123,7 @@ export default {
   mounted() {
     console.log("Initial filters menu mounting...")
     this.populateSpeciesMenu()
+    this.populateTagMenu()
     console.log()
   }
 };
@@ -141,11 +146,6 @@ export default {
     background-color: rgb(255,255,255);
     border-radius:2rem;
     cursor: pointer;
-
-  }
-  .filter-badge:hover {
-    color: rgb(50,50,50);
-    background-color: rgb(238,238,238);
   }
   .remove-filter-button {
     color: rgb(150,150,150);
@@ -159,8 +159,28 @@ export default {
   .selected-filter-badge {
     background-color: rgb(90,90,90);
     color: rgb(255,255,255);
+    padding-right:0.8em!important;
+  }
+  .selected-filter-badge:after {
+    content: "\D7";
+    margin-left:0.5em;
   }
 
+</style>
 
-
+<style lang="css">
+  .multiselect__tag {
+    background-color: rgb(100,150,62);
+    border-radius:.75rem;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+  }
+  .multiselect__option:hover, .multiselect__option:after,
+  .multiselect__tag-icon:hover {
+    background-color: rgb(100,150,62);
+  }
+  .multiselect__tag-icon:after {
+    color: #FFFFFF;
+    font-size: 1em;
+  }
 </style>

@@ -14,12 +14,14 @@
       @removeTagFilter="removeTagFilter"
     />
 
+
     <!-- MASONRY AREA -->
     <masonry
       :cols="{default: 5, 1000: 4, 700: 3, 600: 2}"
       :gutter="{default: '30px', 700: '15px'}"
       >
       <div v-for="(product, index) in products" :key="index" class="card mb-5 text-center">
+
 
           <!-- PRODUCT IMAGE AND COUNT -->
           <a v-on:click="updateLightboxImages(product.image_urls)" class="content text-center inline">
@@ -70,7 +72,6 @@
           <!-- TAGS -->
 
 
-
           <!-- STORE LINK -->
           <div class="mt-2 mb-1 mx-1">
             <a class="store-link" v-bind:href="product.url" target="_blank">
@@ -80,14 +81,18 @@
           <!-- STORE LINK -->
 
 
+          <!-- MORE DETAIL -->
+          <div v-if="showMore[product.id]" class="text-left more-detail">
+            <div class="bold">{{product.title}}</div>
+            <div>{{product.description.substring(0, 500) + "..."}}</div>
+          </div>
+          <!-- MORE DETAIL -->
 
-          <!-- MORE DETAIL -->
-          <span v-if="showMore[product.id]" class="text-left more-detail">{{product.description.substring(0, 500) + "..."}}</span>
-          <!-- MORE DETAIL -->
 
           <!-- SHOW MORE BUTTON -->
           <span v-on:click="toggleShowMore(product.id)" v-if="!showMore[product.id]" class="show-more-button"><font-awesome-icon :icon="['fas', 'chevron-down']" size="sm" />&nbsp;Show more</span>
           <!-- SHOW MORE BUTTON -->
+
 
           <!-- SHOW LESS BUTTON -->
           <span v-on:click="toggleShowLess(product.id)" v-if="showMore[product.id]" class="show-more-button"><font-awesome-icon :icon="['fas', 'chevron-up']" size="sm" />&nbsp;Show less</span>
@@ -98,9 +103,13 @@
     </masonry>
     <!-- MASONRY AREA -->
 
+    <!-- LOAD MORE RESULTS -->
     <div class="text-center">
       <button v-if="last_call_count == api_call_limit" v-on:click="addMore()" type="button" class="btn btn-light mb-5">Load more...</button>
     </div>
+    <!-- LOAD MORE RESULTS -->
+
+
   </div>
 </template>
 
@@ -364,5 +373,9 @@ export default {
   .show-more-button:hover {
     color: rgb(100,100,100);
     cursor: pointer;
+  }
+  .bold {
+    font-weight: bold;
+    margin-bottom: 0.5em;
   }
 </style>
