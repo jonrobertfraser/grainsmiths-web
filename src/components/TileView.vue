@@ -23,84 +23,85 @@
       <div v-for="(product, index) in products" :key="index" class="card mb-5 text-center">
 
 
-          <!-- PRODUCT IMAGE AND COUNT -->
-          <a v-on:click="updateLightboxImages(product.image_urls)" class="content text-center inline">
-            <img v-bind:src="product.thumbnail_url" class="card-img-top rounded mb-1" v-bind:alt="product.title">
-            <span v-if="product.count > 1" class="gs-badge badge count-badge white-badge">
-                {{ product.count }} pieces
-            </span>
+        <!-- PRODUCT IMAGE AND COUNT -->
+        <a v-on:click="updateLightboxImages(product.image_urls)" class="content text-center inline">
+          <img v-bind:src="product.thumbnail_url" class="card-img-top rounded mb-1" v-bind:alt="product.title">
+          <span v-if="product.count > 1" class="gs-badge badge count-badge white-badge">
+              {{ product.count }} pieces
+          </span>
+        </a>
+        <!-- PRODUCT IMAGE AND COUNT -->
+
+
+        <!-- DIMENSIONS -->
+        <div class="my-0 mx-1 text-center">
+          <DimensionSet
+            :length="product.max_length"
+            :width="product.max_width"
+            :thickness="product.max_thickness"
+            :diameter="product.max_diameter"
+          />
+        </div>
+        <!-- DIMENSIONS -->
+
+
+        <!-- PRICE -->
+        <div class="my-1 mx-1">
+          <span class="price">{{ Math.floor(product.price) }}</span>
+        </div>
+        <!-- PRICE -->
+
+
+        <!-- SPECIES, SUBSPECIES -->
+        <div class="my-0 mx-1">
+          <span v-for="species in [product.species, product.subspecies]" v-bind:key="species">
+            <router-link v-if="species" v-bind:key="species" class="gs-badge badge species-badge" :to="addSpeciesForUrl(species)">
+              {{ cleanTagSpecies(species) }}
+          </router-link>
+          </span>
+        </div>
+        <!-- SPECIES, SUBSPECIES -->
+
+
+        <!-- TAGS -->
+        <div class="my-0 mx-1">
+          <div v-for="tag in product.gs_tags" v-bind:key="tag" class="gs-badge badge tag-badge" v-on:click="addTagFilter(tag)">
+              {{ cleanTagSpecies(tag) }}
+          </div>
+        </div>
+        <!-- TAGS -->
+
+
+        <!-- STORE LINK -->
+        <div class="mt-2 mb-1 mx-1">
+          <a class="store-link" v-bind:href="product.url" target="_blank">
+            <font-awesome-icon :icon="['fas', 'link']" size="1x"/>&nbsp;{{ product.company_name }}
           </a>
-          <!-- PRODUCT IMAGE AND COUNT -->
+        </div>
+        <!-- STORE LINK -->
 
 
-          <!-- DIMENSIONS -->
-          <div class="my-0 mx-1 text-center">
-            <DimensionSet
-              :length="product.max_length"
-              :width="product.max_width"
-              :thickness="product.max_thickness"
-              :diameter="product.max_diameter"
-            />
-          </div>
-          <!-- DIMENSIONS -->
+        <!-- MORE DETAIL -->
+        <div v-if="showMore[product.id]" class="text-left more-detail">
+          <div class="bold">{{product.title}}</div>
+          <div>{{product.description.substring(0, 500) + "..."}}</div>
+        </div>
+        <!-- MORE DETAIL -->
 
 
-          <!-- PRICE -->
-          <div class="my-1 mx-1">
-            <span class="price">{{ Math.floor(product.price) }}</span>
-          </div>
-          <!-- PRICE -->
+        <!-- SHOW MORE BUTTON -->
+        <span v-on:click="toggleShowMore(product.id)" v-if="!showMore[product.id]" class="show-more-button"><font-awesome-icon :icon="['fas', 'chevron-down']" size="sm" />&nbsp;Show more</span>
+        <!-- SHOW MORE BUTTON -->
 
 
-          <!-- SPECIES, SUBSPECIES -->
-          <div class="my-0 mx-1">
-            <span v-for="species in [product.species, product.subspecies]" v-bind:key="species">
-              <router-link v-if="species" v-bind:key="species" class="gs-badge badge species-badge" :to="addSpeciesForUrl(species)">
-                {{ cleanTagSpecies(species) }}
-            </router-link>
-            </span>
-          </div>
-          <!-- SPECIES, SUBSPECIES -->
-
-
-          <!-- TAGS -->
-          <div class="my-0 mx-1">
-            <div v-for="tag in product.gs_tags" v-bind:key="tag" class="gs-badge badge tag-badge" v-on:click="addTagFilter(tag)">
-                {{ cleanTagSpecies(tag) }}
-            </div>
-          </div>
-          <!-- TAGS -->
-
-
-          <!-- STORE LINK -->
-          <div class="mt-2 mb-1 mx-1">
-            <a class="store-link" v-bind:href="product.url" target="_blank">
-              <font-awesome-icon :icon="['fas', 'link']" size="1x"/>&nbsp;{{ product.company_name }}
-            </a>
-          </div>
-          <!-- STORE LINK -->
-
-
-          <!-- MORE DETAIL -->
-          <div v-if="showMore[product.id]" class="text-left more-detail">
-            <div class="bold">{{product.title}}</div>
-            <div>{{product.description.substring(0, 500) + "..."}}</div>
-          </div>
-          <!-- MORE DETAIL -->
-
-
-          <!-- SHOW MORE BUTTON -->
-          <span v-on:click="toggleShowMore(product.id)" v-if="!showMore[product.id]" class="show-more-button"><font-awesome-icon :icon="['fas', 'chevron-down']" size="sm" />&nbsp;Show more</span>
-          <!-- SHOW MORE BUTTON -->
-
-
-          <!-- SHOW LESS BUTTON -->
-          <span v-on:click="toggleShowLess(product.id)" v-if="showMore[product.id]" class="show-more-button"><font-awesome-icon :icon="['fas', 'chevron-up']" size="sm" />&nbsp;Show less</span>
-          <!-- SHOW LESS BUTTON -->
+        <!-- SHOW LESS BUTTON -->
+        <span v-on:click="toggleShowLess(product.id)" v-if="showMore[product.id]" class="show-more-button"><font-awesome-icon :icon="['fas', 'chevron-up']" size="sm" />&nbsp;Show less</span>
+        <!-- SHOW LESS BUTTON -->
 
 
       </div>
     </masonry>
+
     <!-- MASONRY AREA -->
 
     <!-- LOAD MORE RESULTS -->
@@ -130,7 +131,6 @@ export default {
   },
   methods: {
     refreshData() {
-      console.log("Refresh Data.")
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/get_active_products'
       //let url = 'http://localhost:5000/get_active_products'
 
@@ -173,6 +173,7 @@ export default {
       return thing.replace(/_/g," ").replace(/-/g," ")
     },
     addMore() {
+      this.scroll_pos = window.scrollY
       this.offset += this.api_call_limit;
       this.refreshData();
     },
@@ -218,7 +219,6 @@ export default {
       return this.makeUrl(new_species_filters, this.tag_filters)
     },
     updateDataFromRoute(params) {
-      console.log("updateDataFromRoute")
       if (params.species) {
         this.species_filters = params.species.split("+")
       }
@@ -244,18 +244,24 @@ export default {
       seed: 0,
       showMore: {},
       lightboxIndex: null,
-      lightboxImages: []
+      lightboxImages: [],
+      scroll_pos: 0
     }
   },
+  updated() {
+    /* Update scroll position back to where
+    you were previously after more products
+    are loaded. */
+    window.scrollTo(0, this.scroll_pos);
+  },
   mounted() {
-    console.log("Initial mounting...")
     this.seed = Math.ceil(Math.random() * 10)
     this.updateDataFromRoute(this.$router.currentRoute.params)
     this.refreshData()
   },
   watch: {
     '$route'(to) {
-      console.log("Route changed...")
+      this.scroll_pos = 0
       this.updateDataFromRoute(to.params)
       this.products.length = 0
       this.offset = 0

@@ -6,11 +6,14 @@
     <div class="py-2 mb-5 mt-3">
 
       <!-- INSTRUCTIONS -->
-      <div class="row mt-2 mb-4" v-if="(tag_filters.length + species_filters.length) == 0">
+      <div class="row mt-2 mb-4" v-if="(tag_filters.length + species_filters.length) == 0 && show_filter_instructions">
         <div class="col-sm-2"></div>
           <div class="col-sm-8">
-            <div class="text-center gs-badge instruction px-4 mx-0">
+            <div class="text-center gs-badge instruction px-5 mx-0">
               Search by species in the search box or look for specific features by clicking the tags below.
+            </div>
+            <div class="close-button" v-on:click="turnOffInstructions">
+              &times;
             </div>
           </div>
         <div class="col-sm-2"></div>
@@ -61,6 +64,10 @@ export default {
     Multiselect
   },
   methods: {
+    turnOffInstructions() {
+      this.show_filter_instructions = !this.show_filter_instructions
+      this.$cookies.set('show_filter_instructions',this.show_filter_instructions)
+    },
     populateSpeciesMenu() {
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/get_species_menu'
       let query_params = {'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY}
@@ -112,7 +119,8 @@ export default {
       multiValue: [],
       allSpecies: {},
       options: [],
-      tag_menu: []
+      tag_menu: [],
+      show_filter_instructions: true
     }
   },
   watch: {
@@ -134,10 +142,13 @@ export default {
     }
   },
   mounted() {
-    console.log("Initial filters menu mounting...")
     this.populateSpeciesMenu()
     this.populateTagMenu()
-    console.log()
+    if (this.$cookies.isKey("show_filter_instructions")) {
+      this.show_filter_instructions = (this.$cookies.get("show_filter_instructions") == 'true')
+    } else {
+      this.$cookies.set("show_filter_instructions",this.show_filter_instructions)
+    }
   }
 };
 
@@ -154,7 +165,14 @@ export default {
     background-color: #000000;
     color: #FFFFFF;
   }
-
+  .close-button {
+    position: absolute;
+    right: 1.5em;
+    top: 0.2em;
+    color: #FFFFFF;
+    font-size: 1.5em;
+    cursor: pointer;
+  }
 
   .filter-badge {
     position: relative;
