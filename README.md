@@ -15,6 +15,7 @@
 * `$ npm i --save vue-masonry-css`
 * `$ npm install --save vue-cool-lightbox`
 * `$ npm install --save vue-multiselect`
+* `$ npm install @auth0/auth0-spa-js`
 
 
 ## Project setup
