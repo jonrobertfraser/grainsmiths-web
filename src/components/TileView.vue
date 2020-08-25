@@ -32,6 +32,19 @@
         </a>
         <!-- PRODUCT IMAGE AND COUNT -->
 
+        <!-- FAVORITE AND PRICE -->
+        <div class="d-flex justify-content-between mx-2 my-1">
+          <div v-if="favorites.includes(product.id)" v-on:click="removeFavorite(product.id)" class="favorite favorited">
+            <font-awesome-icon :icon="['fas', 'heart']" size="1x"/>
+          </div>
+          <div  v-else class="favorite" v-on:click="addFavorite(product.id)">
+            <font-awesome-icon :icon="['far', 'heart']" size="1x"/>
+          </div>
+          <div class="price">
+            {{ Math.floor(product.price) }}
+          </div>
+        </div>
+        <!-- FAVORITE AND PRICE -->
 
         <!-- DIMENSIONS -->
         <div class="my-0 mx-1 text-center">
@@ -43,13 +56,6 @@
           />
         </div>
         <!-- DIMENSIONS -->
-
-
-        <!-- PRICE -->
-        <div class="my-1 mx-1">
-          <span class="price">{{ Math.floor(product.price) }}</span>
-        </div>
-        <!-- PRICE -->
 
 
         <!-- SPECIES, SUBSPECIES -->
@@ -132,8 +138,6 @@ export default {
   methods: {
     refreshData() {
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/get_active_products'
-      //let url = 'http://localhost:5000/get_active_products'
-
       let query_params = {
         'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY,
         'convert_dims_to_fractions': true,
@@ -155,6 +159,42 @@ export default {
           }
         })
     },
+    getFavorites() {
+      if (this.$auth.loading || !this.$auth.isAuthenticated) return;
+      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/get_favorites'
+      let query_params = {
+        'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY,
+        'user_id': this.$auth.user.sub
+      }
+      axios
+        .post(url, query_params)
+        .then(response => {this.favorites = response.data.favorites})
+    },
+    addFavorite(product_id) {
+      if (this.$auth.loading || !this.$auth.isAuthenticated) return;
+      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/add_favorite'
+      let query_params = {
+        'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY,
+        'user_id': this.$auth.user.sub,
+        'product_id': product_id,
+      }
+      axios.post(url, query_params)
+      this.favorites.push(product_id)
+    },
+    removeFavorite(product_id) {
+      if (this.$auth.loading || !this.$auth.isAuthenticated) return;
+      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/remove_favorite'
+      let query_params = {
+        'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY,
+        'user_id': this.$auth.user.sub,
+        'product_id': product_id,
+      }
+      axios.post(url, query_params)
+      const index = this.favorites.indexOf(product_id);
+      if (index > -1) {
+        this.favorites.splice(index, 1);
+      }
+    },
     updateLightboxImages(image_urls) {
       this.lightboxIndex = 0
       this.lightboxImages.length = 0;
@@ -173,6 +213,7 @@ export default {
       return thing.replace(/_/g," ").replace(/-/g," ")
     },
     addMore() {
+      this.requested_more_products = true
       this.scroll_pos = window.scrollY
       this.offset += this.api_call_limit;
       this.refreshData();
@@ -245,14 +286,20 @@ export default {
       showMore: {},
       lightboxIndex: null,
       lightboxImages: [],
-      scroll_pos: 0
+      favorites: [],
+      scroll_pos: 0,
+      requested_more_products: false
     }
   },
   updated() {
-    /* Update scroll position back to where
-    you were previously after more products
-    are loaded. */
-    window.scrollTo(0, this.scroll_pos);
+    if (this.requested_more_products) {
+      /* Update scroll position back to where
+      you were previously after more products
+      are loaded. */
+      window.scrollTo(0, this.scroll_pos);
+      this.requested_more_products = false;
+    }
+    console.log("Favorites: "+this.favorites)
   },
   mounted() {
     this.seed = Math.ceil(Math.random() * 10)
@@ -260,6 +307,12 @@ export default {
     this.refreshData()
   },
   watch: {
+    '$auth.loading': function () {
+      console.log("loading changed...")
+      console.log("Authenticated: "+this.$auth.isAuthenticated)
+      console.log("Loading: "+this.$auth.loading)
+      this.getFavorites()
+    },
     '$route'(to) {
       this.scroll_pos = 0
       this.updateDataFromRoute(to.params)
@@ -355,18 +408,7 @@ export default {
     outline: none;
     box-shadow: none;
   }
-  .price {
-    font-size: 1em;
-    color: #666;
-    font-weight: 700;
-  }
-  .price:before {
-    color: #666;
-    content: '$';
-    font-size: 0.7em;
-    vertical-align:text-top;
-    color: rgb(100,100,100);
-  }
+
   .more-detail {
     padding-top: 0.5em;
     padding-bottom: 0.8em;
@@ -383,5 +425,33 @@ export default {
   .bold {
     font-weight: bold;
     margin-bottom: 0.5em;
+  }
+  .price {
+    color: #666;
+    font-weight: 700;
+  }
+  .price:before {
+    color: #666;
+    content: '$';
+    font-size: 0.7em;
+  }
+  .favorite {
+    cursor: pointer;
+    color: #666;
+    padding-top: 0.1em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    border-radius:.6rem;
+  }
+  .favorite:hover {
+    color: #FFF;
+    background-color: #E60023;
+  }
+  .favorited {
+    color: #E60023;
+  }
+  .favorited:hover {
+    color: #E60023;
+    background-color: #FFFFFF
   }
 </style>

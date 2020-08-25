@@ -1,7 +1,6 @@
 <template>
     <nav class="navbar navbar-expand-md navbar-light">
 
-
       <router-link class="navbar-brand" to="/">
           <img style="height:35px;" src="../assets/grainsmiths-wood-finder.svg" alt="">
       </router-link>
@@ -33,7 +32,8 @@
               <div class="auth-link" v-if="!$auth.isAuthenticated" @click="login">Log in / Sign Up
               </div>
               <!-- show logout when authenticated -->
-              <div class="auth-link" v-if="$auth.isAuthenticated" @click="logout">Log Out
+              <div class="auth-link" v-if="$auth.isAuthenticated" @click="logout">
+                Log Out
               </div>
               <router-link class="auth-image" to="/profile" v-if="$auth.isAuthenticated" >
                 <img :src="$auth.user.picture">
@@ -63,7 +63,7 @@ export default {
         returnTo: window.location.origin
       });
     }
-  }
+  },
 };
 </script>
 
