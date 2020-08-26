@@ -41,7 +41,14 @@ export default {
 
 
 <style lang="css" scoped>
-
+  .white-badge {
+    background-color: #FFFFFF;
+    color: #666;
+    border: 1px solid #999;
+    padding-left: 0.6em;
+    padding-right: 0.6em;
+    margin-right: 0.1em;
+  }
   .dimension-block + .dimension-block:before {
     color: rgb(170,170,170);
     content: "\00D7";

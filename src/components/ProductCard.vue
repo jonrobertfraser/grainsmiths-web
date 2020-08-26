@@ -141,10 +141,32 @@ export default {
 }
 </script>
 
+<style lang="css">
+  .gs-badge {
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+    margin-right: 0.4em;
+    padding-top: 0.5em;
+    padding-bottom: 0.45em;
+    padding-left: 0.7em;
+    padding-right: 0.7em;
+    border-radius:.75rem;
+    color: rgb(255,255,255);
+    font-size: 1em;
+    font-weight: 400;
+  }
+  .white-badge {
+    background-color: #FFFFFF;
+    color: #666;
+    border: 1px solid #999;
+    padding-left: 0.6em;
+    padding-right: 0.6em;
+    margin-right: 0.1em;
+  }
+</style>
 
 <!-- Scoped style doesn't pass style to children. -->
 <style lang="css" scoped>
-
   .rounded {
     border-radius:1rem!important
   }
