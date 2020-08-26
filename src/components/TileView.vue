@@ -22,92 +22,34 @@
       >
       <div v-for="(product, index) in products" :key="index" class="card mb-5 text-center">
 
-
-        <!-- PRODUCT IMAGE AND COUNT -->
-        <a v-on:click="updateLightboxImages(product.image_urls)" class="content text-center inline">
-          <img v-bind:src="product.thumbnail_url" class="card-img-top rounded mb-1" v-bind:alt="product.title">
-          <span v-if="product.count > 1" class="gs-badge badge count-badge white-badge">
-              {{ product.count }} pieces
-          </span>
-        </a>
-        <!-- PRODUCT IMAGE AND COUNT -->
-
-        <!-- FAVORITE AND PRICE -->
-        <div class="d-flex justify-content-between mx-2 my-1">
-          <div v-if="favorites.includes(product.id)" v-on:click="removeFavorite(product.id)" class="favorite favorited">
-            <font-awesome-icon :icon="['fas', 'heart']" size="1x"/>
-          </div>
-          <div  v-else class="favorite" v-on:click="addFavorite(product.id)">
-            <font-awesome-icon :icon="['far', 'heart']" size="1x"/>
-          </div>
-          <div class="price">
-            {{ Math.floor(product.price) }}
-          </div>
-        </div>
-        <!-- FAVORITE AND PRICE -->
-
-        <!-- DIMENSIONS -->
-        <div class="my-0 mx-1 text-center">
-          <DimensionSet
-            :length="product.max_length"
-            :width="product.max_width"
-            :thickness="product.max_thickness"
-            :diameter="product.max_diameter"
-          />
-        </div>
-        <!-- DIMENSIONS -->
-
-
-        <!-- SPECIES, SUBSPECIES -->
-        <div class="my-0 mx-1">
-          <span v-for="species in [product.species, product.subspecies]" v-bind:key="species">
-            <router-link v-if="species" v-bind:key="species" class="gs-badge badge species-badge" :to="addSpeciesForUrl(species)">
-              {{ cleanTagSpecies(species) }}
-          </router-link>
-          </span>
-        </div>
-        <!-- SPECIES, SUBSPECIES -->
-
-
-        <!-- TAGS -->
-        <div class="my-0 mx-1">
-          <div v-for="tag in product.gs_tags" v-bind:key="tag" class="gs-badge badge tag-badge" v-on:click="addTagFilter(tag)">
-              {{ cleanTagSpecies(tag) }}
-          </div>
-        </div>
-        <!-- TAGS -->
-
-
-        <!-- STORE LINK -->
-        <div class="mt-2 mb-1 mx-1">
-          <a class="store-link" v-bind:href="product.url" target="_blank">
-            <font-awesome-icon :icon="['fas', 'link']" size="1x"/>&nbsp;{{ product.company_name }}
-          </a>
-        </div>
-        <!-- STORE LINK -->
-
-
-        <!-- MORE DETAIL -->
-        <div v-if="showMore[product.id]" class="text-left more-detail">
-          <div class="bold">{{product.title}}</div>
-          <div>{{product.description.substring(0, 500) + "..."}}</div>
-        </div>
-        <!-- MORE DETAIL -->
-
-
-        <!-- SHOW MORE BUTTON -->
-        <span v-on:click="toggleShowMore(product.id)" v-if="!showMore[product.id]" class="show-more-button"><font-awesome-icon :icon="['fas', 'chevron-down']" size="sm" />&nbsp;Show more</span>
-        <!-- SHOW MORE BUTTON -->
-
-
-        <!-- SHOW LESS BUTTON -->
-        <span v-on:click="toggleShowLess(product.id)" v-if="showMore[product.id]" class="show-more-button"><font-awesome-icon :icon="['fas', 'chevron-up']" size="sm" />&nbsp;Show less</span>
-        <!-- SHOW LESS BUTTON -->
-
+        <ProductCard
+          :product_id="product.id"
+          :thumbnail_url="product.thumbnail_url"
+          :count="product.count"
+          :price="product.price"
+          :max_length="product.max_length"
+          :max_width="product.max_width"
+          :max_thickness="product.max_thickness"
+          :diameter="product.diameter"
+          :species="product.species"
+          :subspecies="product.subspecies"
+          :gs_tags="product.gs_tags"
+          :url="product.url"
+          :title="product.title"
+          :description="product.description"
+          :image_urls="product.image_urls"
+          :company_name="product.company_name"
+          :favorited="favorites.includes(product.id)"
+          @addTagFilter="addTagFilter"
+          @removeTagFilter="removeTagFilter"
+          @addSpeciesFilter="addSpeciesFilter"
+          @addFavorite="addFavorite"
+          @removeFavorite="removeFavorite"
+          @showLightbox="showLightbox"
+        />
 
       </div>
     </masonry>
-
     <!-- MASONRY AREA -->
 
     <!-- LOAD MORE RESULTS -->
@@ -126,14 +68,14 @@
 import axios from 'axios'
 import ImageLightbox from '../components/ImageLightbox.vue'
 import FiltersMenu from '../components/FiltersMenu.vue'
-import DimensionSet from '../components/DimensionSet.vue'
+import ProductCard from '../components/ProductCard.vue'
 
 export default {
   name: "TileView",
   components: {
     ImageLightbox,
     FiltersMenu,
-    DimensionSet
+    ProductCard
   },
   methods: {
     refreshData() {
@@ -195,22 +137,13 @@ export default {
         this.favorites.splice(index, 1);
       }
     },
-    updateLightboxImages(image_urls) {
+    showLightbox(image_urls) {
       this.lightboxIndex = 0
       this.lightboxImages.length = 0;
       image_urls.forEach(element => this.lightboxImages.push(element));
     },
     closeLightbox() {
       this.lightboxIndex = null
-    },
-    toggleShowMore(id) {
-      this.$set(this.showMore, id, true);
-    },
-    toggleShowLess(id) {
-      this.$set(this.showMore, id, false);
-    },
-    cleanTagSpecies(thing) {
-      return thing.replace(/_/g," ").replace(/-/g," ")
     },
     addMore() {
       this.requested_more_products = true
@@ -225,15 +158,14 @@ export default {
         return '/explore/'+species_filters.join("+")+'/'+tag_filters.join("+")
       }
     },
-    addSpeciesForUrl(species) {
-      var new_species_filters = [...this.species_filters]
+    addSpeciesFilter(species) {
       if (!this.species_filters.includes(species)) {
-        new_species_filters.push(species)
+        this.species_filters.push(species)
       }
-      return this.makeUrl(new_species_filters, this.tag_filters)
+      let new_url = this.makeUrl(this.species_filters, this.tag_filters)
+      this.$router.push({ path: new_url })
     },
     addTagFilter(tag) {
-
       if (!this.tag_filters.includes(tag)) {
         this.tag_filters.push(tag.replace(/\s/g,"_"))
       }
@@ -248,18 +180,8 @@ export default {
       let new_url = this.makeUrl(this.species_filters, this.tag_filters)
       this.$router.push({ path: new_url })
     },
-    removeSpeciesForUrl(species) {
-      const index = this.species_filters.indexOf(species);
-      var new_species_filters = [...this.species_filters] // shallow copy the list
-      if (index > -1) {
-        new_species_filters.splice(index, 1);
-      }
-      if (new_species_filters.length == 0) {
-        new_species_filters = ['all-species']
-      }
-      return this.makeUrl(new_species_filters, this.tag_filters)
-    },
     updateDataFromRoute(params) {
+      console.log("Update data from route")
       if (params.species) {
         this.species_filters = params.species.split("+")
       }
@@ -354,104 +276,7 @@ export default {
 
 <!-- Scoped style doesn't pass style to children. -->
 <style lang="css" scoped>
-
   .card {
     border: none;
-  }
-  .rounded {
-    border-radius:1rem!important
-  }
-  .species-badge {
-    background-color: rgb(100,150,62);
-  }
-  .species-badge:hover {
-    background-color: rgb(50,75,31);
-    color: #FFFFFF;
-  }
-  .tag-badge {
-    background-color: rgb(90,90,90);
-  }
-  .tag-badge:hover {
-    background-color: rgb(40,40,40);
-    color: #FFFFFF;
-    cursor: pointer;
-  }
-
-  .count-badge {
-    position: absolute;
-    top: 0.75em;
-    left: 0.75em;
-    font-size: 0.9em;
-  }
-  .store-link {
-    color: rgb(150,150,150);
-
-  }
-  .store-link:hover {
-    color: rgb(100,100,100);
-    text-decoration: none;
-  }
-  .content .content-overlay {
-    position: absolute;
-    left: 0;
-    top: 0;
-    opacity: 0;
-    background-color: #000000;
-  }
-  .content:hover img {
-    opacity: 0.8;
-    -webkit-transition: all 0.4s ease-in-out 0s;
-    -moz-transition: all 0.4s ease-in-out 0s;
-    transition: all 0.4s ease-in-out 0s;
-  }
-  .content:focus {
-    outline: none;
-    box-shadow: none;
-  }
-
-  .more-detail {
-    padding-top: 0.5em;
-    padding-bottom: 0.8em;
-    font-size:0.9em;
-  }
-  .show-more-button {
-    color: rgb(150,150,150);
-
-  }
-  .show-more-button:hover {
-    color: rgb(100,100,100);
-    cursor: pointer;
-  }
-  .bold {
-    font-weight: bold;
-    margin-bottom: 0.5em;
-  }
-  .price {
-    color: #666;
-    font-weight: 700;
-  }
-  .price:before {
-    color: #666;
-    content: '$';
-    font-size: 0.7em;
-  }
-  .favorite {
-    cursor: pointer;
-    color: #666;
-    padding-top: 0.1em;
-    padding-left: 0.5em;
-    padding-right: 0.5em;
-    border-radius:.6rem;
-  }
-  .favorite:hover {
-    color: #FFF;
-    background-color: #E60023;
-  }
-  .favorited {
-    color: #E60023;
-  }
-  .favorited:hover {
-    color: #E60023;
-    background-color: #FFFFFF
   }
 </style>
