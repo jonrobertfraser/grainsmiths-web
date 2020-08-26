@@ -2,6 +2,7 @@ import Vue from "vue"
 import VueRouter from "vue-router"
 import ExplorePage from "./pages/ExplorePage.vue"
 import WatchListPage from "./pages/WatchListPage.vue"
+import AboutPage from "./pages/AboutPage.vue"
 
 Vue.use(VueRouter)
 
@@ -37,6 +38,14 @@ const router = new VueRouter({
       path: '/watch-list',
       name: 'WatchList',
       component: WatchListPage,
+      meta: {
+        title: 'Grainsmiths',
+      }
+    },
+    {
+      path: '/about',
+      name: 'AboutPage',
+      component: AboutPage,
       meta: {
         title: 'Grainsmiths',
       }

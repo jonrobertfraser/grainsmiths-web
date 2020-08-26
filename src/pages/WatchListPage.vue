@@ -1,25 +1,17 @@
 <template>
   <div>
 
-    <div class="py-2 my-4">
-      <div class="row">
-        <div class="col-sm-2"><!-- Left Spacer --></div>
-        <div class="col-sm-8">
-          <div class="mx-4">
-            <h3 class="mb-4">
-              Your Watch List
-            </h3>
-            <p>
-              This is a list of products you have selected to watch.
-            </p>
-            <p>
-              Tell us what else you'd like to see here! Would you like to be notified of price changes? Or similar products? Anything else?
-            </p>
-          </div>
-        </div>
-        <div class="col-sm-2"><!-- Right Spacer --></div>
-      </div>
-    </div>
+    <WrittenContent>
+      <template v-slot:header>
+        Your Watch List
+      </template>
+      <p>
+        This is a list of products you have selected to watch.
+      </p>
+      <p>
+        Tell us what else you'd like to see here! Would you like to be notified of price changes? Or similar products? Anything else?
+      </p>
+    </WrittenContent>
 
     <TiledCards
       :products="products"
@@ -27,6 +19,7 @@
       @addTagFilter="addTagFilter"
       @addSpeciesFilter="addSpeciesFilter"
     />
+
   </div>
 </template>
 
@@ -34,11 +27,13 @@
 
 import axios from 'axios'
 import TiledCards from '../components/TiledCards.vue'
+import WrittenContent from '../components/WrittenContent.vue'
 
 export default {
   name: "WatchList",
   components: {
     TiledCards,
+    WrittenContent,
   },
   methods: {
     getFavoriteProducts() {

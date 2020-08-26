@@ -12,7 +12,7 @@
       <div class="collapse navbar-collapse text-center" id="gsNavbar">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <router-link class="nav-link" to="/faq">About Grainsmiths</router-link>
+            <router-link class="nav-link" to="/about">About Grainsmiths</router-link>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="https://instagram.com/grainsmiths" target="_blank">
