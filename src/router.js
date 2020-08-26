@@ -1,7 +1,7 @@
 import Vue from "vue"
 import VueRouter from "vue-router"
-import ExploreView from "./views/ExploreView.vue"
-import WatchList from "./views/WatchList.vue"
+import ExplorePage from "./pages/ExplorePage.vue"
+import WatchListPage from "./pages/WatchListPage.vue"
 
 Vue.use(VueRouter)
 
@@ -11,7 +11,7 @@ const router = new VueRouter({
     {
       path: '/',
       name: 'Home',
-      component: ExploreView,
+      component: ExplorePage,
       meta: {
         title: 'Grainsmiths',
       },
@@ -19,16 +19,16 @@ const router = new VueRouter({
     },
     {
       path: '/explore/:species',
-      name: 'ExploreViewSpecies',
-      component: ExploreView,
+      name: 'ExplorePageSpecies',
+      component: ExplorePage,
       meta: {
         title: 'Grainsmiths',
       }
     },
     {
       path: '/explore/:species/:tags',
-      name: 'ExploreViewSpeciesTags',
-      component: ExploreView,
+      name: 'ExplorePageSpeciesTags',
+      component: ExplorePage,
       meta: {
         title: 'Grainsmiths',
       }
@@ -36,7 +36,7 @@ const router = new VueRouter({
     {
       path: '/watch-list',
       name: 'WatchList',
-      component: WatchList,
+      component: WatchListPage,
       meta: {
         title: 'Grainsmiths',
       }

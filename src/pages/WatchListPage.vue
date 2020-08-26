@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <TileView
+    <TiledCards
       :products="products"
       :data_available="false"
       @addTagFilter="addTagFilter"
@@ -33,12 +33,12 @@
 <script>
 
 import axios from 'axios'
-import TileView from '../components/TileView.vue'
+import TiledCards from '../components/TiledCards.vue'
 
 export default {
   name: "WatchList",
   components: {
-    TileView,
+    TiledCards,
   },
   methods: {
     getFavoriteProducts() {

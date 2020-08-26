@@ -61,7 +61,7 @@ import ImageLightbox from '../components/ImageLightbox.vue'
 import ProductCard from '../components/ProductCard.vue'
 
 export default {
-  name: "TileView",
+  name: "TiledCards",
   components: {
     ImageLightbox,
     ProductCard

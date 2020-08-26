@@ -10,7 +10,7 @@
       @removeTagFilter="removeTagFilter"
     />
 
-    <TileView
+    <TiledCards
       :products="products"
       :species_filters="species_filters"
       :tag_filters="tag_filters"
@@ -25,13 +25,13 @@
 <script>
 
 import axios from 'axios'
-import TileView from '../components/TileView.vue'
+import TiledCards from '../components/TiledCards.vue'
 import FiltersMenu from '../components/FiltersMenu.vue'
 
 export default {
   name: "ExploreView",
   components: {
-    TileView,
+    TiledCards,
     FiltersMenu
   },
   methods: {
