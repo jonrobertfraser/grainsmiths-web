@@ -4,7 +4,6 @@
 
     <!-- FILTER AREA -->
     <div class="py-2 mb-5 mt-3">
-
       <!-- INSTRUCTIONS -->
       <div class="row mt-2 mb-4" v-if="(tag_filters.length + species_filters.length) == 0 && show_filter_instructions">
         <div class="col-sm-2"></div>
@@ -117,7 +116,6 @@ export default {
   data () {
     return {
       multiValue: [],
-      allSpecies: {},
       options: [],
       tag_menu: [],
       show_filter_instructions: true
@@ -132,7 +130,7 @@ export default {
     the tileview gets to update its data based on the URL.
     */
     species_filters: function () {
-      this.multiValue.length = 0
+      this.multiValue = []
       this.species_filters.forEach(element => {
         this.multiValue.push({
           'name': this.cleanTagSpecies(element),
@@ -149,7 +147,7 @@ export default {
     } else {
       this.$cookies.set("show_filter_instructions",this.show_filter_instructions)
     }
-  }
+  },
 };
 
 

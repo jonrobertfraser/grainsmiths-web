@@ -221,7 +221,6 @@ export default {
       window.scrollTo(0, this.scroll_pos);
       this.requested_more_products = false;
     }
-    console.log("Favorites: "+this.favorites)
   },
   mounted() {
     this.seed = Math.ceil(Math.random() * 10)

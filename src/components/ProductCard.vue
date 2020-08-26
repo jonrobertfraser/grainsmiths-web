@@ -38,7 +38,7 @@
     <!-- SPECIES, SUBSPECIES -->
     <div class="my-0 mx-1">
       <div v-for="this_species in [species, subspecies].filter(x => x)" v-bind:key="this_species" v-on:click="addSpeciesFilter(this_species)" class="gs-badge badge species-badge">
-          {{ this_species }}
+          {{ cleanTagSpecies(this_species) }}
       </div>
     </div>
     <!-- SPECIES, SUBSPECIES -->
@@ -154,6 +154,7 @@ export default {
   .species-badge:hover {
     background-color: rgb(50,75,31);
     color: #FFFFFF;
+    cursor: pointer;
   }
   .tag-badge {
     background-color: rgb(90,90,90);
