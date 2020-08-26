@@ -1,21 +1,21 @@
 <template>
   <div id="app" class="d-flex flex-column min-vh-100">
-    <NavBar />
+    <AppHeader />
     <router-view />
-    <Footer />
+    <AppFooter />
   </div>
 </template>
 
 <script>
 
-import NavBar from './components/NavBar.vue'
-import Footer from './components/Footer.vue'
+import AppHeader from './components/AppHeader.vue'
+import AppFooter from './components/AppFooter.vue'
 
 export default {
   name: 'App',
   components: {
-    NavBar,
-    Footer
+    AppHeader,
+    AppFooter
   }
 }
 </script>

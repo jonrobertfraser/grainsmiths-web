@@ -1,7 +1,5 @@
 <template>
 
-
-
     <!-- FILTER AREA -->
     <div class="py-2 mb-5 mt-3">
       <!-- INSTRUCTIONS -->

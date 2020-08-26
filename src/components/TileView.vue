@@ -7,14 +7,6 @@
       @closeLightbox="closeLightbox"
     />
 
-    <FiltersMenu
-      :tag_filters="tag_filters"
-      :species_filters="species_filters"
-      @addTagFilter="addTagFilter"
-      @removeTagFilter="removeTagFilter"
-    />
-
-
     <!-- MASONRY AREA -->
     <masonry
       :cols="{default: 5, 1000: 4, 700: 3, 600: 2}"
@@ -53,7 +45,7 @@
 
     <!-- LOAD MORE RESULTS -->
     <div class="text-center">
-      <button v-if="last_call_count == api_call_limit" v-on:click="addMore()" type="button" class="btn btn-light mb-5">Load more...</button>
+      <button v-if="data_available" v-on:click="addMoreProducts()" type="button" class="btn btn-light mb-5">Load more...</button>
     </div>
     <!-- LOAD MORE RESULTS -->
 
@@ -66,40 +58,15 @@
 
 import axios from 'axios'
 import ImageLightbox from '../components/ImageLightbox.vue'
-import FiltersMenu from '../components/FiltersMenu.vue'
 import ProductCard from '../components/ProductCard.vue'
 
 export default {
   name: "TileView",
   components: {
     ImageLightbox,
-    FiltersMenu,
     ProductCard
   },
   methods: {
-    refreshData() {
-      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/get_active_products'
-      let query_params = {
-        'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY,
-        'convert_dims_to_fractions': true,
-        'tag_filters': this.tag_filters,
-        'species_filters': this.species_filters,
-        'offset': this.offset,
-        'limit': this.api_call_limit,
-        'seed': this.seed
-      }
-
-      axios
-        .post(url, query_params)
-        .then(response => {
-          this.last_call_count = response.data.products.length
-          if (this.products.length == 0) {
-            this.products = response.data.products
-          } else {
-            this.products = [...this.products.concat(response.data.products)]
-          }
-        })
-    },
     getFavorites() {
       if (this.$auth.loading || !this.$auth.isAuthenticated) return;
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/get_favorites'
@@ -136,6 +103,15 @@ export default {
         this.favorites.splice(index, 1);
       }
     },
+    addSpeciesFilter(species) {
+      this.$emit('addSpeciesFilter', species)
+    },
+    addTagFilter(tag) {
+      this.$emit('addTagFilter', tag)
+    },
+    removeTagFilter(tag) {
+      this.$emit('removeTagFilter', tag)
+    },
     showLightbox(image_urls) {
       this.lightboxIndex = 0
       this.lightboxImages.length = 0;
@@ -144,97 +120,44 @@ export default {
     closeLightbox() {
       this.lightboxIndex = null
     },
-    addMore() {
-      this.requested_more_products = true
+    addMoreProducts() {
       this.scroll_pos = window.scrollY
-      this.offset += this.api_call_limit;
-      this.refreshData();
+      this.$emit('addMoreProducts');
     },
-    makeUrl(species_filters, tag_filters) {
-      if (species_filters.length == 0) {
-        return '/explore/all-species/'+tag_filters.join("+")
-      } else {
-        return '/explore/'+species_filters.join("+")+'/'+tag_filters.join("+")
-      }
-    },
-    addSpeciesFilter(species) {
-      if (!this.species_filters.includes(species)) {
-        this.species_filters.push(species)
-      }
-      let new_url = this.makeUrl(this.species_filters, this.tag_filters)
-      this.$router.push({ path: new_url })
-    },
-    addTagFilter(tag) {
-      if (!this.tag_filters.includes(tag)) {
-        this.tag_filters.push(tag.replace(/\s/g,"_"))
-      }
-      let new_url = this.makeUrl(this.species_filters, this.tag_filters)
-      this.$router.push({ path: new_url })
-    },
-    removeTagFilter(tag) {
-      const index = this.tag_filters.indexOf(tag);
-      if (index > -1) {
-        this.tag_filters.splice(index, 1);
-      }
-      let new_url = this.makeUrl(this.species_filters, this.tag_filters)
-      this.$router.push({ path: new_url })
-    },
-    updateDataFromRoute(params) {
-      console.log("Update data from route")
-      if (params.species) {
-        this.species_filters = params.species.split("+")
-      }
-      const index = this.species_filters.indexOf('all-species');
-      if (index > -1) {
-        this.species_filters.splice(index, 1);
-      }
-      if (params.tags) {
-        this.tag_filters = params.tags.split("+")
-      } else {
-        this.tag_filters.length = 0
-      }
-    },
+  },
+  props: {
+    products: Array,
+    species_filters: Array,
+    tag_filters: Array,
+    data_available: Boolean,
   },
   data () {
     return {
-      products: [],
-      species_filters: [],
-      tag_filters: [],
-      offset: 0,
-      api_call_limit: 10,
-      last_call_count: 0,
-      seed: 0,
+      favorites: [],
       lightboxIndex: null,
       lightboxImages: [],
-      favorites: [],
       scroll_pos: 0,
-      requested_more_products: false
     }
   },
   updated() {
-    if (this.requested_more_products) {
-      /* Update scroll position back to where
-      you were previously after more products
-      are loaded. */
-      window.scrollTo(0, this.scroll_pos);
-      this.requested_more_products = false;
-    }
-  },
-  mounted() {
-    this.seed = Math.ceil(Math.random() * 10)
-    this.updateDataFromRoute(this.$router.currentRoute.params)
-    this.refreshData()
+
   },
   watch: {
     '$auth.loading': function () {
       this.getFavorites()
     },
-    '$route'(to) {
+    'products' () {
+      /* Update scroll position back to where
+      you were previously after more products
+      are loaded. */
+      this.$nextTick(function () {
+        // DOM updated
+        window.scrollTo(0, this.scroll_pos);
+      });
+    },
+    '$route'() {
       this.scroll_pos = 0
-      this.updateDataFromRoute(to.params)
-      this.products.length = 0
-      this.offset = 0
-      this.refreshData()
+      window.scrollTo(0, this.scroll_pos);
     }
   }
 };

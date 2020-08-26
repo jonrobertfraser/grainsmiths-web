@@ -1,20 +1,131 @@
 <template>
   <div>
 
-    <TileView />
+    <FiltersMenu
+      :tag_filters="tag_filters"
+      :species_filters="species_filters"
+      @addTagFilter="addTagFilter"
+      @removeTagFilter="removeTagFilter"
+    />
+
+    <TileView
+      :products="products"
+      :species_filters="species_filters"
+      :tag_filters="tag_filters"
+      :data_available="last_call_count == api_call_limit"
+      @addTagFilter="addTagFilter"
+      @removeTagFilter="removeTagFilter"
+      @addSpeciesFilter="addSpeciesFilter"
+      @addMoreProducts="addMoreProducts"
+    />
   </div>
 </template>
 
 <script>
 
+import axios from 'axios'
 import TileView from '../components/TileView.vue'
-
+import FiltersMenu from '../components/FiltersMenu.vue'
 
 export default {
   name: "ExploreView",
   components: {
     TileView,
+    FiltersMenu
+  },
+  methods: {
+    addMoreProducts() {
+      this.offset += this.api_call_limit;
+      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/get_active_products'
+      let query_params = {
+        'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY,
+        'convert_dims_to_fractions': true,
+        'tag_filters': this.tag_filters,
+        'species_filters': this.species_filters,
+        'offset': this.offset,
+        'limit': this.api_call_limit,
+        'seed': this.seed
+      }
 
+      axios
+        .post(url, query_params)
+        .then(response => {
+          this.last_call_count = response.data.products.length
+          if (this.products.length == 0) {
+            this.products = response.data.products
+          } else {
+            this.products = [...this.products.concat(response.data.products)]
+          }
+        })
+    },
+    makeUrl(species_filters, tag_filters) {
+      if (species_filters.length == 0) {
+        return '/explore/all-species/'+tag_filters.join("+")
+      } else {
+        return '/explore/'+species_filters.join("+")+'/'+tag_filters.join("+")
+      }
+    },
+    addSpeciesFilter(species) {
+      if (!this.species_filters.includes(species)) {
+        this.species_filters.push(species)
+      }
+      let new_url = this.makeUrl(this.species_filters, this.tag_filters)
+      this.$router.push({ path: new_url })
+    },
+    addTagFilter(tag) {
+      if (!this.tag_filters.includes(tag)) {
+        this.tag_filters.push(tag.replace(/\s/g,"_"))
+      }
+      let new_url = this.makeUrl(this.species_filters, this.tag_filters)
+      this.$router.push({ path: new_url })
+    },
+    removeTagFilter(tag) {
+      const index = this.tag_filters.indexOf(tag);
+      if (index > -1) {
+        this.tag_filters.splice(index, 1);
+      }
+      let new_url = this.makeUrl(this.species_filters, this.tag_filters)
+      this.$router.push({ path: new_url })
+    },
+    updateDataFromRoute(params) {
+      console.log("Update data from route")
+      if (params.species) {
+        this.species_filters = params.species.split("+")
+      }
+      const index = this.species_filters.indexOf('all-species');
+      if (index > -1) {
+        this.species_filters.splice(index, 1);
+      }
+      if (params.tags) {
+        this.tag_filters = params.tags.split("+")
+      } else {
+        this.tag_filters.length = 0
+      }
+    },
+  },
+  data () {
+    return {
+      products: [],
+      species_filters: [],
+      tag_filters: [],
+      offset: 0,
+      api_call_limit: 10,
+      last_call_count: 0,
+      seed: 0,
+    }
+  },
+  mounted() {
+    this.seed = Math.ceil(Math.random() * 10)
+    this.updateDataFromRoute(this.$router.currentRoute.params)
+    this.addMoreProducts()
+  },
+  watch: {
+    '$route'(to) {
+      this.updateDataFromRoute(to.params)
+      this.products.length = 0
+      this.offset = 0
+      this.addMoreProducts()
+    }
   }
 };
 </script>
