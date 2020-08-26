@@ -99,9 +99,6 @@ export default {
     addTagFilter(tag) {
       this.$emit('addTagFilter', tag)
     },
-    removeTagFilter(tag) {
-      this.$emit('removeTagFilter', tag)
-    },
     addSpeciesFilter(species) {
       this.$emit('addSpeciesFilter', species)
     },

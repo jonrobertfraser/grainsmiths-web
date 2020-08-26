@@ -41,7 +41,6 @@
           :company_name="product.company_name"
           :favorited="favorites.includes(product.id)"
           @addTagFilter="addTagFilter"
-          @removeTagFilter="removeTagFilter"
           @addSpeciesFilter="addSpeciesFilter"
           @addFavorite="addFavorite"
           @removeFavorite="removeFavorite"
