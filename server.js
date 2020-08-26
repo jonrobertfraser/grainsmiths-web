@@ -5,11 +5,11 @@ const app = express();
 app.enable("trust proxy");
 
 app.use(function(req, res, next) {
-  /*if (req.protocol !== "https") {
+  if (req.protocol !== "https") {
     var secureUrl = "https://" + req.headers["host"] + req.url;
     res.writeHead(301, { Location: secureUrl });
     res.end();
-  }*/
+  }
   next();
 });
 
