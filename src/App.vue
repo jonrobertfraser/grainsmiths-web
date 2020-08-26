@@ -1,7 +1,9 @@
 <template>
   <div id="app" class="d-flex flex-column min-vh-100">
     <AppHeader />
-    <router-view />
+    <div class="container-fluid">
+      <router-view />
+    </div>
     <AppFooter />
   </div>
 </template>
