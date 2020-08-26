@@ -1,7 +1,7 @@
 <template>
   <WrittenContent>
     <template v-slot:header>
-      Grainsmiths Launching Soon
+      Grainsmiths is launching soon
     </template>
     <p>
       Grainsmiths is the largest online repository of specialty wood products in the world.
