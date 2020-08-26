@@ -104,6 +104,7 @@ export default {
   }
   .auth-image {
     display: inline-block;
+    cursor: pointer;
   }
   .auth-link {
     display: inline-block;

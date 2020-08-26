@@ -16,7 +16,6 @@
       :tag_filters="tag_filters"
       :data_available="last_call_count == api_call_limit"
       @addTagFilter="addTagFilter"
-      @removeTagFilter="removeTagFilter"
       @addSpeciesFilter="addSpeciesFilter"
       @addMoreProducts="addMoreProducts"
     />

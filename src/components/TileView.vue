@@ -68,7 +68,8 @@ export default {
   },
   methods: {
     getFavorites() {
-      if (this.$auth.loading || !this.$auth.isAuthenticated) return;
+      if (this.retrieved_favorites || this.$auth.loading || !this.$auth.isAuthenticated) return;
+      console.log("Executing get_favorites")
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/get_favorites'
       let query_params = {
         'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY,
@@ -77,6 +78,7 @@ export default {
       axios
         .post(url, query_params)
         .then(response => {this.favorites = response.data.favorites})
+      this.retrieved_favorites = true
     },
     addFavorite(product_id) {
       if (this.$auth.loading || !this.$auth.isAuthenticated) return;
@@ -109,9 +111,6 @@ export default {
     addTagFilter(tag) {
       this.$emit('addTagFilter', tag)
     },
-    removeTagFilter(tag) {
-      this.$emit('removeTagFilter', tag)
-    },
     showLightbox(image_urls) {
       this.lightboxIndex = 0
       this.lightboxImages.length = 0;
@@ -127,8 +126,6 @@ export default {
   },
   props: {
     products: Array,
-    species_filters: Array,
-    tag_filters: Array,
     data_available: Boolean,
   },
   data () {
@@ -137,13 +134,17 @@ export default {
       lightboxIndex: null,
       lightboxImages: [],
       scroll_pos: 0,
+      retrieved_favorites: false,
     }
   },
   updated() {
-
+    this.getFavorites()
+  },
+  mounted() {
+    this.getFavorites()
   },
   watch: {
-    '$auth.loading': function () {
+    '$auth.loading' () {
       this.getFavorites()
     },
     'products' () {

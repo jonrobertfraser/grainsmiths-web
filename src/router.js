@@ -1,6 +1,7 @@
 import Vue from "vue"
 import VueRouter from "vue-router"
 import ExploreView from "./views/ExploreView.vue"
+import WatchList from "./views/WatchList.vue"
 
 Vue.use(VueRouter)
 
@@ -28,6 +29,14 @@ const router = new VueRouter({
       path: '/explore/:species/:tags',
       name: 'ExploreViewSpeciesTags',
       component: ExploreView,
+      meta: {
+        title: 'Grainsmiths',
+      }
+    },
+    {
+      path: '/watch-list',
+      name: 'WatchList',
+      component: WatchList,
       meta: {
         title: 'Grainsmiths',
       }
