@@ -4,6 +4,8 @@
     <FiltersMenu
       :tag_filters="tag_filters"
       :species_filters="species_filters"
+      @addSpeciesFilter="addSpeciesFilter"
+      @removeSpeciesFilter="removeSpeciesFilter"
       @addTagFilter="addTagFilter"
       @removeTagFilter="removeTagFilter"
     />
@@ -35,7 +37,6 @@ export default {
   },
   methods: {
     addMoreProducts() {
-      this.offset += this.api_call_limit;
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/get_active_products'
       let query_params = {
         'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY,
@@ -57,6 +58,7 @@ export default {
             this.products = [...this.products.concat(response.data.products)]
           }
         })
+      this.offset += this.api_call_limit;
     },
     makeUrl(species_filters, tag_filters) {
       if (species_filters.length == 0) {
@@ -68,6 +70,14 @@ export default {
     addSpeciesFilter(species) {
       if (!this.species_filters.includes(species)) {
         this.species_filters.push(species)
+      }
+      let new_url = this.makeUrl(this.species_filters, this.tag_filters)
+      this.$router.push({ path: new_url })
+    },
+    removeSpeciesFilter(species) {
+      const index = this.species_filters.indexOf(species);
+      if (index > -1) {
+        this.species_filters.splice(index, 1);
       }
       let new_url = this.makeUrl(this.species_filters, this.tag_filters)
       this.$router.push({ path: new_url })
@@ -88,7 +98,6 @@ export default {
       this.$router.push({ path: new_url })
     },
     updateDataFromRoute(params) {
-      console.log("Update data from route")
       if (params.species) {
         this.species_filters = params.species.split("+")
       }

@@ -1,11 +1,14 @@
 <template>
 
     <!-- FILTER AREA -->
-    <div class="py-2 mb-5 mt-3">
-      <!-- INSTRUCTIONS -->
-      <div class="row mt-2 mb-4" v-if="(tag_filters.length + species_filters.length) == 0 && show_filter_instructions">
-        <div class="col-sm-2"></div>
-          <div class="col-sm-8">
+    <div class="py-2 my-4">
+
+      <div class="row">
+        <div class="col-sm-2"><!-- Left Spacer --></div>
+        <div class="col-sm-8">
+
+          <!-- INSTRUCTIONS -->
+          <div class="mx-3 mb-4" v-if="show_filter_instructions">
             <div class="text-center gs-badge instruction px-5 mx-0">
               Search by species in the search box or look for specific features by clicking the tags below.
             </div>
@@ -13,40 +16,41 @@
               &times;
             </div>
           </div>
-        <div class="col-sm-2"></div>
-      </div>
-      <!-- INSTRUCTIONS -->
+          <!-- INSTRUCTIONS -->
 
-      <div class="row mt-2 mb-4">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-8">
+          <!-- MULTISELECT FOR SPECIES -->
+          <div class="mx-3">
+            <multiselect
+              v-model="multiValue"
+              :options="options"
+              :multiple="true"
+              :close-on-select="true"
+              placeholder="Search for species"
+              track-by="name_for_url"
+              label="name"
+              @select="addSpeciesFilter"
+              @remove="removeSpeciesFilter"
+              >
+            </multiselect>
+          </div>
+          <!-- MULTISELECT FOR SPECIES -->
 
-          <multiselect
-            v-model="multiValue"
-            :options="options"
-            :multiple="true"
-            :close-on-select="true"
-            placeholder="Search for species"
-            track-by="name_for_url"
-            label="name"
-            @input="updateRouteOnSpecies"
-            >
-          </multiselect>
+          <!-- TAG LIST -->
+          <div class="mx-1 mt-3 text-center">
+            <span v-for="tag in tag_menu" v-bind:key="tag">
+              <div v-if="tag_filters.includes(tag)" v-on:click="removeTagFilter(tag)" class="gs-badge badge filter-badge selected-filter-badge py-1 px-4 mx-2 my-1">
+                {{ cleanTagSpecies(tag) }}
+              </div>
+              <div v-else v-on:click="addTagFilter(tag)" class="gs-badge badge filter-badge py-1 px-4 mx-2 my-1">
+                {{ cleanTagSpecies(tag) }}
+              </div>
+            </span>
+          </div>
+          <!-- TAG LIST -->
+
         </div>
-        <div class="col-sm-2"></div>
+        <div class="col-sm-2"><!-- Right Spacer --></div>
       </div>
-
-      <div class="flex-row justify-content-center text-center">
-        <span v-for="tag in tag_menu" v-bind:key="tag">
-          <div v-if="tag_filters.includes(tag)" v-on:click="removeTagFilter(tag)" class="gs-badge badge filter-badge selected-filter-badge py-1 px-4 mx-2 my-1">
-            {{ cleanTagSpecies(tag) }}
-          </div>
-          <div v-else v-on:click="addTagFilter(tag)" class="gs-badge badge filter-badge py-1 px-4 mx-2 my-1">
-            {{ cleanTagSpecies(tag) }}
-          </div>
-        </span>
-      </div>
-
     </div>
     <!-- FILTER AREA -->
 </template>
@@ -83,21 +87,14 @@ export default {
             this.tag_menu = [...response.data.menu]
         })
     },
-    updateRouteOnSpecies() {
-      var new_species_filters = []
-      this.multiValue.forEach(element => new_species_filters.push(element.name_for_url));
-      let new_url = this.makeUrl(new_species_filters, this.tag_filters)
-      this.$router.push({ path: new_url })
-    },
     cleanTagSpecies(thing) {
       return thing.replace(/_/g," ").replace(/-/g," ")
     },
-    makeUrl(species_filters, tag_filters) {
-      if (species_filters.length == 0) {
-        return '/explore/all-species/'+tag_filters.join("+")
-      } else {
-        return '/explore/'+species_filters.join("+")+'/'+tag_filters.join("+")
-      }
+    addSpeciesFilter(species) {
+      this.$emit('addSpeciesFilter', species.name_for_url)
+    },
+    removeSpeciesFilter(species) {
+      this.$emit('removeSpeciesFilter', species.name_for_url)
     },
     addTagFilter(tag) {
       this.$emit('addTagFilter',tag)
@@ -163,7 +160,7 @@ export default {
   }
   .close-button {
     position: absolute;
-    right: 1.5em;
+    right: 1.9em;
     top: 0.2em;
     color: #FFFFFF;
     font-size: 1.5em;
