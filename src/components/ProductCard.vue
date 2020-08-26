@@ -103,11 +103,9 @@ export default {
       this.$emit('addSpeciesFilter', species)
     },
     addFavorite() {
-      console.log(this.product_id)
       this.$emit('addFavorite', this.product_id)
     },
     removeFavorite() {
-      console.log(this.product_id)
       this.$emit('removeFavorite', this.product_id)
     },
   },

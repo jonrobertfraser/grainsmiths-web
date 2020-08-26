@@ -69,7 +69,6 @@ export default {
   methods: {
     getFavorites() {
       if (this.retrieved_favorites || this.$auth.loading || !this.$auth.isAuthenticated) return;
-      console.log("Executing get_favorites")
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/get_favorites'
       let query_params = {
         'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY,

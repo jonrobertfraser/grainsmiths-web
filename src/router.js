@@ -11,7 +11,6 @@ Vue.use(VueRouter)
 import { getInstance } from "./auth/index.js";
 
 export const authGuard = (to, from, next) => {
-  console.log("authGuard")
   const authService = getInstance();
 
   const fn = () => {
