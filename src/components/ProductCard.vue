@@ -228,9 +228,15 @@ export default {
     padding-right: 0.5em;
     border-radius:.6rem;
   }
-  .favorite:hover {
-    color: #FFF;
-    background-color: #E60023;
+  /* Mobile devices fail the @media
+  call so the insides don't get processed.
+  This means that you don't get
+  sticky hover states on mobile. */
+  @media (hover: hover) {
+    .favorite:hover {
+      color: #FFF;
+      background-color: #E60023;
+    }
   }
   .favorited {
     color: #E60023;

@@ -229,9 +229,6 @@ export default {
   },
   watch: {
     '$auth.loading': function () {
-      console.log("loading changed...")
-      console.log("Authenticated: "+this.$auth.isAuthenticated)
-      console.log("Loading: "+this.$auth.loading)
       this.getFavorites()
     },
     '$route'(to) {
