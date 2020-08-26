@@ -17,6 +17,7 @@
 * `$ npm install --save vue-multiselect`
 * `$ npm install @auth0/auth0-spa-js`
 * `$ npm install vue-cookies --save`
+* `$ npm install express serve-static --save`
 
 
 ## Project setup

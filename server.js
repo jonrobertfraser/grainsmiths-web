@@ -1,0 +1,23 @@
+const express = require("express");
+const port = process.env.PORT || 8080;
+const app = express();
+
+app.enable("trust proxy");
+
+app.use(function(req, res, next) {
+  /*if (req.protocol !== "https") {
+    var secureUrl = "https://" + req.headers["host"] + req.url;
+    res.writeHead(301, { Location: secureUrl });
+    res.end();
+  }*/
+  next();
+});
+
+app.use(express.static(__dirname + "/dist/"));
+app.get(/.*/, function(req, res) {
+  console.log("inside get");
+  res.sendFile(__dirname + "/dist/index.html");
+});
+app.listen(port);
+
+console.log('app is listening on port: '+port)
