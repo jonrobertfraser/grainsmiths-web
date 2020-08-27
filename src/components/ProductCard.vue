@@ -213,6 +213,7 @@ export default {
       -webkit-transition: all 0.4s ease-in-out 0s;
       -moz-transition: all 0.4s ease-in-out 0s;
       transition: all 0.4s ease-in-out 0s;
+      cursor: pointer;
     }
   }
   .content:focus {
