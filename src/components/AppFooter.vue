@@ -1,6 +1,9 @@
 <template>
-    <div class="footer py-5 mt-auto">
+    <div class="container-fluid footer py-5 mt-auto">
       <div class="row">
+        <div class="col-sm-6 footer-brand-image text-center">
+          <img src="../assets/build-something-beautiful-grey.svg" alt="">
+        </div>
         <div class="col-sm-6 text-center">
           <div>
             <router-link class="nav-link" to="/about">
@@ -11,13 +14,8 @@
             &copy; Grainsmiths {{ new Date().getFullYear() }}
           </div>
         </div>
-        <div class="col-sm-6 footer-brand-image text-center">
-          <img src="../assets/build-something-beautiful-grey.svg" alt="">
-        </div>
       </div>
-
     </div>
-
 </template>
 
 <script>
