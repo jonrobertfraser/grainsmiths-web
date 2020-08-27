@@ -24,6 +24,7 @@
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.3",
     "vue-cool-lightbox": "^2.4.3",
+    "vue-drift": "^2.0.4",
     "vue-masonry-css": "^1.0.3",
     "vue-multiselect": "^2.1.6",
     "vue-router": "^3.4.2"

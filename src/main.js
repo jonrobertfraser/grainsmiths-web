@@ -70,6 +70,13 @@ Vue.$cookies.config('7d')
 
 Vue.config.productionTip = false
 
+let driftAppId = process.env.VUE_APP_DRIFT_APP_ID
+
+import VueDrift from 'vue-drift'
+Vue.use(VueDrift, {
+  appId: driftAppId,
+  development: false,
+})
 
 new Vue({
   router,

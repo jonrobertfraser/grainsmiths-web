@@ -18,6 +18,7 @@
 * `$ npm install @auth0/auth0-spa-js`
 * `$ npm install vue-cookies --save`
 * `$ npm install express serve-static --save`
+* `$ npm install --save vue-drift`
 
 
 ## Project setup
