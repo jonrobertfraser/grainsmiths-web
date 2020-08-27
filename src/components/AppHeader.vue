@@ -21,6 +21,11 @@
               <font-awesome-icon size="lg" :icon="['fab', 'reddit-alien']" />
             </a>
           </li>
+          <li class="nav-item" v-if="!$auth.loading && $auth.isAuthenticated">
+            <router-link class="nav-link" to="/explore">
+              Explore
+            </router-link>
+          </li>
           <li class="nav-item" v-if="!$auth.loading && !$auth.isAuthenticated">
             <!-- show login when not authenticated -->
             <div class="nav-link auth-link menu-button" @click="login">
