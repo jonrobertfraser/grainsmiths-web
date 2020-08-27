@@ -1,6 +1,6 @@
 # grainsmiths-vue
 
-# Additional packages I installed:
+## Additional packages I installed:
 
 * `$ npm i --save vue-router`
 * `$ npm i --save bootstrap-vue`
@@ -19,6 +19,19 @@
 * `$ npm install vue-cookies --save`
 * `$ npm install express serve-static --save`
 * `$ npm install --save vue-drift`
+
+
+## Deploying Vue via command line
+
+Set up the Heroku remotes by issuing the following command:
+
+* `$ heroku git:remote -a grainsmiths-web-staging -r staging`
+* `$ heroku git:remote -a grainsmiths-web -r production`
+
+Deploy on Heroku by issuing the following:
+
+* `$ git push staging master`
+* `$ git push production master`
 
 
 ## Project setup
