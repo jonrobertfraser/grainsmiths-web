@@ -67,38 +67,46 @@ export default {
     ProductCard
   },
   methods: {
-    getFavorites() {
+    async getFavorites() {
       if (this.retrieved_favorites || this.$auth.loading || !this.$auth.isAuthenticated) return;
-      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/get_favorites'
-      let query_params = {
-        'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY,
-        'user_id': this.$auth.user.sub
-      }
+      const accessToken = await this.$auth.getTokenSilently()
+      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/private/get_favorites'
       axios
-        .post(url, query_params)
+        .get(url, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        })
         .then(response => {this.favorites = response.data.favorites})
       this.retrieved_favorites = true
     },
-    addFavorite(product_id) {
+    async addFavorite(product_id) {
       if (this.$auth.loading || !this.$auth.isAuthenticated) return;
-      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/add_favorite'
+      const accessToken = await this.$auth.getTokenSilently()
+      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/private/add_favorite'
       let query_params = {
-        'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY,
-        'user_id': this.$auth.user.sub,
         'product_id': product_id,
       }
-      axios.post(url, query_params)
+      axios.post(url, query_params, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
       this.favorites.push(product_id)
     },
-    removeFavorite(product_id) {
+    async removeFavorite(product_id) {
       if (this.$auth.loading || !this.$auth.isAuthenticated) return;
-      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/remove_favorite'
+      const accessToken = await this.$auth.getTokenSilently()
+      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/private/remove_favorite'
       let query_params = {
-        'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY,
-        'user_id': this.$auth.user.sub,
         'product_id': product_id,
       }
-      axios.post(url, query_params)
+      axios.delete(url, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        params: query_params
+      })
       const index = this.favorites.indexOf(product_id);
       if (index > -1) {
         this.favorites.splice(index, 1);

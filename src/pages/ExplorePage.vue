@@ -36,19 +36,20 @@ export default {
   },
   methods: {
     addMoreProducts() {
-      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/get_active_products'
+      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/public/get_active_products'
       let query_params = {
-        'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY,
         'convert_dims_to_fractions': true,
-        'tag_filters': this.tag_filters,
-        'species_filters': this.species_filters,
+        'tag_filters': this.tag_filters.join("+"),
+        'species_filters': this.species_filters.join("+"),
         'offset': this.offset,
         'limit': this.api_call_limit,
         'seed': this.seed
       }
 
       axios
-        .post(url, query_params)
+        .get(url, {
+          params: query_params,
+        })
         .then(response => {
           this.last_call_count = response.data.products.length
           if (this.products.length == 0) {

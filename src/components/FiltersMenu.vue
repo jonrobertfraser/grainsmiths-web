@@ -70,19 +70,17 @@ export default {
       this.$cookies.set('show_filter_instructions',this.show_filter_instructions)
     },
     populateSpeciesMenu() {
-      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/get_species_menu'
-      let query_params = {'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY}
+      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/public/get_species_menu'
       axios
-        .post(url, query_params)
+        .get(url)
         .then(response => {
             this.options = [...response.data.menu]
         })
     },
     populateTagMenu() {
-      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/get_tag_menu'
-      let query_params = {'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY}
+      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/public/get_tag_menu'
       axios
-        .post(url, query_params)
+        .get(url)
         .then(response => {
             this.tag_menu = [...response.data.menu]
         })

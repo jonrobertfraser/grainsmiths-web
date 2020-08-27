@@ -36,17 +36,21 @@ export default {
     WrittenContent,
   },
   methods: {
-    getFavoriteProducts() {
+    async getFavoriteProducts() {
       if (this.retrieved_favorite_products || this.$auth.loading || !this.$auth.isAuthenticated) return;
-      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/get_favorite_products'
+      const accessToken = await this.$auth.getTokenSilently()
+      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/private/get_favorite_products'
       let query_params = {
-        'api_key': process.env.VUE_APP_GRAINSMITHS_API_KEY,
         'convert_dims_to_fractions': true,
-        'user_id': this.$auth.user.sub
       }
       console.log("Executing get_favorite_products")
       axios
-        .post(url, query_params)
+        .get(url, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          params: query_params
+        })
         .then(response => {
           this.last_call_count = response.data.products.length
             this.products = response.data.products
