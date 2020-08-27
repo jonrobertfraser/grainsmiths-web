@@ -22,20 +22,20 @@
             </a>
           </li>
           <li class="nav-item" v-if="!$auth.loading && $auth.isAuthenticated">
-            <router-link class="nav-link" to="/explore">
+            <router-link class="nav-link" to="/explore" data-toggle="collapse" data-target=".navbar-collapse.show">
               Explore
             </router-link>
           </li>
           <li class="nav-item" v-if="!$auth.loading && !$auth.isAuthenticated">
             <!-- show login when not authenticated -->
-            <div class="nav-link auth-link menu-button" @click="login">
+            <div class="nav-link auth-link menu-button" @click="login" data-toggle="collapse"  data-target=".navbar-collapse.show">
               Log in / Sign Up
             </div>
             <!-- show login when not authenticated -->
           </li>
 
           <li class="nav-item" v-if="!$auth.loading && $auth.isAuthenticated">
-            <router-link class="nav-link menu-button" to="/watch-list">
+            <router-link class="nav-link menu-button" to="/watch-list" data-toggle="collapse" data-target=".navbar-collapse.show">
               <font-awesome-icon :icon="['far', 'heart']" size="1x" class="mr-2"/>Your Watch List
             </router-link>
           </li>
@@ -47,7 +47,7 @@
             <div class="dropdown">
               <img class="auth-image px-2" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :src="$auth.user.picture">
               <div class="dropdown-menu dropdown-menu-right mt-2" aria-labelledby="dropdownMenuButton">
-                <div class="dropdown-item auth-link text-center py-0" @click="logout">
+                <div class="dropdown-item auth-link text-center py-0" @click="logout"  data-toggle="collapse" data-target=".navbar-collapse.show">
                   Log Out
                 </div>
               </div>
