@@ -168,18 +168,22 @@ export default {
   .species-badge {
     background-color: rgb(100,150,62);
   }
-  .species-badge:hover {
-    background-color: rgb(50,75,31);
-    color: #FFFFFF;
-    cursor: pointer;
+  @media (hover: hover) {
+    .species-badge:hover {
+      background-color: rgb(50,75,31);
+      color: #FFFFFF;
+      cursor: pointer;
+    }
   }
   .tag-badge {
     background-color: rgb(90,90,90);
   }
-  .tag-badge:hover {
-    background-color: rgb(40,40,40);
-    color: #FFFFFF;
-    cursor: pointer;
+  @media (hover: hover) {
+    .tag-badge:hover {
+      background-color: rgb(40,40,40);
+      color: #FFFFFF;
+      cursor: pointer;
+    }
   }
   .count-badge {
     position: absolute;
@@ -190,9 +194,11 @@ export default {
   .store-link {
     color: rgb(150,150,150);
   }
-  .store-link:hover {
-    color: rgb(100,100,100);
-    text-decoration: none;
+  @media (hover: hover) {
+    .store-link:hover {
+      color: rgb(100,100,100);
+      text-decoration: none;
+    }
   }
   .content .content-overlay {
     position: absolute;
@@ -201,11 +207,13 @@ export default {
     opacity: 0;
     background-color: #000000;
   }
-  .content:hover img {
-    opacity: 0.8;
-    -webkit-transition: all 0.4s ease-in-out 0s;
-    -moz-transition: all 0.4s ease-in-out 0s;
-    transition: all 0.4s ease-in-out 0s;
+  @media (hover: hover) {
+    .content:hover img {
+      opacity: 0.8;
+      -webkit-transition: all 0.4s ease-in-out 0s;
+      -moz-transition: all 0.4s ease-in-out 0s;
+      transition: all 0.4s ease-in-out 0s;
+    }
   }
   .content:focus {
     outline: none;
@@ -220,9 +228,11 @@ export default {
     color: rgb(150,150,150);
 
   }
-  .show-more-button:hover {
-    color: rgb(100,100,100);
-    cursor: pointer;
+  @media (hover: hover) {
+    .show-more-button:hover {
+      color: rgb(100,100,100);
+      cursor: pointer;
+    }
   }
   .bold {
     font-weight: bold;
@@ -258,8 +268,10 @@ export default {
   .favorited {
     color: #E60023;
   }
-  .favorited:hover {
-    color: #E60023;
-    background-color: #FFFFFF
+  @media (hover: hover) {
+    .favorited:hover {
+      color: #E60023;
+      background-color: #FFFFFF
+    }
   }
 </style>
