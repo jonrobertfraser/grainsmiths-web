@@ -2,7 +2,7 @@
     <div class="container-fluid footer py-5 mt-auto">
       <div class="row">
         <div class="col-sm-6 footer-brand-image text-center">
-          <img src="../assets/build-something-beautiful-grey.svg" alt="">
+          <img src="../assets/logo-build-something-beautiful-grey.svg" alt="">
         </div>
         <div class="col-sm-6 text-center">
           <div>

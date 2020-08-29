@@ -2,7 +2,7 @@
     <nav class="navbar navbar-expand-md navbar-light">
 
       <router-link class="navbar-brand" to="/">
-          <img style="height:35px;" src="../assets/grainsmiths-wood-finder.svg" alt="">
+          <img style="height:35px;" src="../assets/logo-grainsmiths-wood-finder.svg" alt="">
       </router-link>
 
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#gsNavbar" aria-controls="gsNavbar" aria-expanded="false" aria-label="Toggle navigation">

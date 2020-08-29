@@ -6,7 +6,9 @@
     <p>
       (Except bread and a cookie)
     </p>
-    <img style="max-width:100%;" src="../assets/cookie.jpg">
+    <div class="text-center">
+      <img style="max-width:75%;" src="https://grainsmiths-images.s3.us-east-2.amazonaws.com/static-assets/picture-cookie.jpg">
+    </div>
   </WrittenContent>
 </template>
 
