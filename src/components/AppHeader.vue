@@ -48,7 +48,7 @@
               <img class="auth-image px-2" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :src="$auth.user.picture">
               <div class="dropdown-menu dropdown-menu-right mt-2" aria-labelledby="dropdownMenuButton">
                 <div class="dropdown-item auth-link text-center py-0" @click="logout"  data-toggle="collapse" data-target=".navbar-collapse.show">
-                  Log Out
+                  Log Out <font-awesome-icon :icon="['fas', 'sign-out-alt']" size="1x" class="ml-2"/>
                 </div>
               </div>
             </div>
