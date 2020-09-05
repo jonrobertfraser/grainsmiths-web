@@ -1,5 +1,6 @@
 import Vue from "vue"
 import VueRouter from "vue-router"
+import ProductPage from "./pages/ProductPage.vue"
 import ExplorePage from "./pages/ExplorePage.vue"
 import WatchListPage from "./pages/WatchListPage.vue"
 import AboutPage from "./pages/AboutPage.vue"
@@ -49,6 +50,15 @@ const router = new VueRouter({
       meta: {
         title: 'Grainsmiths',
       },
+    },
+    {
+      path: '/product/:product_id',
+      name: 'ProductPage',
+      component: ProductPage,
+      beforeEnter: authGuard,
+      meta: {
+        title: 'Grainsmiths',
+      }
     },
     {
       path: '/explore',

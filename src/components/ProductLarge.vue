@@ -1,13 +1,12 @@
 <template>
   <div>
     <!-- PRODUCT IMAGE AND COUNT -->
-    <router-link :to="'/product/'+product_id" class="content text-center inline">
+    <a class="content text-center inline">
       <img v-bind:src="thumbnail_url" class="card-img-top rounded mb-1" v-bind:alt="title">
       <span v-if="count > 1" class="gs-badge badge count-badge white-badge">
           {{ count }} pieces
       </span>
-    </router-link>
-    <a v-on:click="showLightbox">Images</a>
+    </a>
     <!-- PRODUCT IMAGE AND COUNT -->
 
     <!-- FAVORITE AND PRICE -->
@@ -86,16 +85,13 @@
 import DimensionSet from '../components/DimensionSet.vue'
 
 export default {
-  name: "ProductCard",
+  name: "ProductLarge",
   components: {
     DimensionSet
   },
   methods: {
     cleanTagSpecies(thing) {
       return thing.replace(/_/g," ").replace(/-/g," ")
-    },
-    showLightbox() {
-      this.$emit('showLightbox',this.image_urls)
     },
     addTagFilter(tag) {
       this.$emit('addTagFilter', tag)
