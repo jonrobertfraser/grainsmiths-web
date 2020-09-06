@@ -1,74 +1,84 @@
 <template>
   <div class="container-fluid mt-3">
     <!-- PRODUCT IMAGE AND COUNT -->
-    <h5 class="my-4">{{title}}</h5>
-    <a class="content text-center inline">
-      <img v-bind:src="thumbnail_url" class="card-img-top rounded mb-1" v-bind:alt="title">
-      <span v-if="count > 1" class="gs-badge badge count-badge white-badge">
-          {{ count }} pieces
-      </span>
-    </a>
+
+
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div class="carousel">
+          <h5 class="my-4">{{title}}</h5>
+          <carousel>
+            <slide v-bind:key="image_url" v-for="image_url in image_urls">
+                <img v-bind:src="image_url" class="card-img-top rounded mb-1" v-bind:alt="title">
+            </slide>
+          </carousel>
+        </div>
+      </div>
+    </div>
     <!-- PRODUCT IMAGE AND COUNT -->
 
-    <!-- FAVORITE AND PRICE -->
-    <div class="d-flex justify-content-between mx-2 my-1">
-      <div v-if="favorited" v-on:click="removeFavorite" class="favorite favorited">
-        <font-awesome-icon :icon="['fas', 'heart']" size="1x"/>
-      </div>
-      <div  v-else class="favorite" v-on:click="addFavorite">
-        <font-awesome-icon :icon="['far', 'heart']" size="1x"/>
-      </div>
-      <div class="my-0 mx-1 text-center">
-        <DimensionSet
-          :length="max_length"
-          :width="max_width"
-          :thickness="max_thickness"
-          :diameter="diameter"
-        />
-      </div>
-      <div class="price">
-        {{ Math.floor(price) }}
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <!-- FAVORITE AND PRICE -->
+        <div class="d-flex justify-content-between mx-2 my-1">
+          <div v-if="favorited" v-on:click="removeFavorite" class="favorite favorited py-1">
+            <font-awesome-icon :icon="['fas', 'heart']" size="1x"/>
+          </div>
+          <div  v-else class="favorite py-1" v-on:click="addFavorite">
+            <font-awesome-icon :icon="['far', 'heart']" size="1x"/>
+          </div>
+          <div class="my-0 mx-1 text-center">
+            <DimensionSet
+              :length="max_length"
+              :width="max_width"
+              :thickness="max_thickness"
+              :diameter="diameter"
+            />
+          </div>
+          <div class="price py-1">
+            {{ Math.floor(price) }}
+          </div>
+        </div>
+        <!-- FAVORITE AND PRICE -->
+
+        <!-- SPECIES, SUBSPECIES -->
+        <div class="my-0 mx-0">
+          <div v-for="this_species in [species, subspecies].filter(x => x)" v-bind:key="this_species" v-on:click="addSpeciesFilter(this_species)" class="gs-badge badge species-badge">
+              {{ cleanTagSpecies(this_species) }}
+          </div>
+        </div>
+        <!-- SPECIES, SUBSPECIES -->
+
+
+        <!-- TAGS -->
+        <div class="my-0 mx-0">
+          <div v-for="tag in gs_tags" v-bind:key="tag" class="gs-badge badge tag-badge" v-on:click="addTagFilter(tag)">
+              {{ cleanTagSpecies(tag) }}
+          </div>
+        </div>
+        <!-- TAGS -->
+        <div class="my-0 mx-0">
+          <div v-if="count > 1" class="gs-badge badge count-badge">
+                {{ count }} pieces
+          </div>
+        </div>
+
+        <!-- STORE LINK -->
+        <div class="mt-3 mb-1 mx-1">
+          <a class="store-link" v-bind:href="url" target="_blank">
+            <font-awesome-icon :icon="['fas', 'link']" size="1x"/>&nbsp;{{ company_name }}
+          </a>
+        </div>
+        <!-- STORE LINK -->
+
+
+        <!-- MORE DETAIL -->
+        <div class="text-left more-detail">
+          <div>{{description}}</div>
+        </div>
+        <!-- MORE DETAIL -->
       </div>
     </div>
-    <!-- FAVORITE AND PRICE -->
-
-    <!-- DIMENSIONS -->
-
-    <!-- DIMENSIONS -->
-
-
-    <!-- SPECIES, SUBSPECIES -->
-    <div class="my-0 mx-1">
-      <div v-for="this_species in [species, subspecies].filter(x => x)" v-bind:key="this_species" v-on:click="addSpeciesFilter(this_species)" class="gs-badge badge species-badge">
-          {{ cleanTagSpecies(this_species) }}
-      </div>
-    </div>
-    <!-- SPECIES, SUBSPECIES -->
-
-
-    <!-- TAGS -->
-    <div class="my-0 mx-1">
-      <div v-for="tag in gs_tags" v-bind:key="tag" class="gs-badge badge tag-badge" v-on:click="addTagFilter(tag)">
-          {{ cleanTagSpecies(tag) }}
-      </div>
-    </div>
-    <!-- TAGS -->
-
-
-    <!-- STORE LINK -->
-    <div class="mt-2 mb-1 mx-1">
-      <a class="store-link" v-bind:href="url" target="_blank">
-        <font-awesome-icon :icon="['fas', 'link']" size="1x"/>&nbsp;{{ company_name }}
-      </a>
-    </div>
-    <!-- STORE LINK -->
-
-
-    <!-- MORE DETAIL -->
-    <div class="text-left more-detail">
-      <div>{{description}}</div>
-    </div>
-    <!-- MORE DETAIL -->
 
 
 
@@ -77,11 +87,14 @@
 
 <script>
 import DimensionSet from '../components/DimensionSet.vue'
+import { Carousel, Slide } from 'vue-carousel';
 
 export default {
   name: "ProductLarge",
   components: {
-    DimensionSet
+    DimensionSet,
+    Carousel,
+    Slide
   },
   methods: {
     cleanTagSpecies(thing) {
@@ -177,10 +190,9 @@ export default {
     }
   }
   .count-badge {
-    position: absolute;
-    top: 0.75em;
-    left: 0.75em;
-    font-size: 0.9em;
+    border: 1px solid #999;
+    background-color: rgb(255,255,255);
+    color: #666;
   }
   .store-link {
     color: rgb(150,150,150);
@@ -234,6 +246,7 @@ export default {
     color: #666;
     font-weight: 700;
     font-size: 1.2em;
+    border: 0;
   }
   .price:before {
     color: #666;
@@ -268,4 +281,8 @@ export default {
       background-color: #FFFFFF
     }
   }
+  .carousel {
+
+  }
+
 </style>
