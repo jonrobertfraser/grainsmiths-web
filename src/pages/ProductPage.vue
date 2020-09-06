@@ -1,6 +1,5 @@
 <template>
   <div>
-
       <ProductLarge
         :product_id="product.id"
         :thumbnail_url="product.thumbnail_url"
@@ -26,7 +25,7 @@
       />
 
     <TiledCards
-      :products="products"
+      :products="similar_products"
       :species_filters="species_filters"
       :tag_filters="tag_filters"
       :data_available="last_call_count == api_call_limit"
@@ -50,6 +49,19 @@ export default {
     TiledCards,
   },
   methods: {
+    async getFavorites() {
+      if (this.retrieved_favorites || this.$auth.loading || !this.$auth.isAuthenticated) return;
+      const accessToken = await this.$auth.getTokenSilently()
+      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/private/get_favorites'
+      axios
+        .get(url, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        })
+        .then(response => {this.favorites = response.data.favorites})
+      this.retrieved_favorites = true
+    },
     async addFavorite(product_id) {
       if (this.$auth.loading || !this.$auth.isAuthenticated) return;
       const accessToken = await this.$auth.getTokenSilently()
@@ -62,6 +74,7 @@ export default {
           Authorization: `Bearer ${accessToken}`
         }
       })
+      console.log("Added favorite "+product_id)
     },
     async removeFavorite(product_id) {
       if (this.$auth.loading || !this.$auth.isAuthenticated) return;
@@ -76,6 +89,7 @@ export default {
         },
         params: query_params
       })
+      console.log("Removed favorite "+product_id)
     },
     getProductDetail(product_id) {
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/public/get_product'
@@ -89,6 +103,14 @@ export default {
         })
         .then(response => {
           this.product = response.data.product
+          if (this.product.species) {
+            this.species_filters.push(this.product.species)
+          }
+          if (this.product.subspecies) {
+            this.species_filters.push(this.product.subspecies)
+          }
+          this.tag_filters = this.product.gs_tags
+          this.addMoreProducts()
         })
     },
     addMoreProducts() {
@@ -108,20 +130,13 @@ export default {
         })
         .then(response => {
           this.last_call_count = response.data.products.length
-          if (this.products.length == 0) {
-            this.products = response.data.products
+          if (this.similar_products.length == 0) {
+            this.similar_products = response.data.products
           } else {
-            this.products = [...this.products.concat(response.data.products)]
+            this.similar_products = [...this.similar_products.concat(response.data.products)]
           }
         })
       this.offset += this.api_call_limit;
-    },
-    makeUrl(species_filters, tag_filters) {
-      if (species_filters.length == 0) {
-        return '/explore/all-species/'+tag_filters.join("+")
-      } else {
-        return '/explore/'+species_filters.join("+")+'/'+tag_filters.join("+")
-      }
     },
     exploreBySpecies(species) {
       this.$router.push({ path: '/explore/'+species })
@@ -133,7 +148,7 @@ export default {
   data () {
     return {
       product: {},
-      products: [],
+      similar_products: [],
       species_filters: [],
       tag_filters: [],
       offset: 0,
@@ -145,8 +160,29 @@ export default {
   mounted() {
     this.seed = Math.ceil(Math.random() * 10)
     this.getProductDetail(this.$router.currentRoute.params.product_id)
-    this.addMoreProducts()
+    this.getFavorites()
   },
+  updated() {
+    this.getFavorites()
+  },
+  watch: {
+    '$route'() {
+      this.getProductDetail(this.$router.currentRoute.params.product_id)
+      this.similar_products.length = 0
+      this.offset = 0
+    },
+    '$auth.loading' () {
+      this.getFavorites()
+    },
+    'similar_products' () {
+      const isProductId = (element) => element.id == this.product.id;
+      const index = this.similar_products.findIndex(isProductId)
+      if (index > -1) {
+        console.log("Removing product from similar products.")
+        this.similar_products.splice(index, 1);
+      }
+    }
+  }
 };
 </script>
 
