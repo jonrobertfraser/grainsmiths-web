@@ -1,6 +1,7 @@
 <template>
-  <div>
+  <div class="container-fluid mt-3">
     <!-- PRODUCT IMAGE AND COUNT -->
+    <h5 class="my-4">{{title}}</h5>
     <a class="content text-center inline">
       <img v-bind:src="thumbnail_url" class="card-img-top rounded mb-1" v-bind:alt="title">
       <span v-if="count > 1" class="gs-badge badge count-badge white-badge">
@@ -17,6 +18,14 @@
       <div  v-else class="favorite" v-on:click="addFavorite">
         <font-awesome-icon :icon="['far', 'heart']" size="1x"/>
       </div>
+      <div class="my-0 mx-1 text-center">
+        <DimensionSet
+          :length="max_length"
+          :width="max_width"
+          :thickness="max_thickness"
+          :diameter="diameter"
+        />
+      </div>
       <div class="price">
         {{ Math.floor(price) }}
       </div>
@@ -24,14 +33,7 @@
     <!-- FAVORITE AND PRICE -->
 
     <!-- DIMENSIONS -->
-    <div class="my-0 mx-1 text-center">
-      <DimensionSet
-        :length="max_length"
-        :width="max_width"
-        :thickness="max_thickness"
-        :diameter="diameter"
-      />
-    </div>
+
     <!-- DIMENSIONS -->
 
 
@@ -63,21 +65,13 @@
 
 
     <!-- MORE DETAIL -->
-    <div v-if="showMore" class="text-left more-detail">
-      <div class="bold">{{title}}</div>
-      <div>{{description.substring(0, 500) + "..."}}</div>
+    <div class="text-left more-detail">
+      <div>{{description}}</div>
     </div>
     <!-- MORE DETAIL -->
 
 
-    <!-- SHOW MORE BUTTON -->
-    <span v-on:click="showMore = !showMore" v-if="!showMore" class="show-more-button"><font-awesome-icon :icon="['fas', 'chevron-down']" size="sm" />&nbsp;Show more</span>
-    <!-- SHOW MORE BUTTON -->
 
-
-    <!-- SHOW LESS BUTTON -->
-    <span v-on:click="showMore = !showMore" v-if="showMore" class="show-more-button"><font-awesome-icon :icon="['fas', 'chevron-up']" size="sm" />&nbsp;Show less</span>
-    <!-- SHOW LESS BUTTON -->
   </div>
 </template>
 
@@ -239,6 +233,7 @@ export default {
   .price {
     color: #666;
     font-weight: 700;
+    font-size: 1.2em;
   }
   .price:before {
     color: #666;
@@ -246,6 +241,7 @@ export default {
     font-size: 0.7em;
   }
   .favorite {
+    font-size: 1.2em;
     cursor: pointer;
     color: #666;
     padding-top: 0.1em;

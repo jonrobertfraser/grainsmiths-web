@@ -83,6 +83,7 @@ export default {
     async addFavorite(product_id) {
       if (this.$auth.loading || !this.$auth.isAuthenticated) return;
       const accessToken = await this.$auth.getTokenSilently()
+      this.favorites.push(product_id)
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/private/add_favorite'
       let query_params = {
         'product_id': product_id,
@@ -92,11 +93,14 @@ export default {
           Authorization: `Bearer ${accessToken}`
         }
       })
-      this.favorites.push(product_id)
     },
     async removeFavorite(product_id) {
       if (this.$auth.loading || !this.$auth.isAuthenticated) return;
       const accessToken = await this.$auth.getTokenSilently()
+      const index = this.favorites.indexOf(product_id);
+      if (index > -1) {
+        this.favorites.splice(index, 1);
+      }
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/private/remove_favorite'
       let query_params = {
         'product_id': product_id,
@@ -107,10 +111,6 @@ export default {
         },
         params: query_params
       })
-      const index = this.favorites.indexOf(product_id);
-      if (index > -1) {
-        this.favorites.splice(index, 1);
-      }
     },
     addSpeciesFilter(species) {
       this.$emit('addSpeciesFilter', species)
@@ -166,6 +166,9 @@ export default {
     '$route'() {
       this.scroll_pos = 0
       window.scrollTo(0, this.scroll_pos);
+    },
+    'favorites'() {
+      this.$emit('favoritesUpdated', this.favorites)
     }
   }
 };

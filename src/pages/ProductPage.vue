@@ -1,34 +1,39 @@
 <template>
   <div>
-      <ProductLarge
-        :product_id="product.id"
-        :thumbnail_url="product.thumbnail_url"
-        :count="product.count"
-        :price="product.price"
-        :max_length="product.max_length"
-        :max_width="product.max_width"
-        :max_thickness="product.max_thickness"
-        :diameter="product.diameter"
-        :species="product.species"
-        :subspecies="product.subspecies"
-        :gs_tags="product.gs_tags"
-        :url="product.url"
-        :title="product.title"
-        :description="product.description"
-        :image_urls="product.image_urls"
-        :company_name="product.company_name"
-        :favorited="false"
-        @addTagFilter="exploreByTag"
-        @addSpeciesFilter="exploreBySpecies"
-        @addFavorite="addFavorite"
-        @removeFavorite="removeFavorite"
-      />
+    <ProductLarge
+      :product_id="product.id"
+      :thumbnail_url="product.thumbnail_url"
+      :count="product.count"
+      :price="product.price"
+      :max_length="product.max_length"
+      :max_width="product.max_width"
+      :max_thickness="product.max_thickness"
+      :diameter="product.diameter"
+      :species="product.species"
+      :subspecies="product.subspecies"
+      :gs_tags="product.gs_tags"
+      :url="product.url"
+      :title="product.title"
+      :description="product.description"
+      :image_urls="product.image_urls"
+      :company_name="product.company_name"
+      :favorited="favorited"
+      @addTagFilter="exploreByTag"
+      @addSpeciesFilter="exploreBySpecies"
+      @addFavorite="addFavorite"
+      @removeFavorite="removeFavorite"
+    />
+    <div class="mx-3 mt-5 mb-2">
+      <h5 class="">Compare with similar items</h5>
+      <hr />
+    </div>
 
     <TiledCards
       :products="similar_products"
       :species_filters="species_filters"
       :tag_filters="tag_filters"
       :data_available="last_call_count == api_call_limit"
+      @favoritesUpdated="isProductFavorited"
       @addTagFilter="exploreByTag"
       @addSpeciesFilter="exploreBySpecies"
       @addMoreProducts="addMoreProducts"
@@ -49,18 +54,9 @@ export default {
     TiledCards,
   },
   methods: {
-    async getFavorites() {
-      if (this.retrieved_favorites || this.$auth.loading || !this.$auth.isAuthenticated) return;
-      const accessToken = await this.$auth.getTokenSilently()
-      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/private/get_favorites'
-      axios
-        .get(url, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
-        })
-        .then(response => {this.favorites = response.data.favorites})
-      this.retrieved_favorites = true
+    isProductFavorited(favorites) {
+      console.log("here" +favorites)
+      this.favorited = favorites.includes(this.product.id)
     },
     async addFavorite(product_id) {
       if (this.$auth.loading || !this.$auth.isAuthenticated) return;
@@ -74,6 +70,7 @@ export default {
           Authorization: `Bearer ${accessToken}`
         }
       })
+      this.favorited = true
       console.log("Added favorite "+product_id)
     },
     async removeFavorite(product_id) {
@@ -89,6 +86,7 @@ export default {
         },
         params: query_params
       })
+      this.favorited = false
       console.log("Removed favorite "+product_id)
     },
     getProductDetail(product_id) {
@@ -148,6 +146,7 @@ export default {
   data () {
     return {
       product: {},
+      favorited: false,
       similar_products: [],
       species_filters: [],
       tag_filters: [],
@@ -160,10 +159,10 @@ export default {
   mounted() {
     this.seed = Math.ceil(Math.random() * 10)
     this.getProductDetail(this.$router.currentRoute.params.product_id)
-    this.getFavorites()
+
   },
   updated() {
-    this.getFavorites()
+
   },
   watch: {
     '$route'() {
@@ -172,7 +171,7 @@ export default {
       this.offset = 0
     },
     '$auth.loading' () {
-      this.getFavorites()
+
     },
     'similar_products' () {
       const isProductId = (element) => element.id == this.product.id;

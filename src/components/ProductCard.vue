@@ -7,7 +7,7 @@
           {{ count }} pieces
       </span>
     </router-link>
-    <a v-on:click="showLightbox">Images</a>
+
     <!-- PRODUCT IMAGE AND COUNT -->
 
     <!-- FAVORITE AND PRICE -->
@@ -54,30 +54,65 @@
     <!-- TAGS -->
 
 
-    <!-- STORE LINK -->
-    <div class="mt-2 mb-1 mx-1">
-      <a class="store-link" v-bind:href="url" target="_blank">
-        <font-awesome-icon :icon="['fas', 'link']" size="1x"/>&nbsp;{{ company_name }}
-      </a>
-    </div>
-    <!-- STORE LINK -->
+
+
 
 
     <!-- MORE DETAIL -->
-    <div v-if="showMore" class="text-left more-detail">
-      <div class="bold">{{title}}</div>
-      <div>{{description.substring(0, 500) + "..."}}</div>
+
+
+
+
+    <div v-if="showMore" class="more-detail text-left">
+      <!-- LINKS SECTION -->
+      <div class="mb-3">
+
+        <!-- PRODUCT PAGE LINK -->
+        <div class=" mt-2 mb-1 mx-0">
+          <router-link :to="'/product/'+product_id" class="product-card-link">
+            <font-awesome-icon :icon="['fas', 'info-circle']" size="1x"/>&nbsp;Product Page
+          </router-link>
+        </div>
+        <!-- PRODUCT PAGE LINK -->
+
+        <!-- ZOOM IMAGES LINK -->
+        <div class="mt-2 mb-1 mx-0">
+          <span v-on:click="showLightbox" class="product-card-link">
+            <font-awesome-icon :icon="['fas', 'search-plus']" size="1x"/>&nbsp;Zoom images
+          </span>
+        </div>
+        <!-- ZOOM IMAGES LINK -->
+
+        <!-- STORE LINK -->
+        <div class="mt-2 mb-1 mx-0">
+          <a class="product-card-link" v-bind:href="url" target="_blank">
+            <font-awesome-icon :icon="['fas', 'link']" size="1x"/>&nbsp;{{ company_name }}
+          </a>
+        </div>
+        <!-- STORE LINK -->
+
+      </div>
+      <!-- LINKS SECTION -->
+
+      <!-- PRODUCT TITLE AND DESC -->
+      <div class="bold text-left">
+        {{title}}
+      </div>
+      <div class="text-left">
+        {{description.substring(0, 500) + "..."}}
+      </div>
+      <!-- PRODUCT TITLE AND DESC -->
     </div>
     <!-- MORE DETAIL -->
 
 
     <!-- SHOW MORE BUTTON -->
-    <span v-on:click="showMore = !showMore" v-if="!showMore" class="show-more-button"><font-awesome-icon :icon="['fas', 'chevron-down']" size="sm" />&nbsp;Show more</span>
+    <div v-on:click="showMore = !showMore" v-if="!showMore" class="show-more-button mt-2"><font-awesome-icon :icon="['fas', 'chevron-down']" size="sm" />&nbsp;Show more</div>
     <!-- SHOW MORE BUTTON -->
 
 
     <!-- SHOW LESS BUTTON -->
-    <span v-on:click="showMore = !showMore" v-if="showMore" class="show-more-button"><font-awesome-icon :icon="['fas', 'chevron-up']" size="sm" />&nbsp;Show less</span>
+    <div v-on:click="showMore = !showMore" v-if="showMore" class="show-more-button mt-2"><font-awesome-icon :icon="['fas', 'chevron-up']" size="sm" />&nbsp;Show less</div>
     <!-- SHOW LESS BUTTON -->
   </div>
 </template>
@@ -192,11 +227,14 @@ export default {
     left: 0.75em;
     font-size: 0.9em;
   }
-  .store-link {
+  .product-card-link {
     color: rgb(150,150,150);
   }
+  .product-card-link:hover {
+    cursor: pointer;
+  }
   @media (hover: hover) {
-    .store-link:hover {
+    .product-card-link:hover {
       color: rgb(100,100,100);
       text-decoration: none;
     }
@@ -210,7 +248,7 @@ export default {
   }
   @media (hover: hover) {
     .content:hover img {
-      opacity: 0.8;
+      opacity: 0.5;
       -webkit-transition: all 0.4s ease-in-out 0s;
       -moz-transition: all 0.4s ease-in-out 0s;
       transition: all 0.4s ease-in-out 0s;
@@ -228,7 +266,6 @@ export default {
   }
   .show-more-button {
     color: rgb(150,150,150);
-
   }
   @media (hover: hover) {
     .show-more-button:hover {
