@@ -55,7 +55,6 @@ export default {
   },
   methods: {
     isProductFavorited(favorites) {
-      console.log("here" +favorites)
       this.favorited = favorites.includes(this.product.id)
     },
     async addFavorite(product_id) {

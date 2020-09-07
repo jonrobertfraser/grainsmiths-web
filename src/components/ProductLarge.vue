@@ -8,12 +8,11 @@
           <b-carousel
             id="product-large-carousel"
             v-model="slide"
-            :interval="false"
+            :interval="0"
             indicators
             controls
             background="#fff"
-            @sliding-start="onSlideStart"
-            @sliding-end="onSlideEnd"
+            transition=".6s ease-in-out left"
           >
             <b-carousel-slide v-for="(image_url, i) in image_urls" v-bind:key="i" style="text-align: center;">
               <template v-slot:img>
@@ -142,6 +141,7 @@ export default {
   },
   data () {
     return {
+      slide: 0,
       showMore: false,
     }
   },
@@ -154,6 +154,9 @@ export default {
   }
   .carousel-indicators {
     bottom: -55px;
+  }
+  .carousel-item {
+    transition: 0.1s
   }
   .carousel img {
     max-height: 50vh;
