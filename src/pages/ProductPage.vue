@@ -169,6 +169,7 @@ export default {
       this.getProductDetail(this.$router.currentRoute.params.product_id)
       this.similar_products.length = 0
       this.offset = 0
+      this.favorited = false
     },
     '$auth.loading' () {
 

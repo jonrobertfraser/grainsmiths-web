@@ -19,7 +19,6 @@
 * `$ npm install vue-cookies --save`
 * `$ npm install express serve-static --save`
 * `$ npm install --save vue-drift`
-* `$ npm i --save vue-carousel`
 
 ## Deploying Vue via command line
 

@@ -1,17 +1,27 @@
 <template>
   <div class="container-fluid mt-3">
-    <!-- PRODUCT IMAGE AND COUNT -->
-
-
     <div class="row justify-content-center">
+
       <div class="col-md-8 col-lg-6">
-        <div class="carousel">
+        <div>
           <h5 class="my-4">{{title}}</h5>
-          <carousel>
-            <slide v-bind:key="image_url" v-for="image_url in image_urls">
-                <img v-bind:src="image_url" class="card-img-top rounded mb-1" v-bind:alt="title">
-            </slide>
-          </carousel>
+          <b-carousel
+            id="product-large-carousel"
+            v-model="slide"
+            :interval="false"
+            indicators
+            controls
+            background="#fff"
+            @sliding-start="onSlideStart"
+            @sliding-end="onSlideEnd"
+          >
+            <b-carousel-slide v-for="(image_url, i) in image_urls" v-bind:key="i" style="text-align: center;">
+              <template v-slot:img>
+                <img :src="image_url">
+              </template>
+            </b-carousel-slide>
+          </b-carousel>
+
         </div>
       </div>
     </div>
@@ -87,14 +97,12 @@
 
 <script>
 import DimensionSet from '../components/DimensionSet.vue'
-import { Carousel, Slide } from 'vue-carousel';
+
 
 export default {
   name: "ProductLarge",
   components: {
     DimensionSet,
-    Carousel,
-    Slide
   },
   methods: {
     cleanTagSpecies(thing) {
@@ -141,6 +149,32 @@ export default {
 </script>
 
 <style lang="css">
+  .carousel {
+    margin-bottom: 40px;
+  }
+  .carousel-indicators {
+    bottom: -55px;
+  }
+  .carousel img {
+    max-height: 50vh;
+    width: auto;
+    max-width:100%
+  }
+  .carousel .carousel-indicators li {
+    background-color: #000;
+    opacity: 0.2;
+    height: 10px;
+    width: 10px;
+  }
+  .carousel .carousel-indicators li.active {
+    opacity: 0.9;
+  }
+  @media {
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+      filter: invert(1);
+    }
+  }
   .gs-badge {
     margin-top: 0.25em;
     margin-bottom: 0.25em;
@@ -281,8 +315,4 @@ export default {
       background-color: #FFFFFF
     }
   }
-  .carousel {
-
-  }
-
 </style>

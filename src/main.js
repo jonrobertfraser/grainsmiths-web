@@ -81,9 +81,6 @@ Vue.use(VueDrift, {
   development: false,
 })
 
-import VueCarousel from 'vue-carousel';
-Vue.use(VueCarousel);
-
 new Vue({
   router,
   render: h => h(App),
