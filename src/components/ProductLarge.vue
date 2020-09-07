@@ -169,7 +169,7 @@ export default {
   .carousel .carousel-indicators li.active {
     opacity: 0.9;
   }
-  @media {
+  @media (hover: hover) {
     .carousel-control-prev-icon,
     .carousel-control-next-icon {
       filter: invert(1);
@@ -260,7 +260,7 @@ export default {
   .more-detail {
     padding-top: 0.5em;
     padding-bottom: 0.8em;
-    font-size:0.9em;
+    font-size:1em;
   }
   .show-more-button {
     color: rgb(150,150,150);
