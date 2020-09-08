@@ -177,7 +177,6 @@ export default {
       const isProductId = (element) => element.id == this.product.id;
       const index = this.similar_products.findIndex(isProductId)
       if (index > -1) {
-        console.log("Removing product from similar products.")
         this.similar_products.splice(index, 1);
       }
     }

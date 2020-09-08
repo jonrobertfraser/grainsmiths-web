@@ -16,7 +16,9 @@
           >
             <b-carousel-slide v-for="(image_url, i) in image_urls" v-bind:key="i" style="text-align: center;">
               <template v-slot:img>
-                <img :src="image_url">
+                <router-link target="_blank" :to="{name: 'ProductImage', params: { productId: product_id, imageIndex: i }}">
+                  <img :src="image_url">
+                </router-link>
               </template>
             </b-carousel-slide>
           </b-carousel>

@@ -6,6 +6,7 @@ import WatchListPage from "./pages/WatchListPage.vue"
 import AboutPage from "./pages/AboutPage.vue"
 import NotFound from "./pages/NotFound.vue"
 import HomePage from "./pages/HomePage.vue"
+import ProductImage from "./pages/ProductImage.vue"
 
 Vue.use(VueRouter)
 
@@ -103,6 +104,15 @@ const router = new VueRouter({
       meta: {
         title: 'About Grainsmiths',
       }
+    },
+    {
+      path: '/product-image/:productId/:imageIndex',
+      name: 'ProductImage',
+      component: ProductImage,
+      meta: {
+        title: 'Grainsmiths',
+      },
+      props: true,
     },
     {
       path: '*',

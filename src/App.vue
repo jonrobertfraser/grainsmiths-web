@@ -1,10 +1,15 @@
 <template>
-  <div id="app" class="d-flex flex-column min-vh-100">
-    <AppHeader />
-    <div class="container-fluid">
+  <div id="app">
+    <div v-if="$route.name == 'ProductImage'">
       <router-view />
     </div>
-    <AppFooter />
+    <div v-else class="d-flex flex-column min-vh-100">
+      <AppHeader />
+      <div class="container-fluid">
+        <router-view />
+      </div>
+      <AppFooter />
+    </div>
   </div>
 </template>
 
