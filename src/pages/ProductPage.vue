@@ -151,7 +151,9 @@ export default {
   },
   data () {
     return {
-      product: {},
+      product: {
+        price: 0,
+      },
       favorited: false,
       similar_products: [],
       species_filters: [],
