@@ -3,6 +3,7 @@
     <div class="row justify-content-center my-5">
 
       <div class="col-lg-6">
+        <!-- Carousel -->
         <b-carousel
           id="product-large-carousel"
           v-model="slide"
@@ -20,6 +21,8 @@
             </template>
           </b-carousel-slide>
         </b-carousel>
+        <!-- Carousel -->
+
         <!-- FAVORITE AND PRICE -->
         <div class="d-flex justify-content-between mx-2 my-1">
           <div v-if="favorited" v-on:click="removeFavorite" class="favorite favorited py-1">
@@ -44,11 +47,9 @@
 
       </div>
 
-    <!-- PRODUCT IMAGE AND COUNT -->
 
 
       <div class="col-lg-6">
-
         <h5 class="my-4">{{title}}</h5>
 
         <!-- SPECIES, SUBSPECIES -->
@@ -73,8 +74,6 @@
                 {{ count }} pieces
           </div>
         </div>
-
-
 
 
         <!-- MORE DETAIL -->
