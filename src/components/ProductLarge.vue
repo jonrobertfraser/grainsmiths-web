@@ -9,8 +9,8 @@
             id="product-large-carousel"
             v-model="slide"
             :interval="0"
-            indicators
-            controls
+            :indicators="hasControls"
+            :controls="hasControls"
             background="#fff"
             transition=".6s ease-in-out left"
           >
@@ -75,9 +75,9 @@
         </div>
 
         <!-- STORE LINK -->
-        <div class="mt-3 mb-1 mx-1">
+        <div class="mt-3 mb-1 mx-0">
           <a class="store-link" v-bind:href="url" target="_blank">
-            <font-awesome-icon :icon="['fas', 'link']" size="1x"/>&nbsp;{{ company_name }}
+            Buy it now at {{ company_name }}<font-awesome-icon :icon="['fas', 'external-link-alt']" size="1x" class="ml-2"/>&nbsp;
           </a>
         </div>
         <!-- STORE LINK -->
@@ -137,7 +137,7 @@ export default {
     url: String,
     title: String,
     description: String,
-    image_urls: Array,
+    image_urls: {type: Array, default: function () { return [] }},
     company_name: String,
     favorited: Boolean,
   },
@@ -145,7 +145,11 @@ export default {
     return {
       slide: 0,
       showMore: false,
+      hasControls: false,
     }
+  },
+  updated() {
+    this.hasControls = this.image_urls.length > 1
   },
 }
 </script>
@@ -234,12 +238,13 @@ export default {
     color: #666;
   }
   .store-link {
-    color: rgb(150,150,150);
+    color: rgb(100,100,100);
+    font-weight: 600;
   }
   @media (hover: hover) {
     .store-link:hover {
-      color: rgb(100,100,100);
-      text-decoration: none;
+      text-decoration: underline;
+
     }
   }
   .content .content-overlay {
