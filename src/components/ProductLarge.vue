@@ -1,35 +1,25 @@
 <template>
   <div class="container-fluid mt-3">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center my-5">
 
-      <div class="col-md-8 col-lg-6">
-        <div>
-          <h5 class="my-4">{{title}}</h5>
-          <b-carousel
-            id="product-large-carousel"
-            v-model="slide"
-            :interval="0"
-            :indicators="hasControls"
-            :controls="hasControls"
-            background="#fff"
-            transition=".6s ease-in-out left"
-          >
-            <b-carousel-slide v-for="(image_url, i) in image_urls" v-bind:key="i" style="text-align: center;">
-              <template v-slot:img>
-                <router-link target="_blank" :to="{name: 'ProductImage', params: { productId: product_id, imageIndex: i }}">
-                  <img :src="image_url">
-                </router-link>
-              </template>
-            </b-carousel-slide>
-          </b-carousel>
-
-        </div>
-      </div>
-    </div>
-    <!-- PRODUCT IMAGE AND COUNT -->
-
-    <div class="row justify-content-center">
-      <div class="col-md-8 col-lg-6">
+      <div class="col-lg-6">
+        <b-carousel
+          id="product-large-carousel"
+          v-model="slide"
+          :interval="0"
+          :indicators="hasControls"
+          :controls="hasControls"
+          background="#fff"
+          transition=".6s ease-in-out left"
+        >
+          <b-carousel-slide v-for="(image_url, i) in image_urls" v-bind:key="i" style="text-align: center;">
+            <template v-slot:img>
+              <router-link target="_blank" :to="{name: 'ProductImage', params: { productId: product_id, imageIndex: i }}">
+                <img :src="image_url">
+              </router-link>
+            </template>
+          </b-carousel-slide>
+        </b-carousel>
         <!-- FAVORITE AND PRICE -->
         <div class="d-flex justify-content-between mx-2 my-1">
           <div v-if="favorited" v-on:click="removeFavorite" class="favorite favorited py-1">
@@ -52,6 +42,15 @@
         </div>
         <!-- FAVORITE AND PRICE -->
 
+      </div>
+
+    <!-- PRODUCT IMAGE AND COUNT -->
+
+
+      <div class="col-lg-6">
+
+        <h5 class="my-4">{{title}}</h5>
+
         <!-- SPECIES, SUBSPECIES -->
         <div class="my-0 mx-0">
           <div v-for="this_species in [species, subspecies].filter(x => x)" v-bind:key="this_species" v-on:click="addSpeciesFilter(this_species)" class="gs-badge badge species-badge">
@@ -68,11 +67,21 @@
           </div>
         </div>
         <!-- TAGS -->
+
         <div class="my-0 mx-0">
           <div v-if="count > 1" class="gs-badge badge count-badge">
                 {{ count }} pieces
           </div>
         </div>
+
+
+
+
+        <!-- MORE DETAIL -->
+        <div class="text-left more-detail">
+          <div>{{description}}</div>
+        </div>
+        <!-- MORE DETAIL -->
 
         <!-- STORE LINK -->
         <div class="mt-3 mb-1 mx-0">
@@ -81,13 +90,6 @@
           </a>
         </div>
         <!-- STORE LINK -->
-
-
-        <!-- MORE DETAIL -->
-        <div class="text-left more-detail">
-          <div>{{description}}</div>
-        </div>
-        <!-- MORE DETAIL -->
       </div>
     </div>
 
@@ -145,7 +147,7 @@ export default {
     return {
       slide: 0,
       showMore: false,
-      hasControls: false,
+      hasControls: true,
     }
   },
   updated() {
