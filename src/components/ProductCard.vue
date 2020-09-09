@@ -169,6 +169,11 @@ export default {
       showMore: false,
     }
   },
+  watch: {
+    product_id: function() {
+      this.showMore = false
+    }
+  }
 }
 </script>
 

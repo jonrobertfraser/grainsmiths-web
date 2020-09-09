@@ -15,13 +15,20 @@
         >
           <b-carousel-slide v-for="(image_url, i) in image_urls" v-bind:key="i" style="text-align: center;">
             <template v-slot:img>
-              <router-link target="_blank" :to="{name: 'ProductImage', params: { productId: product_id, imageIndex: i }}">
+              <router-link class="zoom-image" target="_blank" :to="{name: 'ProductImage', params: { productId: product_id, imageIndex: i }}">
                 <img :src="image_url">
               </router-link>
             </template>
           </b-carousel-slide>
         </b-carousel>
         <!-- Carousel -->
+
+      </div>
+
+
+
+      <div class="col-lg-6">
+        <h5 class="my-4">{{title}}</h5>
 
         <!-- FAVORITE AND PRICE -->
         <div class="d-flex justify-content-between mx-2 my-1">
@@ -44,13 +51,6 @@
           </div>
         </div>
         <!-- FAVORITE AND PRICE -->
-
-      </div>
-
-
-
-      <div class="col-lg-6">
-        <h5 class="my-4">{{title}}</h5>
 
         <!-- SPECIES, SUBSPECIES -->
         <div class="my-0 mx-0">
@@ -325,5 +325,8 @@ export default {
       color: #E60023;
       background-color: #FFFFFF
     }
+  }
+  .zoom-image {
+    cursor: zoom-in;
   }
 </style>

@@ -159,7 +159,7 @@ export default {
       species_filters: [],
       tag_filters: [],
       offset: 0,
-      api_call_limit: 10,
+      api_call_limit: 25,
       last_call_count: 0,
       seed: 0,
     }
