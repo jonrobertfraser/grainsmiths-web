@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <NotFound v-if="product == null"/>
+  <div v-else>
     <ProductLarge
       :product_id="product.id"
       :thumbnail_url="product.thumbnail_url"
@@ -46,12 +47,14 @@
 import axios from 'axios'
 import TiledCards from '../components/TiledCards.vue'
 import ProductLarge from '../components/ProductLarge.vue'
+import NotFound from './NotFound.vue'
 
 export default {
   name: "ProductPage",
   components: {
     ProductLarge,
     TiledCards,
+    NotFound,
   },
   methods: {
     isProductFavorited(favorites) {
@@ -99,15 +102,19 @@ export default {
           params: query_params,
         })
         .then(response => {
-          this.product = response.data.product
-          if (this.product.species) {
-            this.species_filters.push(this.product.species)
+          if (Object.keys(response.data.product).length === 0 && response.data.product.constructor === Object) {
+            this.product = null
+          } else {
+             this.product = response.data.product
+            if (this.product.species) {
+              this.species_filters.push(this.product.species)
+            }
+            if (this.product.subspecies) {
+              this.species_filters.push(this.product.subspecies)
+            }
+            this.tag_filters = this.product.gs_tags
+            this.addMoreProducts()
           }
-          if (this.product.subspecies) {
-            this.species_filters.push(this.product.subspecies)
-          }
-          this.tag_filters = this.product.gs_tags
-          this.addMoreProducts()
         })
     },
     addMoreProducts() {
