@@ -81,7 +81,10 @@ export default {
       this.retrieved_favorites = true
     },
     async addFavorite(product_id) {
-      if (this.$auth.loading || !this.$auth.isAuthenticated) return;
+      if (this.$auth.loading || !this.$auth.isAuthenticated) {
+        this.$bvModal.show("requires-login")
+        return;
+      }
       const accessToken = await this.$auth.getTokenSilently()
       this.favorites.push(product_id)
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/private/add_favorite'
@@ -95,7 +98,10 @@ export default {
       })
     },
     async removeFavorite(product_id) {
-      if (this.$auth.loading || !this.$auth.isAuthenticated) return;
+      if (this.$auth.loading || !this.$auth.isAuthenticated) {
+        this.$bvModal.show("requires-login")
+        return;
+      }
       const accessToken = await this.$auth.getTokenSilently()
       const index = this.favorites.indexOf(product_id);
       if (index > -1) {

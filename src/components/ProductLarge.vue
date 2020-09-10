@@ -2,7 +2,7 @@
   <div class="container-fluid mt-3">
     <div class="row justify-content-center my-5">
 
-      <div class="col-lg-6">
+      <div class="col-lg-6 mb-3  mt-1">
         <!-- Carousel -->
         <b-carousel
           id="product-large-carousel"
@@ -28,7 +28,7 @@
 
 
       <div class="col-lg-6">
-        <h5 class="my-4">{{title}}</h5>
+        <h5 class="mb-4">{{title}}</h5>
 
         <!-- FAVORITE AND PRICE -->
         <div class="d-flex justify-content-between mx-2 my-1">
@@ -166,7 +166,7 @@ export default {
     transition: 0.1s
   }
   .carousel img {
-    max-height: 50vh;
+    max-height: 75vh;
     width: auto;
     max-width:100%
   }

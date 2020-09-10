@@ -61,7 +61,10 @@ export default {
       this.favorited = favorites.includes(this.product.id)
     },
     async addFavorite(product_id) {
-      if (this.$auth.loading || !this.$auth.isAuthenticated) return;
+      if (this.$auth.loading || !this.$auth.isAuthenticated) {
+        this.$bvModal.show("requires-login")
+        return;
+      }
       const accessToken = await this.$auth.getTokenSilently()
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/private/add_favorite'
       let query_params = {
@@ -76,7 +79,10 @@ export default {
       console.log("Added favorite "+product_id)
     },
     async removeFavorite(product_id) {
-      if (this.$auth.loading || !this.$auth.isAuthenticated) return;
+      if (this.$auth.loading || !this.$auth.isAuthenticated) {
+        this.$bvModal.show("requires-login")
+        return;
+      }
       const accessToken = await this.$auth.getTokenSilently()
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/private/remove_favorite'
       let query_params = {

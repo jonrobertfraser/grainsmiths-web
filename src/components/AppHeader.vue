@@ -21,7 +21,8 @@
               <font-awesome-icon size="lg" :icon="['fab', 'reddit-alien']" />
             </a>
           </li>
-          <li class="nav-item" v-if="!$auth.loading && $auth.isAuthenticated">
+          <li class="nav-item">
+          <!-- <li class="nav-item" v-if="!$auth.loading && $auth.isAuthenticated"> -->
             <router-link class="nav-link" to="/explore" data-toggle="collapse" data-target=".navbar-collapse.show">
               Explore
             </router-link>
@@ -92,10 +93,6 @@ export default {
   nav .navbar-nav li a, .nav-link{
     color: rgb(51,51,51)!important;
   }
-  .auth-link {
-    cursor: pointer;
-    vertical-align: top;
-  }
   .nav-item {
     margin-left: 0.5em;
     margin-right: 0.5em;
@@ -110,6 +107,8 @@ export default {
   }
   .auth-link {
     display: inline-block;
+    cursor: pointer;
+    vertical-align: top;
   }
   .dropdown-menu {
     border: 1px solid #666;

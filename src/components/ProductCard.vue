@@ -253,10 +253,7 @@ export default {
   }
   @media (hover: hover) {
     .content:hover img {
-      opacity: 0.5;
-      -webkit-transition: all 0.4s ease-in-out 0s;
-      -moz-transition: all 0.4s ease-in-out 0s;
-      transition: all 0.4s ease-in-out 0s;
+      opacity: 0.9;
       cursor: pointer;
     }
   }
