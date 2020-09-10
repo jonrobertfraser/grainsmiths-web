@@ -69,7 +69,7 @@
 
         <!-- PRODUCT PAGE LINK -->
         <div class=" mt-2 mb-1 mx-0">
-          <router-link :to="{name: 'ProductPage', params: { productId: product.id}}" class="product-card-link">
+          <router-link :to="{name: 'ProductPage', params: { productId: productId}}" class="product-card-link">
             <font-awesome-icon :icon="['fas', 'info-circle']" size="1x"/>&nbsp;Product Page
           </router-link>
         </div>
@@ -86,7 +86,7 @@
         <!-- STORE LINK -->
         <div class="mt-2 mb-1 mx-0">
           <a class="product-card-link" v-bind:href="url" target="_blank">
-            <font-awesome-icon :icon="['fas', 'link']" size="1x"/>&nbsp;{{ company_name }}
+            <font-awesome-icon :icon="['fas', 'link']" size="1x"/>&nbsp;{{ companyName }}
           </a>
         </div>
         <!-- STORE LINK -->
@@ -161,7 +161,7 @@ export default {
     title: String,
     description: String,
     image_urls: Array,
-    company_name: String,
+    companyName: String,
     favorited: Boolean,
   },
   data () {

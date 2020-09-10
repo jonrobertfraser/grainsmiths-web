@@ -30,7 +30,7 @@
           :title="product.title"
           :description="product.description"
           :imageUrls="product.imageUrls"
-          :companyName="product.companyName"
+          :companyName="product.company_name"
           :favorited="favorites.includes(product.id)"
           @addTagFilter="addTagFilter"
           @addSpeciesFilter="addSpeciesFilter"
