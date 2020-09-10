@@ -40,6 +40,7 @@
       @addMoreProducts="addMoreProducts"
     />
   </div>
+
 </template>
 
 <script>
@@ -157,8 +158,10 @@ export default {
   },
   data () {
     return {
+
       product: {
         price: 0,
+        image_urls: ["https://grainsmiths-images.s3.us-east-2.amazonaws.com/static-assets/logo-image-placeholder.png"]
       },
       favorited: false,
       similar_products: [],
@@ -173,20 +176,17 @@ export default {
   mounted() {
     this.seed = Math.ceil(Math.random() * 10)
     this.getProductDetail(this.$router.currentRoute.params.product_id)
-
-  },
-  updated() {
-
   },
   watch: {
+    'product.image_urls' () {
+      console.log(this.product.image_urls[0])
+    },
     '$route'() {
+      this.product.image_urls = ["https://grainsmiths-images.s3.us-east-2.amazonaws.com/static-assets/logo-image-placeholder.png"]
       this.getProductDetail(this.$router.currentRoute.params.product_id)
       this.similar_products.length = 0
       this.offset = 0
       this.favorited = false
-    },
-    '$auth.loading' () {
-
     },
     'similar_products' () {
       const isProductId = (element) => element.id == this.product.id;
