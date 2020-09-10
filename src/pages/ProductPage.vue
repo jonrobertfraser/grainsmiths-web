@@ -31,9 +31,7 @@
 
     <TiledCards
       :products="similar_products"
-      :species_filters="species_filters"
-      :tag_filters="tag_filters"
-      :data_available="last_call_count == api_call_limit"
+      :dataAvailable="lastCallCount == apiCallLimit"
       @favoritesUpdated="isProductFavorited"
       @addTagFilter="exploreByTag"
       @addSpeciesFilter="exploreBySpecies"
@@ -131,7 +129,7 @@ export default {
         'tag_filters': this.tag_filters.join("+"),
         'species_filters': this.species_filters.join("+"),
         'offset': this.offset,
-        'limit': this.api_call_limit,
+        'limit': this.apiCallLimit,
         'seed': this.seed
       }
 
@@ -140,14 +138,14 @@ export default {
           params: query_params,
         })
         .then(response => {
-          this.last_call_count = response.data.products.length
+          this.lastCallCount = response.data.products.length
           if (this.similar_products.length == 0) {
             this.similar_products = response.data.products
           } else {
             this.similar_products = [...this.similar_products.concat(response.data.products)]
           }
         })
-      this.offset += this.api_call_limit;
+      this.offset += this.apiCallLimit;
     },
     exploreBySpecies(species) {
       this.$router.push({ path: '/explore/'+species })
@@ -168,8 +166,8 @@ export default {
       species_filters: [],
       tag_filters: [],
       offset: 0,
-      api_call_limit: 25,
-      last_call_count: 0,
+      apiCallLimit: 25,
+      lastCallCount: 0,
       seed: 0,
     }
   },
