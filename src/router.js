@@ -53,13 +53,14 @@ const router = new VueRouter({
       },
     },
     {
-      path: '/product/:product_id',
+      path: '/product/:productId',
       name: 'ProductPage',
       component: ProductPage,
       beforeEnter: authGuard,
       meta: {
         title: 'Grainsmiths',
-      }
+      },
+      props: true,
     },
     {
       path: '/explore',

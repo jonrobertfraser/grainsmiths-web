@@ -146,7 +146,7 @@ export default {
     },
   },
   props: {
-    productId: Number,
+    productId: {type: Number, default: 1},
     thumbnailUrl: String,
     count: Number,
     price: Number,
