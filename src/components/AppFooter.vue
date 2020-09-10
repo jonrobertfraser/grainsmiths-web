@@ -6,7 +6,7 @@
         </div>
         <div class="col-sm-6 text-center">
           <div>
-            <router-link class="nav-link" to="/about">
+            <router-link class="nav-link" :to="{'name': 'AboutPage'}">
               About Grainsmiths
             </router-link>
           </div>

@@ -2,7 +2,7 @@ import Vue from "vue"
 import VueRouter from "vue-router"
 import ProductPage from "./pages/ProductPage.vue"
 import ExplorePage from "./pages/ExplorePage.vue"
-import WatchListPage from "./pages/WatchListPage.vue"
+import FavoritesPage from "./pages/FavoritesPage.vue"
 import AboutPage from "./pages/AboutPage.vue"
 import NotFound from "./pages/NotFound.vue"
 import HomePage from "./pages/HomePage.vue"
@@ -46,7 +46,7 @@ const router = new VueRouter({
   routes: [
     {
       path: '/',
-      name: 'Home',
+      name: 'HomePage',
       component: HomePage,
       meta: {
         title: 'Grainsmiths',
@@ -90,12 +90,12 @@ const router = new VueRouter({
       }
     },
     {
-      path: '/watch-list',
-      name: 'WatchList',
-      component: WatchListPage,
+      path: '/favorites',
+      name: 'FavoritesPage',
+      component: FavoritesPage,
       beforeEnter: authGuard,
       meta: {
-        title: 'Watch List',
+        title: 'Your Favorites',
       }
     },
     {

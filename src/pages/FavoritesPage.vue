@@ -3,10 +3,10 @@
 
     <WrittenContent>
       <template v-slot:header>
-        Your Watch List
+        Your Favorites
       </template>
       <p>
-        This is a list of products you have selected to watch.
+        This is a list of products you have selected to keep an eye on.
       </p>
       <p>
         Tell us what else you'd like to see here! Would you like to be notified of price changes? Or similar products? Anything else?
@@ -30,7 +30,7 @@ import TiledCards from '../components/TiledCards.vue'
 import WrittenContent from '../components/WrittenContent.vue'
 
 export default {
-  name: "WatchList",
+  name: "FavoritesPage",
   components: {
     TiledCards,
     WrittenContent,

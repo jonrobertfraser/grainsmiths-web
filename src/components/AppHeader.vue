@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar navbar-expand-md navbar-light">
 
-      <router-link class="navbar-brand" to="/">
+      <router-link class="navbar-brand" :to="{'name': 'HomePage'}">
           <img style="height:35px;" src="../assets/logo-grainsmiths-wood-finder.svg" alt="">
       </router-link>
 
@@ -23,7 +23,7 @@
           </li>
           <li class="nav-item">
           <!-- <li class="nav-item" v-if="!$auth.loading && $auth.isAuthenticated"> -->
-            <router-link class="nav-link" to="/explore" data-toggle="collapse" data-target=".navbar-collapse.show">
+            <router-link class="nav-link" :to="{'name': 'ExplorePage'}" data-toggle="collapse" data-target=".navbar-collapse.show">
               Explore
             </router-link>
           </li>
@@ -36,8 +36,8 @@
           </li>
 
           <li class="nav-item" v-if="!$auth.loading && $auth.isAuthenticated">
-            <router-link class="nav-link menu-button" to="/watch-list" data-toggle="collapse" data-target=".navbar-collapse.show">
-              <font-awesome-icon :icon="['far', 'heart']" size="1x" class="mr-2"/>Your Watch List
+            <router-link class="nav-link menu-button" :to="{'name': 'FavoritesPage'}" data-toggle="collapse" data-target=".navbar-collapse.show">
+              <font-awesome-icon :icon="['far', 'heart']" size="1x" class="mr-2"/>Your Favorites
             </router-link>
           </li>
 
