@@ -1,8 +1,8 @@
 <template>
   <div>
     <!-- PRODUCT IMAGE AND COUNT -->
-    <router-link :to="'/product/'+product_id" class="content text-center inline">
-      <img v-bind:src="thumbnail_url" class="card-img-top rounded mb-1" v-bind:alt="title">
+    <router-link :to="{name: 'ProductPage', params: { productId: productId}}" class="content text-center inline">
+      <img v-bind:src="thumbnailUrl" class="card-img-top rounded mb-1" v-bind:alt="title">
       <span v-if="count > 1" class="gs-badge badge count-badge white-badge">
           {{ count }} pieces
       </span>
@@ -27,9 +27,9 @@
     <!-- DIMENSIONS -->
     <div class="my-0 mx-1 text-center">
       <DimensionSet
-        :length="max_length"
-        :width="max_width"
-        :thickness="max_thickness"
+        :length="maxLength"
+        :width="maxWidth"
+        :thickness="maxThickness"
         :diameter="diameter"
       />
     </div>
@@ -47,7 +47,7 @@
 
     <!-- TAGS -->
     <div class="my-0 mx-1">
-      <div v-for="tag in gs_tags" v-bind:key="tag" class="gs-badge badge tag-badge" v-on:click="addTagFilter(tag)">
+      <div v-for="tag in gsTags" v-bind:key="tag" class="gs-badge badge tag-badge" v-on:click="addTagFilter(tag)">
           {{ cleanTagSpecies(tag) }}
       </div>
     </div>
@@ -69,7 +69,7 @@
 
         <!-- PRODUCT PAGE LINK -->
         <div class=" mt-2 mb-1 mx-0">
-          <router-link :to="'/product/'+product_id" class="product-card-link">
+          <router-link :to="{name: 'ProductPage', params: { productId: product.id}}" class="product-card-link">
             <font-awesome-icon :icon="['fas', 'info-circle']" size="1x"/>&nbsp;Product Page
           </router-link>
         </div>
@@ -139,24 +139,24 @@ export default {
       this.$emit('addSpeciesFilter', species)
     },
     addFavorite() {
-      this.$emit('addFavorite', this.product_id)
+      this.$emit('addFavorite', this.productId)
     },
     removeFavorite() {
-      this.$emit('removeFavorite', this.product_id)
+      this.$emit('removeFavorite', this.productId)
     },
   },
   props: {
-    product_id: Number,
-    thumbnail_url: String,
+    productId: Number,
+    thumbnailUrl: String,
     count: Number,
     price: Number,
-    max_length: String,
-    max_width: String,
-    max_thickness: String,
+    maxLength: String,
+    maxWidth: String,
+    maxThickness: String,
     diameter: String,
     species: String,
     subspecies: String,
-    gs_tags: Array,
+    gsTags: Array,
     url: String,
     title: String,
     description: String,
@@ -170,7 +170,7 @@ export default {
     }
   },
   watch: {
-    product_id: function() {
+    productId: function() {
       this.showMore = false
     }
   }

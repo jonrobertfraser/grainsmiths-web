@@ -2,8 +2,8 @@
   <div>
 
     <FiltersMenu
-      :tag_filters="tag_filters"
-      :species_filters="species_filters"
+      :tag_filters="tagFilters"
+      :species_filters="speciesFilters"
       @addSpeciesFilter="addSpeciesFilter"
       @removeSpeciesFilter="removeSpeciesFilter"
       @addTagFilter="addTagFilter"
@@ -12,9 +12,7 @@
 
     <TiledCards
       :products="products"
-      :species_filters="species_filters"
-      :tag_filters="tag_filters"
-      :data_available="last_call_count == api_call_limit"
+      :dataAvailable="lastCallCount == apiCallLimit"
       @addTagFilter="addTagFilter"
       @addSpeciesFilter="addSpeciesFilter"
       @addMoreProducts="addMoreProducts"
@@ -39,10 +37,10 @@ export default {
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/public/get_active_products'
       let query_params = {
         'convert_dims_to_fractions': true,
-        'tag_filters': this.tag_filters.join("+"),
-        'species_filters': this.species_filters.join("+"),
+        'tag_filters': this.tagFilters.join("+"),
+        'species_filters': this.speciesFilters.join("+"),
         'offset': this.offset,
-        'limit': this.api_call_limit,
+        'limit': this.apiCallLimit,
         'seed': this.seed
       }
 
@@ -51,75 +49,75 @@ export default {
           params: query_params,
         })
         .then(response => {
-          this.last_call_count = response.data.products.length
+          this.lastCallCount = response.data.products.length
           if (this.products.length == 0) {
             this.products = response.data.products
           } else {
             this.products = [...this.products.concat(response.data.products)]
           }
         })
-      this.offset += this.api_call_limit;
+      this.offset += this.apiCallLimit;
     },
-    makeUrl(species_filters, tag_filters) {
-      if (species_filters.length == 0) {
-        return '/explore/all-species/'+tag_filters.join("+")
+    makeUrl(speciesFilters, tagFilters) {
+      if (speciesFilters.length == 0) {
+        return '/explore/all-species/'+tagFilters.join("+")
       } else {
-        return '/explore/'+species_filters.join("+")+'/'+tag_filters.join("+")
+        return '/explore/'+speciesFilters.join("+")+'/'+tagFilters.join("+")
       }
     },
     addSpeciesFilter(species) {
-      if (!this.species_filters.includes(species)) {
-        this.species_filters.push(species)
+      if (!this.speciesFilters.includes(species)) {
+        this.speciesFilters.push(species)
       }
-      let new_url = this.makeUrl(this.species_filters, this.tag_filters)
+      let new_url = this.makeUrl(this.speciesFilters, this.tagFilters)
       this.$router.push({ path: new_url })
     },
     removeSpeciesFilter(species) {
-      const index = this.species_filters.indexOf(species);
+      const index = this.speciesFilters.indexOf(species);
       if (index > -1) {
-        this.species_filters.splice(index, 1);
+        this.speciesFilters.splice(index, 1);
       }
-      let new_url = this.makeUrl(this.species_filters, this.tag_filters)
+      let new_url = this.makeUrl(this.speciesFilters, this.tagFilters)
       this.$router.push({ path: new_url })
     },
     addTagFilter(tag) {
-      if (!this.tag_filters.includes(tag)) {
-        this.tag_filters.push(tag.replace(/\s/g,"_"))
+      if (!this.tagFilters.includes(tag)) {
+        this.tagFilters.push(tag.replace(/\s/g,"_"))
       }
-      let new_url = this.makeUrl(this.species_filters, this.tag_filters)
+      let new_url = this.makeUrl(this.speciesFilters, this.tagFilters)
       this.$router.push({ path: new_url })
     },
     removeTagFilter(tag) {
-      const index = this.tag_filters.indexOf(tag);
+      const index = this.tagFilters.indexOf(tag);
       if (index > -1) {
-        this.tag_filters.splice(index, 1);
+        this.tagFilters.splice(index, 1);
       }
-      let new_url = this.makeUrl(this.species_filters, this.tag_filters)
+      let new_url = this.makeUrl(this.speciesFilters, this.tagFilters)
       this.$router.push({ path: new_url })
     },
     updateDataFromRoute(params) {
       if (params.species) {
-        this.species_filters = params.species.split("+")
+        this.speciesFilters = params.species.split("+")
       }
-      const index = this.species_filters.indexOf('all-species');
+      const index = this.speciesFilters.indexOf('all-species');
       if (index > -1) {
-        this.species_filters.splice(index, 1);
+        this.speciesFilters.splice(index, 1);
       }
       if (params.tags) {
-        this.tag_filters = params.tags.split("+")
+        this.tagFilters = params.tags.split("+")
       } else {
-        this.tag_filters.length = 0
+        this.tagFilters.length = 0
       }
     },
   },
   data () {
     return {
       products: [],
-      species_filters: [],
-      tag_filters: [],
+      speciesFilters: [],
+      tagFilters: [],
       offset: 0,
-      api_call_limit: 25,
-      last_call_count: 0,
+      apiCallLimit: 25,
+      lastCallCount: 0,
       seed: 0,
     }
   },

@@ -2,22 +2,22 @@
   <NotFound v-if="product == null"/>
   <div v-else>
     <ProductLarge
-      :product_id="product.id"
-      :thumbnail_url="product.thumbnail_url"
+      :productId="product.id"
+      :thumbnailUrl="product.thumbnail_url"
       :count="product.count"
       :price="product.price"
-      :max_length="product.max_length"
-      :max_width="product.max_width"
-      :max_thickness="product.max_thickness"
+      :maxLength="product.max_length"
+      :maxWidth="product.max_width"
+      :maxThickness="product.max_thickness"
       :diameter="product.diameter"
       :species="product.species"
       :subspecies="product.subspecies"
-      :gs_tags="product.gs_tags"
+      :gsTags="product.gs_tags"
       :url="product.url"
       :title="product.title"
       :description="product.description"
-      :image_urls="product.image_urls"
-      :company_name="product.company_name"
+      :imageUrls="product.image_urls"
+      :companyName="product.company_name"
       :favorited="favorited"
       @addTagFilter="exploreByTag"
       @addSpeciesFilter="exploreBySpecies"
@@ -61,7 +61,7 @@ export default {
     isProductFavorited(favorites) {
       this.favorited = favorites.includes(this.product.id)
     },
-    async addFavorite(product_id) {
+    async addFavorite(productId) {
       if (this.$auth.loading || !this.$auth.isAuthenticated) {
         this.$bvModal.show("requires-login")
         return;
@@ -69,7 +69,7 @@ export default {
       const accessToken = await this.$auth.getTokenSilently()
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/private/add_favorite'
       let query_params = {
-        'product_id': product_id,
+        'product_id': productId,
       }
       axios.post(url, query_params, {
         headers: {
@@ -77,9 +77,9 @@ export default {
         }
       })
       this.favorited = true
-      console.log("Added favorite "+product_id)
+      console.log("Added favorite "+productId)
     },
-    async removeFavorite(product_id) {
+    async removeFavorite(productId) {
       if (this.$auth.loading || !this.$auth.isAuthenticated) {
         this.$bvModal.show("requires-login")
         return;
@@ -87,7 +87,7 @@ export default {
       const accessToken = await this.$auth.getTokenSilently()
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/private/remove_favorite'
       let query_params = {
-        'product_id': product_id,
+        'product_id': productId,
       }
       axios.delete(url, {
         headers: {
@@ -96,12 +96,12 @@ export default {
         params: query_params
       })
       this.favorited = false
-      console.log("Removed favorite "+product_id)
+      console.log("Removed favorite "+productId)
     },
-    getProductDetail(product_id) {
+    getProductDetail(productId) {
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/public/get_product'
       let query_params = {
-        'product_id': product_id,
+        'product_id': productId,
       }
 
       axios
@@ -158,8 +158,8 @@ export default {
   },
   data () {
     return {
-
       product: {
+        productId: 0,
         price: 0,
         image_urls: ["https://grainsmiths-images.s3.us-east-2.amazonaws.com/static-assets/logo-image-placeholder.png"]
       },
@@ -175,15 +175,12 @@ export default {
   },
   mounted() {
     this.seed = Math.ceil(Math.random() * 10)
-    this.getProductDetail(this.$router.currentRoute.params.product_id)
+    this.getProductDetail(this.$router.currentRoute.params.productId)
   },
   watch: {
-    'product.image_urls' () {
-      console.log(this.product.image_urls[0])
-    },
     '$route'() {
       this.product.image_urls = ["https://grainsmiths-images.s3.us-east-2.amazonaws.com/static-assets/logo-image-placeholder.png"]
-      this.getProductDetail(this.$router.currentRoute.params.product_id)
+      this.getProductDetail(this.$router.currentRoute.params.productId)
       this.similar_products.length = 0
       this.offset = 0
       this.favorited = false

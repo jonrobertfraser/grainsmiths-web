@@ -15,22 +15,22 @@
       <div v-for="(product, index) in products" :key="index" class="card mb-5 text-center">
 
         <ProductCard
-          :product_id="product.id"
-          :thumbnail_url="product.thumbnail_url"
+          :productId="product.id"
+          :thumbnailUrl="product.thumbnail_url"
           :count="product.count"
           :price="product.price"
-          :max_length="product.max_length"
-          :max_width="product.max_width"
-          :max_thickness="product.max_thickness"
+          :maxLength="product.max_length"
+          :maxWidth="product.max_width"
+          :maxThickness="product.max_thickness"
           :diameter="product.diameter"
           :species="product.species"
           :subspecies="product.subspecies"
-          :gs_tags="product.gs_tags"
+          :gsTags="product.gs_tags"
           :url="product.url"
           :title="product.title"
           :description="product.description"
-          :image_urls="product.image_urls"
-          :company_name="product.company_name"
+          :imageUrls="product.imageUrls"
+          :companyName="product.companyName"
           :favorited="favorites.includes(product.id)"
           @addTagFilter="addTagFilter"
           @addSpeciesFilter="addSpeciesFilter"
@@ -45,7 +45,7 @@
 
     <!-- LOAD MORE RESULTS -->
     <div class="text-center">
-      <button v-if="data_available" v-on:click="addMoreProducts()" type="button" class="btn btn-light mb-5">Load more...</button>
+      <button v-if="dataAvailable" v-on:click="addMoreProducts()" type="button" class="btn btn-light mb-5">Load more...</button>
     </div>
     <!-- LOAD MORE RESULTS -->
 
@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     async getFavorites() {
-      if (this.retrieved_favorites || this.$auth.loading || !this.$auth.isAuthenticated) return;
+      if (this.retrievedFavorites || this.$auth.loading || !this.$auth.isAuthenticated) return;
       const accessToken = await this.$auth.getTokenSilently()
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/private/get_favorites'
       axios
@@ -78,18 +78,18 @@ export default {
           }
         })
         .then(response => {this.favorites = response.data.favorites})
-      this.retrieved_favorites = true
+      this.retrievedFavorites = true
     },
-    async addFavorite(product_id) {
+    async addFavorite(productId) {
       if (this.$auth.loading || !this.$auth.isAuthenticated) {
         this.$bvModal.show("requires-login")
         return;
       }
       const accessToken = await this.$auth.getTokenSilently()
-      this.favorites.push(product_id)
+      this.favorites.push(productId)
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/private/add_favorite'
       let query_params = {
-        'product_id': product_id,
+        'product_id': productId,
       }
       axios.post(url, query_params, {
         headers: {
@@ -97,19 +97,19 @@ export default {
         }
       })
     },
-    async removeFavorite(product_id) {
+    async removeFavorite(productId) {
       if (this.$auth.loading || !this.$auth.isAuthenticated) {
         this.$bvModal.show("requires-login")
         return;
       }
       const accessToken = await this.$auth.getTokenSilently()
-      const index = this.favorites.indexOf(product_id);
+      const index = this.favorites.indexOf(productId);
       if (index > -1) {
         this.favorites.splice(index, 1);
       }
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/private/remove_favorite'
       let query_params = {
-        'product_id': product_id,
+        'product_id': productId,
       }
       axios.delete(url, {
         headers: {
@@ -124,30 +124,30 @@ export default {
     addTagFilter(tag) {
       this.$emit('addTagFilter', tag)
     },
-    showLightbox(image_urls) {
+    showLightbox(imageUrls) {
       this.lightboxIndex = 0
       this.lightboxImages.length = 0;
-      image_urls.forEach(element => this.lightboxImages.push(element));
+      imageUrls.forEach(element => this.lightboxImages.push(element));
     },
     closeLightbox() {
       this.lightboxIndex = null
     },
     addMoreProducts() {
-      this.scroll_pos = window.scrollY
+      this.scrollPos = window.scrollY
       this.$emit('addMoreProducts');
     },
   },
   props: {
     products: Array,
-    data_available: Boolean,
+    dataAvailable: Boolean,
   },
   data () {
     return {
       favorites: [],
       lightboxIndex: null,
       lightboxImages: [],
-      scroll_pos: 0,
-      retrieved_favorites: false,
+      scrollPos: 0,
+      retrievedFavorites: false,
     }
   },
   updated() {
@@ -166,12 +166,12 @@ export default {
       are loaded. */
       this.$nextTick(function () {
         // DOM updated
-        window.scrollTo(0, this.scroll_pos);
+        window.scrollTo(0, this.scrollPos);
       });
     },
     '$route'() {
-      this.scroll_pos = 0
-      window.scrollTo(0, this.scroll_pos);
+      this.scrollPos = 0
+      window.scrollTo(0, this.scrollPos);
     },
     'favorites'() {
       this.$emit('favoritesUpdated', this.favorites)
