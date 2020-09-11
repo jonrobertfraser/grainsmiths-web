@@ -118,24 +118,33 @@ export default {
       }
       this.routeToNewFilters()
     },
+    getDimRange(prefix, string) {
+      let regex = new RegExp('(?:'+prefix+')(\\d+)',"g")
+      var dimRange = []
+      var dimLimit = Number
+      while ((dimLimit = regex.exec(string)) != null) {
+        dimRange.push(parseInt(dimLimit[1]))
+      }
+      if (dimRange.length == 2) return dimRange
+      else return null
+    },
     updateDataFromRoute() {
+
       if (this.pathSpecies == 'all-species') this.speciesFilters = []
       else this.speciesFilters = this.pathSpecies.split("+")
       if (this.pathTags == 'all-tags') this.tagFilters = []
       else this.tagFilters = this.pathTags.split("+")
       this.dimFilters = Object.assign({}, this.dimFilterDefaults);
       if (this.pathDims != null) {
-        let lengthFilters = this.pathDims.match(/(?<=L)(\d+)/g)
-        let widthFilters = this.pathDims.match(/(?<=W)(\d+)/g)
-        let thicknessFilters = this.pathDims.match(/(?<=T)(\d+)/g)
-
+        let lengthFilters = this.getDimRange("L", this.pathDims)
+        let widthFilters = this.getDimRange("W", this.pathDims)
+        let thicknessFilters = this.getDimRange("T", this.pathDims)
         if (lengthFilters != null)
           this.dimFilters.length = [parseInt(lengthFilters[0]), parseInt(lengthFilters[1])]
         if (widthFilters != null)
           this.dimFilters.width = [parseInt(widthFilters[0]), parseInt(widthFilters[1])]
         if (thicknessFilters != null)
           this.dimFilters.thickness = [parseInt(thicknessFilters[0]), parseInt(thicknessFilters[1])]
-        console.log("dimFilters: "+this.dimFilters.length+" "+this.dimFilters.width+" "+this.dimFilters.thickness)
       }
     },
   },

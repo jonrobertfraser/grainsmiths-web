@@ -130,7 +130,7 @@ export default {
       return thing.replace(/_/g," ").replace(/-/g," ")
     },
     showLightbox() {
-      this.$emit('showLightbox',this.image_urls)
+      this.$emit('showLightbox',this.imageUrls)
     },
     addTagFilter(tag) {
       this.$emit('addTagFilter', tag)
@@ -160,7 +160,7 @@ export default {
     url: String,
     title: String,
     description: String,
-    image_urls: Array,
+    imageUrls: Array,
     companyName: String,
     favorited: Boolean,
   },

@@ -50,14 +50,14 @@
 
           <!-- SLIDERS -->
           <div v-if="!showDimFilterMenu" class="d-flex justify-content-center">
-            <div v-on:click="showDimFilterMenu = true" class="mt-4 mb-3 text-center w-50 gs-badge white-badge btn">
-              Narrow search by board dimensions<font-awesome-icon :icon="['fas', 'chevron-down']" size="sm" class="ml-3"/>
+            <div v-on:click="showDimFilterMenu = true" class="mt-4 mb-3 text-center w-md-50 gs-badge white-badge btn">
+              Narrow search by dimensions<font-awesome-icon :icon="['fas', 'chevron-down']" size="sm" class="ml-3"/>
             </div>
           </div>
 
           <div class="position-relative mx-3 pt-3 pb-2 px-5 mt-4 dimFilterMenu" v-else>
-            <div class="text-center">
-              Narrow search by board dimensions
+            <div class="text-center pb-3">
+              Narrow search by dimensions
             </div>
             <div class="filter-menu-close-button" v-on:click="closeDimFilterMenu">
 

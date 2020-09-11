@@ -29,7 +29,7 @@
           :url="product.url"
           :title="product.title"
           :description="product.description"
-          :imageUrls="product.imageUrls"
+          :imageUrls="product.image_urls"
           :companyName="product.company_name"
           :favorited="favorites.includes(product.id)"
           @addTagFilter="addTagFilter"
