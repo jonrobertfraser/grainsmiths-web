@@ -51,13 +51,16 @@
           <!-- SLIDERS -->
           <div v-if="!showDimFilterMenu" class="d-flex justify-content-center">
             <div v-on:click="showDimFilterMenu = true" class="mt-4 mb-3 text-center w-50 gs-badge white-badge btn">
-              Search for dimensions<font-awesome-icon :icon="['fas', 'chevron-down']" size="sm" class="ml-3"/>
+              Narrow search by board dimensions<font-awesome-icon :icon="['fas', 'chevron-down']" size="sm" class="ml-3"/>
             </div>
           </div>
 
-          <div class="position-relative mx-3 pt-4 pb-2 px-5 mt-4 dimFilterMenu" v-else>
+          <div class="position-relative mx-3 pt-3 pb-2 px-5 mt-4 dimFilterMenu" v-else>
+            <div class="text-center">
+              Narrow search by board dimensions
+            </div>
             <div class="filter-menu-close-button" v-on:click="closeDimFilterMenu">
-              &times;
+
             </div>
             <div class="w-100 px-4" v-for="(value, key) in sliderValueDefaults" :key="key+'-slider'">
               <div class="mb-2 mx-2">
@@ -92,8 +95,11 @@
         <div class="col-md-2"><!-- Right Spacer --></div>
       </div>
       <div class="row results-count mt-3">
-        <div v-if="resultsCount != -1" class="mx-4 mb-1">
-          Showing {{ resultsCount }} results
+        <div v-if="resultsCount == -1" class="mx-4 mb-1">
+          Found thousands of results
+        </div>
+        <div v-if="resultsCount > 0" class="mx-4 mb-1">
+          Found {{ resultsCount }} results
         </div>
       </div>
     </div>
@@ -271,8 +277,13 @@ export default {
     position: absolute;
     color: #666;
     top: 0.2em;
-    right: 0.7em;
-    font-size: 1.7em;
+    right: 1em;
+    font-size: 1em;
+  }
+  .filter-menu-close-button:after {
+    content: '\D7';
+    font-size: 1.6em;
+    margin-left: 0.2em;
   }
 </style>
 

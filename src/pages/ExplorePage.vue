@@ -155,7 +155,7 @@ export default {
       apiCallLimit: 25,
       lastCallCount: 0,
       seed: 0,
-      resultsCount: -1,
+      resultsCount: null,
       dimFilterDefaults: {
         length: [minLength, maxLength],
         width: [minWidth, maxWidth],
