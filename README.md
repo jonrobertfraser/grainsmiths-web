@@ -19,6 +19,7 @@
 * `$ npm install vue-cookies --save`
 * `$ npm install express serve-static --save`
 * `$ npm install --save vue-drift`
+* `$ npm install vue-slider-component --save`
 
 ## Deploying Vue via command line
 

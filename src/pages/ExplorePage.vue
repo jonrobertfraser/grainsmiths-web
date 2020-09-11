@@ -4,6 +4,7 @@
     <FiltersMenu
       :tag_filters="tagFilters"
       :species_filters="speciesFilters"
+      :resultsCount="resultsCount"
       @addSpeciesFilter="addSpeciesFilter"
       @removeSpeciesFilter="removeSpeciesFilter"
       @addTagFilter="addTagFilter"
@@ -50,6 +51,7 @@ export default {
         })
         .then(response => {
           this.lastCallCount = response.data.products.length
+          this.resultsCount = response.data.count
           if (this.products.length == 0) {
             this.products = response.data.products
           } else {
@@ -119,6 +121,7 @@ export default {
       apiCallLimit: 25,
       lastCallCount: 0,
       seed: 0,
+      resultsCount: -1,
     }
   },
   mounted() {
@@ -131,6 +134,7 @@ export default {
       this.updateDataFromRoute(to.params)
       this.products.length = 0
       this.offset = 0
+      this.resultsCount = null
       this.addMoreProducts()
     }
   }

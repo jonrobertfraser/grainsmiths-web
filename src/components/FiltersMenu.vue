@@ -4,8 +4,8 @@
     <div class="py-2 my-4">
 
       <div class="row">
-        <div class="col-sm-2"><!-- Left Spacer --></div>
-        <div class="col-sm-8">
+        <div class="col-md-2"><!-- Left Spacer --></div>
+        <div class="col-md-8">
 
           <!-- INSTRUCTIONS -->
           <div class="mx-3 mb-4" v-if="show_filter_instructions">
@@ -48,8 +48,60 @@
           </div>
           <!-- TAG LIST -->
 
+          <!-- SLIDERS -->
+          <div v-if="!showDimFilterMenu" class="d-flex justify-content-center">
+            <div v-on:click="showDimFilterMenu = true" class="mt-4 mb-3 text-center w-50 gs-badge white-badge btn">
+              Search for dimensions<font-awesome-icon :icon="['fas', 'chevron-down']" size="sm" class="ml-3"/>
+            </div>
+          </div>
+          <div class="position-relative mx-3 pt-4 pb-2 px-5 mt-4 dimFilterMenu" v-else>
+            <div class="row">
+              <div class="filter-menu-close-button" v-on:click="closeDimFilterMenu">&times;</div>
+              <div class="col-lg-1"></div>
+                <div class="col-lg-10">
+                  <div v-for="value in dimFilters" :key="value.label">
+                    <div class="d-flex mb-1 mt-1 pt-0 pb-1">
+                      <div class="mr-auto">
+                        {{ value.label }}
+                      </div>
+                      <!-- <div class="">
+                        {{ value.sliderValues[0] }} in ~ {{ value.sliderValues[1] }}<span v-if="value.sliderValues[1] == value.max">+</span> in
+                      </div> -->
+                    </div>
+                    <vue-slider class="mt-0 mb-4 pt-0"
+                      v-model="value.sliderValues"
+                      :dotSize="[20, 20]"
+                      :height="10"
+                      :lazy="true"
+                      :max="value.max"
+                      width="auto"
+                      :interval="1"
+                      tooltip="always"
+                      :tooltipPlacement="['left','right']"
+                      :minRange="2"
+                      :contained="true"
+                      :tooltip-formatter="val => {
+                        if (val == value.max) {
+                          return val+'+ in'
+                        } else {
+                          return val+' in'
+                        }}"
+                    >
+                    </vue-slider>
+                  </div>
+                </div>
+              <div class="col-lg-1"></div>
+            </div>
+          </div>
+          <!-- SLIDERS -->
+
         </div>
-        <div class="col-sm-2"><!-- Right Spacer --></div>
+        <div class="col-md-2"><!-- Right Spacer --></div>
+      </div>
+      <div class="row results-count mt-3">
+        <div v-if="resultsCount != -1" class="mx-4 mb-1">
+          Showing {{ resultsCount }} results
+        </div>
       </div>
     </div>
     <!-- FILTER AREA -->
@@ -59,12 +111,31 @@
 import axios from 'axios'
 import Multiselect from 'vue-multiselect'
 
+import VueSlider from 'vue-slider-component'
+import 'vue-slider-component/theme/default.css'
+
 export default {
   name: "FiltersMenu",
   components: {
-    Multiselect
+    Multiselect,
+    VueSlider
   },
   methods: {
+    closeDimFilterMenu() {
+      this.showDimFilterMenu = false
+      this.dimFilters.length.sliderValues = [
+        this.dimFilters.length.min,
+        this.dimFilters.length.max,
+      ]
+      this.dimFilters.width.sliderValues = [
+        this.dimFilters.width.min,
+        this.dimFilters.width.max,
+      ]
+      this.dimFilters.thickness.sliderValues = [
+        this.dimFilters.thickness.min,
+        this.dimFilters.thickness.max,
+      ]
+    },
     turnOffInstructions() {
       this.show_filter_instructions = !this.show_filter_instructions
       this.$cookies.set('show_filter_instructions',this.show_filter_instructions)
@@ -104,14 +175,36 @@ export default {
   },
   props: {
     tag_filters: Array,
-    species_filters: Array
+    species_filters: Array,
+    resultsCount: Number,
   },
   data () {
     return {
+      dimFilters: {
+        length: {
+          label: "Length",
+          min: 0,
+          max: 100,
+          sliderValues: [0,100],
+        },
+        width: {
+          label: "Width",
+          min: 0,
+          max: 50,
+          sliderValues: [0,50],
+        },
+        thickness: {
+          label: "Thickness",
+          min: 0,
+          max: 10,
+          sliderValues: [0,10],
+        }
+      },
       multiValue: [],
       options: [],
       tag_menu: [],
-      show_filter_instructions: true
+      show_filter_instructions: true,
+      showDimFilterMenu: false
     }
   },
   watch: {
@@ -193,10 +286,34 @@ export default {
     content: "\D7";
     margin-left:0.5em;
   }
-
+  .results-count {
+    border-bottom:1px solid rgb(235,235,235);
+  }
+  .dimFilterMenu {
+    background-color: rgb(247,247,247);
+    border-radius:.75rem;
+  }
+  .filter-menu-close-button {
+    cursor: pointer;
+    position: absolute;
+    color: #666;
+    top: 0.2em;
+    right: 0.7em;
+    font-size: 1.7em;
+  }
 </style>
 
 <style lang="css">
+  /* process style */
+  .vue-slider-process {
+    background-color: #000;
+  }
+  .vue-slider-dot-tooltip-inner {
+    color: #fff;
+    border-color: rgba(0, 0, 0, 0.75);
+    background-color: rgba(0, 0, 0, 0.75);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
   .multiselect__input, .multiselect__placeholder {
     color: rgb(51,51,51);
     padding: 0.2em;

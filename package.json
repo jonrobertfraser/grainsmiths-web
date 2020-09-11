@@ -27,7 +27,8 @@
     "vue-drift": "^2.0.4",
     "vue-masonry-css": "^1.0.3",
     "vue-multiselect": "^2.1.6",
-    "vue-router": "^3.4.2"
+    "vue-router": "^3.4.2",
+    "vue-slider-component": "^3.2.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.4.0",
