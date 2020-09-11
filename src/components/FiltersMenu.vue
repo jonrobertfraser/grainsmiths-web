@@ -98,7 +98,7 @@
         <div v-if="resultsCount == -1" class="mx-4 mb-1">
           Found thousands of results
         </div>
-        <div v-if="resultsCount > 0" class="mx-4 mb-1">
+        <div v-if="resultsCount >= 0" class="mx-4 mb-1">
           Found {{ resultsCount }} results
         </div>
       </div>
