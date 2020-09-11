@@ -54,43 +54,36 @@
               Search for dimensions<font-awesome-icon :icon="['fas', 'chevron-down']" size="sm" class="ml-3"/>
             </div>
           </div>
+
           <div class="position-relative mx-3 pt-4 pb-2 px-5 mt-4 dimFilterMenu" v-else>
-            <div class="row">
-              <div class="filter-menu-close-button" v-on:click="closeDimFilterMenu">&times;</div>
-              <div class="col-lg-1"></div>
-                <div class="col-lg-10">
-                  <div v-for="value in dimFilters" :key="value.label">
-                    <div class="d-flex mb-1 mt-1 pt-0 pb-1">
-                      <div class="mr-auto">
-                        {{ value.label }}
-                      </div>
-                      <!-- <div class="">
-                        {{ value.sliderValues[0] }} in ~ {{ value.sliderValues[1] }}<span v-if="value.sliderValues[1] == value.max">+</span> in
-                      </div> -->
-                    </div>
-                    <vue-slider class="mt-0 mb-4 pt-0"
-                      v-model="value.sliderValues"
-                      :dotSize="[20, 20]"
-                      :height="10"
-                      :lazy="true"
-                      :max="value.max"
-                      width="auto"
-                      :interval="1"
-                      tooltip="always"
-                      :tooltipPlacement="['left','right']"
-                      :minRange="2"
-                      :contained="true"
-                      :tooltip-formatter="val => {
-                        if (val == value.max) {
-                          return val+'+ in'
-                        } else {
-                          return val+' in'
-                        }}"
-                    >
-                    </vue-slider>
-                  </div>
-                </div>
-              <div class="col-lg-1"></div>
+            <div class="filter-menu-close-button" v-on:click="closeDimFilterMenu">
+              &times;
+            </div>
+            <div class="w-100 px-4" v-for="(value, key) in sliderValueDefaults" :key="key+'-slider'">
+              <div class="mb-2 mx-2">
+                {{ key }}
+              </div>
+              <vue-slider class="mt-0 mb-4 pt-0"
+                v-model="sliderValues[key]"
+                :dotSize="[20, 20]"
+                :height="10"
+                :lazy="true"
+                :max="value[1]"
+                width="auto"
+                :interval="1"
+                tooltip="always"
+                :tooltipPlacement="['left','right']"
+                :minRange="2"
+                :contained="true"
+                :tooltip-formatter="val => {
+                  if (val == value[1]) {
+                    return val+'+ in'
+                  } else {
+                    return val+' in'
+                  }}"
+                @change="dimFilterChange"
+              >
+              </vue-slider>
             </div>
           </div>
           <!-- SLIDERS -->
@@ -121,20 +114,13 @@ export default {
     VueSlider
   },
   methods: {
+    dimFilterChange() {
+      this.$emit("dimFilterChange", this.sliderValues)
+    },
     closeDimFilterMenu() {
       this.showDimFilterMenu = false
-      this.dimFilters.length.sliderValues = [
-        this.dimFilters.length.min,
-        this.dimFilters.length.max,
-      ]
-      this.dimFilters.width.sliderValues = [
-        this.dimFilters.width.min,
-        this.dimFilters.width.max,
-      ]
-      this.dimFilters.thickness.sliderValues = [
-        this.dimFilters.thickness.min,
-        this.dimFilters.thickness.max,
-      ]
+      this.sliderValues = this.sliderValueDefaults
+      this.$emit("dimFilterChange", this.sliderValues)
     },
     turnOffInstructions() {
       this.show_filter_instructions = !this.show_filter_instructions
@@ -177,34 +163,18 @@ export default {
     tag_filters: Array,
     species_filters: Array,
     resultsCount: Number,
+    sliderValueDefaults: Object,
+    setSliderValues: Object,
+    showSliders: Boolean
   },
   data () {
     return {
-      dimFilters: {
-        length: {
-          label: "Length",
-          min: 0,
-          max: 100,
-          sliderValues: [0,100],
-        },
-        width: {
-          label: "Width",
-          min: 0,
-          max: 50,
-          sliderValues: [0,50],
-        },
-        thickness: {
-          label: "Thickness",
-          min: 0,
-          max: 10,
-          sliderValues: [0,10],
-        }
-      },
+      sliderValues: Object.assign({}, this.setSliderValues),
       multiValue: [],
       options: [],
       tag_menu: [],
       show_filter_instructions: true,
-      showDimFilterMenu: false
+      showDimFilterMenu: this.showSliders
     }
   },
   watch: {
@@ -223,7 +193,10 @@ export default {
           'name_for_url': element
         })
       })
-    }
+    },
+    setSliderValues: function () {
+      this.sliderValues = Object.assign({}, this.setSliderValues);
+    },
   },
   mounted() {
     this.populateSpeciesMenu()

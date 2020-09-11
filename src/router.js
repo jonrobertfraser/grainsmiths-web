@@ -63,31 +63,14 @@ const router = new VueRouter({
       props: true,
     },
     {
-      path: '/explore',
+      path: '/explore/:pathSpecies?/:pathTags?/:pathDims?',
       name: 'ExplorePage',
       component: ExplorePage,
       beforeEnter: authGuard,
       meta: {
         title: 'Explore',
-      }
-    },
-    {
-      path: '/explore/:species',
-      name: 'ExplorePageSpecies',
-      component: ExplorePage,
-      beforeEnter: authGuard,
-      meta: {
-        title: 'Explore',
-      }
-    },
-    {
-      path: '/explore/:species/:tags',
-      name: 'ExplorePageSpeciesTags',
-      component: ExplorePage,
-      beforeEnter: authGuard,
-      meta: {
-        title: 'Explore',
-      }
+      },
+      props: true,
     },
     {
       path: '/favorites',
@@ -123,8 +106,7 @@ const router = new VueRouter({
         title: '404 Not Found',
       }
     }
-
-  ]
+  ],
 })
 
 
@@ -132,6 +114,7 @@ router.beforeEach((to, from, next) => {
   document.title = to.meta.title || 'Grainsmiths';
   next();
 });
+
 
 
 
