@@ -1,25 +1,27 @@
 # grainsmiths-vue
 
-## Additional packages I installed:
+## Additional packages install installed:
 
-* `$ npm i --save vue-router`
-* `$ npm i --save bootstrap-vue`
-* `$ npm i --save jquery`
-* `$ npm i --save @fortawesome/fontawesome-svg-core`
-* `$ npm i --save @fortawesome/free-solid-svg-icons`
-* `$ npm i --save @fortawesome/free-regular-svg-icons`
-* `$ npm i --save @fortawesome/vue-fontawesome`
-* `$ npm i --save @fortawesome/free-brands-svg-icons`
-* `$ npm i --save-dev node-sass sass-loader`
-* `$ npm i --save axios`
-* `$ npm i --save vue-masonry-css`
-* `$ npm install --save vue-cool-lightbox`
-* `$ npm install --save vue-multiselect`
-* `$ npm install @auth0/auth0-spa-js`
-* `$ npm install vue-cookies --save`
-* `$ npm install express serve-static --save`
-* `$ npm install --save vue-drift`
-* `$ npm install vue-slider-component --save`
+* `$ npm install --save vue-router` // Router
+* `$ npm install --save bootstrap-vue` // Lots of things
+* `$ npm install --save jquery` // Basic requirement
+* `$ npm install --save @fortawesome/fontawesome-svg-core`
+* `$ npm install --save @fortawesome/free-solid-svg-icons`
+* `$ npm install --save @fortawesome/free-regular-svg-icons`
+* `$ npm install --save @fortawesome/vue-fontawesome`
+* `$ npm install --save @fortawesome/free-brands-svg-icons`
+* `$ npm install --save node-sass sass-loader` // not sure.
+* `$ npm install --save axios` // API calls
+* `$ npm install --save vue-masonry-css` // Tileview
+* `$ npm install --save vue-cool-lightbox` // Lightbox on tileview cards
+* `$ npm install --save vue-multiselect` // Species selector
+* `$ npm install --save @auth0/auth0-spa-js` // Auth0
+* `$ npm install --save vue-cookies` // Capturing cookies
+* `$ npm install --save express serve-static` // HTTPS only
+* `$ npm install --save vue-drift` // Drift Chat
+* `$ npm install --save vue-gtag` // Google analytics
+* `$ npm install --save vue-slider-component` // Dimension sliders
+
 
 ## Deploying Vue via command line
 

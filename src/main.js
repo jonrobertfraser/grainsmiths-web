@@ -87,6 +87,14 @@ Vue.use(VueDrift, {
   development: false,
 })
 
+import VueGtag from "vue-gtag";
+if (process.env.VUE_APP_ENVIRONMENT == 'PRODUCTION') {
+  Vue.use(VueGtag, {
+    config: { id: "UA-154451675-1" },
+    appName: 'Grainsmiths',
+  }, router);
+}
+
 new Vue({
   router,
   render: h => h(App),
