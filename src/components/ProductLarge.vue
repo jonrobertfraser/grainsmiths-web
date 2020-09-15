@@ -15,7 +15,7 @@
         >
           <b-carousel-slide v-for="(imageUrl, i) in imageUrls" v-bind:key="i" style="text-align: center;">
             <template v-slot:img>
-              <router-link class="zoom-image" target="_blank" :to="{name: 'ProductImage', params: { productId: productId, imageIndex: i }}">
+              <router-link class="zoom-image" :to="{name: 'ProductImage', params: { productId: productId, imageIndex: i }}">
                 <img :src="imageUrl">
               </router-link>
             </template>

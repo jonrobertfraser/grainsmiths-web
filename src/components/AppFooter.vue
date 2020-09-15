@@ -1,16 +1,14 @@
 <template>
-    <div class="container-fluid footer py-5 mt-auto">
+    <div class="container-fluid footer pt-5 mt-auto">
       <div class="row">
-        <div class="col-sm-6 footer-brand-image text-center">
+        <div class="col-sm-12 footer-brand-image text-center">
           <img src="../assets/logo-build-something-beautiful-grey.svg" alt="">
-        </div>
-        <div class="col-sm-6 text-center">
-          <div>
-            <router-link class="nav-link" :to="{'name': 'AboutPage'}">
+
+            <!-- <router-link class="nav-link" :to="{'name': 'AboutPage'}">
               About Grainsmiths
-            </router-link>
-          </div>
-          <div>
+            </router-link> -->
+
+          <div class="mt-4 mb-3">
             &copy; Grainsmiths {{ new Date().getFullYear() }}
           </div>
         </div>

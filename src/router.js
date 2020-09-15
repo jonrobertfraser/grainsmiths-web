@@ -56,7 +56,7 @@ const router = new VueRouter({
       path: '/product/:productId',
       name: 'ProductPage',
       component: ProductPage,
-      beforeEnter: authGuard,
+      //beforeEnter: authGuard,
       meta: {
         title: 'Grainsmiths',
       },
@@ -66,7 +66,7 @@ const router = new VueRouter({
       path: '/explore/:pathSpecies?/:pathTags?/:pathDims?',
       name: 'ExplorePage',
       component: ExplorePage,
-      beforeEnter: authGuard,
+      //beforeEnter: authGuard,
       meta: {
         title: 'Explore',
       },
