@@ -43,11 +43,11 @@
             @resetFilterMenu="resetDimFilterMenu"
             >
             <template v-slot:body>
-              <div class="w-100 px-5" v-for="(value, key) in sliderValueDefaults" :key="key+'-slider'">
+              <div class="w-100 px-4" v-for="(value, key) in sliderValueDefaults" :key="key+'-slider'">
                 <div class="mb-2 mx-2">
                   {{ key }}
                 </div>
-                <vue-slider class="mt-0 mb-4 pt-0"
+                <vue-slider class="mt-0 mb-2 pt-0"
                   v-model="sliderValues[key]"
                   :dotSize="[20, 20]"
                   :height="10"
@@ -55,13 +55,13 @@
                   :max="value[1]"
                   width="auto"
                   :interval="1"
+                  :enable-cross="false"
                   tooltip="always"
                   :tooltipPlacement="['left','right']"
-                  :minRange="2"
                   :contained="true"
                   :tooltip-formatter="val => {
                     if (val == value[1]) {
-                      return val+'+ in'
+                      return 'No max'
                     } else {
                       return val+' in'
                     }}"

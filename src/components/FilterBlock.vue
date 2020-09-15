@@ -1,6 +1,6 @@
 <template>
 
-  <div class="my-2">
+  <div class="my-3">
 
     <!-- TITLE AREA -->
     <div class="filter-block-title-line" v-bind:class="{'filter-title-when-closed': !showFilterMenu}">
@@ -81,7 +81,7 @@ export default {
 
 <style lang="css" scoped>
   .filter-menu-block {
-    background-color: rgb(247,247,247);
+    background-color: rgb(230,230,230);
     border-radius: 0em 0em 0.5em 0.5em;
     position: relative;
     margin: 0em 0.5em;
