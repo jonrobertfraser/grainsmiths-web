@@ -28,8 +28,8 @@
         </div>
       </div>
     </div>
-    <div class="container-fluid p-5">
-      <div class="row p-5">
+    <div class="container-fluid p-3">
+      <div class="row p-4">
         <div class="col-md-6">
           <div class="text-center">
             <img style="max-width:75%;" src="https://grainsmiths-images.s3.us-east-2.amazonaws.com/static-assets/picture-cookie.jpg">
