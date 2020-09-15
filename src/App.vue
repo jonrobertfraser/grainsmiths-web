@@ -15,15 +15,12 @@
         </div>
       </div>
     </b-modal>
-    <div v-if="$route.name == 'ProductImage'">
-      <router-view />
-    </div>
-    <div v-else class="d-flex flex-column min-vh-100">
-      <AppHeader />
-      <div class="container-fluid">
+    <div class="d-flex flex-column min-vh-100">
+      <AppHeader v-if="$route.name != 'ProductImage'" />
+      <div v-bind:class="{'container-fluid': $route.name != 'HomePage'}">
         <router-view />
       </div>
-      <AppFooter />
+      <AppFooter v-if="$route.name != 'ProductImage'"/>
     </div>
   </div>
 </template>
