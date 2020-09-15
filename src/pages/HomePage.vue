@@ -11,7 +11,7 @@
       </div>
       <div class="row py-5 px-0 justify-content-center">
         <div id="" class="text-left home-hero-search col-md-12 mb-5">
-          <div class="mb-2">
+          <div class="mb-2 font-weight-light">
             Get started here.
           </div>
           <multiselect
@@ -117,12 +117,12 @@ export default {
   }
   @media screen and (max-width: 750px) {
     .hero-image {
-      background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.5)), url("https://grainsmiths-images.s3.us-east-2.amazonaws.com/static-assets/teo-duldulao-4op9_2Bt2Eg-unsplash-750x500.jpg");
+      background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.5)), url("https://grainsmiths-images.s3.us-east-2.amazonaws.com/static-assets/teo-duldulao-4op9_2Bt2Eg-unsplash-750x1728.jpg");
     }
   }
   @media screen and (min-width: 750px) and (max-width: 1200px) {
     .hero-image {
-      background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.5)), url("https://grainsmiths-images.s3.us-east-2.amazonaws.com/static-assets/teo-duldulao-4op9_2Bt2Eg-unsplash-1200x800.jpg");
+      background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.5)), url("https://grainsmiths-images.s3.us-east-2.amazonaws.com/static-assets/teo-duldulao-4op9_2Bt2Eg-unsplash-1200x1728.jpg");
     }
   }
   @media screen and (min-width: 1200px) and (max-width: 1800px) {
@@ -146,7 +146,6 @@ export default {
     background-color:rgba(0,0,0,0.3);
     color: #FFF;
     font-size: 2em;
-    font-weight: 100;
   }
 
 </style>
