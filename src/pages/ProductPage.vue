@@ -182,6 +182,7 @@ export default {
   },
   watch: {
     '$route'() {
+      window.scrollTo(0, 0)
       this.product.image_urls = ["https://grainsmiths-images.s3.us-east-2.amazonaws.com/static-assets/logo-image-placeholder.png"]
       this.getProductDetail(this.$router.currentRoute.params.productId)
       this.similar_products.length = 0

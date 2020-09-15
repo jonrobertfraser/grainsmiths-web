@@ -99,12 +99,14 @@ export default {
       }
     },
     addSpeciesFilter(species) {
+      window.scrollTo(0, 0)
       if (!this.speciesFilters.includes(species)) {
         this.speciesFilters.push(species)
       }
       this.routeToNewFilters()
     },
     removeSpeciesFilter(species) {
+      window.scrollTo(0, 0)
       const index = this.speciesFilters.indexOf(species);
       if (index > -1) {
         this.speciesFilters.splice(index, 1);
@@ -112,12 +114,14 @@ export default {
       this.routeToNewFilters()
     },
     addTagFilter(tag) {
+      window.scrollTo(0, 0)
       if (!this.tagFilters.includes(tag)) {
         this.tagFilters.push(tag.replace(/\s/g,"_"))
       }
       this.routeToNewFilters()
     },
     removeTagFilter(tag) {
+      window.scrollTo(0, 0)
       const index = this.tagFilters.indexOf(tag);
       if (index > -1) {
         this.tagFilters.splice(index, 1);
