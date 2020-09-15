@@ -43,13 +43,6 @@
     </masonry>
     <!-- MASONRY AREA -->
 
-    <!-- LOAD MORE RESULTS -->
-    <div class="text-center">
-      <button v-if="dataAvailable" v-on:click="addMoreProducts()" type="button" class="btn btn-light mb-5">Load more...</button>
-    </div>
-    <!-- LOAD MORE RESULTS -->
-
-
   </div>
 </template>
 
@@ -64,7 +57,7 @@ export default {
   name: "TiledCards",
   components: {
     ImageLightbox,
-    ProductCard
+    ProductCard,
   },
   methods: {
     async getFavorites() {
@@ -132,21 +125,15 @@ export default {
     closeLightbox() {
       this.lightboxIndex = null
     },
-    addMoreProducts() {
-      this.scrollPos = window.scrollY
-      this.$emit('addMoreProducts');
-    },
   },
   props: {
     products: Array,
-    dataAvailable: Boolean,
   },
   data () {
     return {
       favorites: [],
       lightboxIndex: null,
       lightboxImages: [],
-      scrollPos: 0,
       retrievedFavorites: false,
     }
   },
@@ -159,19 +146,6 @@ export default {
   watch: {
     '$auth.loading' () {
       this.getFavorites()
-    },
-    'products' () {
-      /* Update scroll position back to where
-      you were previously after more products
-      are loaded. */
-      this.$nextTick(function () {
-        // DOM updated
-        window.scrollTo(0, this.scrollPos);
-      });
-    },
-    '$route'() {
-      this.scrollPos = 0
-      window.scrollTo(0, this.scrollPos);
     },
     'favorites'() {
       this.$emit('favoritesUpdated', this.favorites)

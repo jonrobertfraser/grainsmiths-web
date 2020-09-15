@@ -17,11 +17,15 @@
 
     <TiledCards
       :products="products"
-      :dataAvailable="lastCallCount == apiCallLimit"
       @addTagFilter="addTagFilter"
       @addSpeciesFilter="addSpeciesFilter"
-      @addMoreProducts="addMoreProducts"
     />
+
+    <infinite-loading class="mb-5" @infinite="addMoreProducts" :identifier="infiniteId">
+      <div slot="no-more">That's the end of the list...</div>
+      <div slot="no-results"></div>
+    </infinite-loading>
+
   </div>
 </template>
 
@@ -30,15 +34,17 @@
 import axios from 'axios'
 import TiledCards from '../components/TiledCards.vue'
 import FiltersMenu from '../components/FiltersMenu.vue'
+import InfiniteLoading from 'vue-infinite-loading';
 
 export default {
   name: "ExploreView",
   components: {
     TiledCards,
-    FiltersMenu
+    FiltersMenu,
+    InfiniteLoading,
   },
   methods: {
-    addMoreProducts() {
+    addMoreProducts($state) {
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/public/get_active_products'
       var maxLength = this.dimFilters.length[1]
       var maxWidth = this.dimFilters.width[1]
@@ -70,13 +76,13 @@ export default {
           params: query_params,
         })
         .then(response => {
-          this.lastCallCount = response.data.products.length
           this.resultsCount = response.data.count
-          if (this.products.length == 0) {
-            this.products = response.data.products
+          if (response.data.products.length == 0) {
+            $state.complete()
           } else {
-            this.products = [...this.products.concat(response.data.products)]
+            $state.loaded()
           }
+          this.products.push(...response.data.products)
         })
       this.offset += this.apiCallLimit;
     },
@@ -162,7 +168,6 @@ export default {
       tagFilters: [],
       offset: 0,
       apiCallLimit: 25,
-      lastCallCount: 0,
       seed: 0,
       resultsCount: null,
       dimFilterDefaults: {
@@ -174,7 +179,8 @@ export default {
         length: [minLength, maxLength],
         width: [minWidth, maxWidth],
         thickness: [minThickness, maxThickness],
-      }
+      },
+      infiniteId: +new Date(),
     }
   },
   props: {
@@ -222,15 +228,15 @@ export default {
   mounted() {
     this.seed = Math.ceil(Math.random() * 10)
     this.updateDataFromRoute()
-    this.addMoreProducts()
   },
   watch: {
     '$route'() {
+
       this.updateDataFromRoute()
-      this.products.length = 0
+      this.products = []
+      this.infiniteId += 1
       this.offset = 0
       this.resultsCount = null
-      this.addMoreProducts()
     }
   },
 };

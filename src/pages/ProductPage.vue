@@ -31,13 +31,16 @@
 
     <TiledCards
       :products="similar_products"
-      :dataAvailable="lastCallCount == apiCallLimit"
       @favoritesUpdated="isProductFavorited"
       @addTagFilter="exploreByTag"
       @addSpeciesFilter="exploreBySpecies"
-      @addMoreProducts="addMoreProducts"
     />
+
+    <infinite-loading @infinite="addMoreProducts">
+    </infinite-loading>
   </div>
+
+
 
 </template>
 
@@ -47,6 +50,7 @@ import axios from 'axios'
 import TiledCards from '../components/TiledCards.vue'
 import ProductLarge from '../components/ProductLarge.vue'
 import NotFound from './NotFound.vue'
+import InfiniteLoading from 'vue-infinite-loading';
 
 export default {
   name: "ProductPage",
@@ -54,6 +58,7 @@ export default {
     ProductLarge,
     TiledCards,
     NotFound,
+    InfiniteLoading,
   },
   methods: {
     isProductFavorited(favorites) {
@@ -118,11 +123,10 @@ export default {
               this.species_filters.push(this.product.subspecies)
             }
             this.tag_filters = this.product.gs_tags
-            this.addMoreProducts()
           }
         })
     },
-    addMoreProducts() {
+    addMoreProducts($state) {
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/public/get_active_products'
       let query_params = {
         'convert_dims_to_fractions': true,
@@ -138,12 +142,13 @@ export default {
           params: query_params,
         })
         .then(response => {
-          this.lastCallCount = response.data.products.length
-          if (this.similar_products.length == 0) {
-            this.similar_products = response.data.products
+          this.resultsCount = response.data.count
+          if (response.data.products.length == 0) {
+            $state.complete()
           } else {
-            this.similar_products = [...this.similar_products.concat(response.data.products)]
+            $state.loaded()
           }
+          this.similar_products.push(...response.data.products)
         })
       this.offset += this.apiCallLimit;
     },
