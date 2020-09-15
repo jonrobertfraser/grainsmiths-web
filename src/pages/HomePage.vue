@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="hero-image container-fluid">
-      <div class="row py-5 px-5">
+      <div class="row py-5 px-4">
         <div class="col-sm-4">
           <!-- spacer -->
         </div>
@@ -9,9 +9,9 @@
           The world's largest and fastest growing online catalog of specialty wood products.
         </div>
       </div>
-      <div class="row py-5 px-5 justify-content-center">
-        <div id="" class="text-left home-hero-search col-md-10 mb-5">
-          <div class="mx-1 mb-1">
+      <div class="row py-5 px-0 justify-content-center">
+        <div id="" class="text-left home-hero-search col-md-12 mb-5">
+          <div class="mb-2">
             Get started here.
           </div>
           <multiselect
@@ -104,10 +104,10 @@ export default {
 
 </script>
 
-<style scoped>
+<style lang="css" scoped>
 
   .hero-image {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.5)), url("https://grainsmiths-images.s3.us-east-2.amazonaws.com/static-assets/teo-duldulao-4op9_2Bt2Eg-unsplash.jpg");
+    background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.5)), url("https://grainsmiths-images.s3.us-east-2.amazonaws.com/static-assets/teo-duldulao-4op9_2Bt2Eg-unsplash-2400x1600.jpg");
     min-height: 75vh;
     background-position: center;
     background-repeat: no-repeat;
@@ -115,6 +115,26 @@ export default {
     position: relative;
     text-align: center
   }
+  @media screen and (max-width: 750px) {
+    .hero-image {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.5)), url("https://grainsmiths-images.s3.us-east-2.amazonaws.com/static-assets/teo-duldulao-4op9_2Bt2Eg-unsplash-750x500.jpg");
+    }
+  }
+  @media screen and (min-width: 750px) and (max-width: 1200px) {
+    .hero-image {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.5)), url("https://grainsmiths-images.s3.us-east-2.amazonaws.com/static-assets/teo-duldulao-4op9_2Bt2Eg-unsplash-1200x800.jpg");
+    }
+  }
+  @media screen and (min-width: 1200px) and (max-width: 1800px) {
+    .hero-image {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.5)), url("https://grainsmiths-images.s3.us-east-2.amazonaws.com/static-assets/teo-duldulao-4op9_2Bt2Eg-unsplash-1800x1200.jpg");
+    }
+  }
+
+
+
+
+
   .hero-text {
     color: #FFF;
     font-size: 3em;
@@ -122,8 +142,12 @@ export default {
     text-align: right;
   }
   .home-hero-search {
-    padding: 2em 2.5em 2.5em 2.5em;
+    padding: 3em 2.5em 3.5em 2.5em;
     background-color:rgba(0,0,0,0.3);
     color: #FFF;
+    font-size: 2em;
+    font-weight: 100;
   }
+
 </style>
+
