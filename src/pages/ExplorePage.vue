@@ -2,17 +2,21 @@
   <div>
 
     <FiltersMenu
-      :tag_filters="tagFilters"
-      :species_filters="speciesFilters"
+      :tagFilters="tagFilters"
+      :speciesFilters="speciesFilters"
       :resultsCount="resultsCount"
       :sliderValueDefaults="dimFilterDefaults"
       :setSliderValues="dimFilters"
-      :showSliders="pathDims != null"
+      :initialShowSpeciesFilterMenu="speciesFilters.length > 0"
+      :initialShowDimFilterMenu="pathDims != null"
+      :initialShowTagFilterMenu="tagFilters.length > 0"
       @dimFilterChange="dimFilterChange"
       @addSpeciesFilter="addSpeciesFilter"
       @removeSpeciesFilter="removeSpeciesFilter"
+      @removeAllSpeciesFilters="removeAllSpeciesFilters"
       @addTagFilter="addTagFilter"
       @removeTagFilter="removeTagFilter"
+      @removeAllTagFilters="removeAllTagFilters"
     />
 
     <TiledCards
@@ -113,6 +117,11 @@ export default {
       }
       this.routeToNewFilters()
     },
+    removeAllSpeciesFilters() {
+      window.scrollTo(0, 0)
+      this.speciesFilters = []
+      this.routeToNewFilters()
+    },
     addTagFilter(tag) {
       window.scrollTo(0, 0)
       if (!this.tagFilters.includes(tag)) {
@@ -126,6 +135,11 @@ export default {
       if (index > -1) {
         this.tagFilters.splice(index, 1);
       }
+      this.routeToNewFilters()
+    },
+    removeAllTagFilters() {
+      window.scrollTo(0, 0)
+      this.tagFilters = []
       this.routeToNewFilters()
     },
     getDimRange(prefix, string) {
@@ -241,6 +255,9 @@ export default {
       this.infiniteId += 1
       this.offset = 0
       this.resultsCount = null
+    },
+    'tagFilters'() {
+      console.log(this.tagFilters)
     }
   },
 };

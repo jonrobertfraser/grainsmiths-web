@@ -24,12 +24,14 @@ import {
   faHeart as faHeartSolid, faExternalLinkAlt,
   faInfoCircle, faSearchPlus, faSignOutAlt,
   faChevronUp, faChevronDown, faFilter,
-  faLink, faBookmark, faWindowClose }
+  faLink, faBookmark, faWindowClose, faUndo, faTimes }
   from '@fortawesome/free-solid-svg-icons'
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
+library.add(faUndo)
+library.add(faTimes)
 library.add(faExternalLinkAlt)
 library.add(faSearchPlus)
 library.add(faInfoCircle)

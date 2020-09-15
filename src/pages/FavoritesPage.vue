@@ -43,7 +43,6 @@ export default {
       let query_params = {
         'convert_dims_to_fractions': true,
       }
-      console.log("Executing get_favorite_products")
       axios
         .get(url, {
           headers: {

@@ -1,95 +1,102 @@
 <template>
 
     <!-- FILTER AREA -->
-    <div class="py-2 my-4">
+    <div class="py-2 mt-2 mb-3">
 
       <div class="row">
         <div class="col-md-2"><!-- Left Spacer --></div>
         <div class="col-md-8">
 
-          <!-- INSTRUCTIONS -->
-          <div class="mx-3 mb-4" v-if="show_filter_instructions">
-            <div class="text-center gs-badge instruction px-5 mx-0">
-              Search by species in the search box or look for specific features by clicking the tags below.
-            </div>
-            <div class="close-button" v-on:click="turnOffInstructions">
-              &times;
-            </div>
-          </div>
-          <!-- INSTRUCTIONS -->
+          <!-- SPECIES MENU -->
+          <FilterBlock
+            :showFilterMenu="showSpeciesFilterMenu"
+            openTitle="Select one or more species"
+            closedTitle="Search for species"
+            @openFilterMenu="showSpeciesFilterMenu = true"
+            @closeFilterMenu="closeSpeciesFilterMenu"
+            @resetFilterMenu="resetSpeciesFilterMenu"
+            >
+            <template v-slot:body>
+              <multiselect
+                v-model="multiValue"
+                :options="options"
+                :multiple="true"
+                :close-on-select="true"
+                placeholder="Search for species"
+                track-by="name_for_url"
+                label="name"
+                @select="addSpeciesFilter"
+                @remove="removeSpeciesFilter"
+                >
+              </multiselect>
+            </template>
+          </FilterBlock>
+          <!-- SPECIES MENU -->
 
-          <!-- MULTISELECT FOR SPECIES -->
-          <div class="mx-3">
-            <multiselect
-              v-model="multiValue"
-              :options="options"
-              :multiple="true"
-              :close-on-select="true"
-              placeholder="Search for species"
-              track-by="name_for_url"
-              label="name"
-              @select="addSpeciesFilter"
-              @remove="removeSpeciesFilter"
-              >
-            </multiselect>
-          </div>
-          <!-- MULTISELECT FOR SPECIES -->
-
-          <!-- TAG LIST -->
-          <div class="mx-1 mt-3 text-center">
-            <span v-for="tag in tag_menu" v-bind:key="tag">
-              <div v-if="tag_filters.includes(tag)" v-on:click="removeTagFilter(tag)" class="gs-badge badge filter-badge selected-filter-badge py-1 px-4 mx-2 my-1">
-                {{ cleanTagSpecies(tag) }}
+          <!-- DIMENSION MENU -->
+          <FilterBlock
+            :showFilterMenu="showDimFilterMenu"
+            openTitle="Choose your max and min dimensions"
+            closedTitle="Search for board dimensions"
+            @openFilterMenu="showDimFilterMenu = true"
+            @closeFilterMenu="closeDimFilterMenu"
+            @resetFilterMenu="resetDimFilterMenu"
+            >
+            <template v-slot:body>
+              <div class="w-100 px-5" v-for="(value, key) in sliderValueDefaults" :key="key+'-slider'">
+                <div class="mb-2 mx-2">
+                  {{ key }}
+                </div>
+                <vue-slider class="mt-0 mb-4 pt-0"
+                  v-model="sliderValues[key]"
+                  :dotSize="[20, 20]"
+                  :height="10"
+                  :lazy="true"
+                  :max="value[1]"
+                  width="auto"
+                  :interval="1"
+                  tooltip="always"
+                  :tooltipPlacement="['left','right']"
+                  :minRange="2"
+                  :contained="true"
+                  :tooltip-formatter="val => {
+                    if (val == value[1]) {
+                      return val+'+ in'
+                    } else {
+                      return val+' in'
+                    }}"
+                  @change="dimFilterChange"
+                >
+                </vue-slider>
               </div>
-              <div v-else v-on:click="addTagFilter(tag)" class="gs-badge badge filter-badge py-1 px-4 mx-2 my-1">
-                {{ cleanTagSpecies(tag) }}
+            </template>
+          </FilterBlock>
+          <!-- DIMENSION MENU -->
+
+          <!-- TAG MENU -->
+          <FilterBlock
+            :showFilterMenu="showTagFilterMenu"
+            openTitle="Choose your tags"
+            closedTitle="Search for product types"
+            @openFilterMenu="showTagFilterMenu = true"
+            @closeFilterMenu="closeTagFilterMenu"
+            @resetFilterMenu="resetTagFilterMenu"
+            >
+            <template v-slot:body>
+              <div class="px-2 text-center">
+                <span v-for="tag in tag_menu" v-bind:key="tag">
+                  <div v-if="tagFilters.includes(tag)" v-on:click="removeTagFilter(tag)" class="gs-badge badge filter-badge selected-filter-badge py-1 px-4 mx-1 my-1">
+                    {{ cleanTagSpecies(tag) }}
+                  </div>
+                  <div v-else v-on:click="addTagFilter(tag)" class="gs-badge badge filter-badge py-1 px-4 mx-1 my-1">
+                    {{ cleanTagSpecies(tag) }}
+                  </div>
+                </span>
               </div>
-            </span>
-          </div>
-          <!-- TAG LIST -->
+            </template>
+          </FilterBlock>
+          <!-- TAG MENU -->
 
-          <!-- SLIDERS -->
-          <div v-if="!showDimFilterMenu" class="d-flex justify-content-center">
-            <div v-on:click="showDimFilterMenu = true" class="mt-4 mb-3 text-center w-md-50 gs-badge white-badge btn">
-              Narrow search by dimensions<font-awesome-icon :icon="['fas', 'chevron-down']" size="sm" class="ml-3"/>
-            </div>
-          </div>
-
-          <div class="position-relative mx-3 pt-3 pb-2 px-5 mt-4 dimFilterMenu" v-else>
-            <div class="text-center pb-3">
-              Narrow search by dimensions
-            </div>
-            <div class="filter-menu-close-button" v-on:click="closeDimFilterMenu">
-
-            </div>
-            <div class="w-100 px-4" v-for="(value, key) in sliderValueDefaults" :key="key+'-slider'">
-              <div class="mb-2 mx-2">
-                {{ key }}
-              </div>
-              <vue-slider class="mt-0 mb-4 pt-0"
-                v-model="sliderValues[key]"
-                :dotSize="[20, 20]"
-                :height="10"
-                :lazy="true"
-                :max="value[1]"
-                width="auto"
-                :interval="1"
-                tooltip="always"
-                :tooltipPlacement="['left','right']"
-                :minRange="2"
-                :contained="true"
-                :tooltip-formatter="val => {
-                  if (val == value[1]) {
-                    return val+'+ in'
-                  } else {
-                    return val+' in'
-                  }}"
-                @change="dimFilterChange"
-              >
-              </vue-slider>
-            </div>
-          </div>
-          <!-- SLIDERS -->
 
         </div>
         <div class="col-md-2"><!-- Right Spacer --></div>
@@ -113,24 +120,40 @@ import Multiselect from 'vue-multiselect'
 import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/default.css'
 
+import FilterBlock from './FilterBlock.vue'
+
 export default {
   name: "FiltersMenu",
   components: {
     Multiselect,
-    VueSlider
+    VueSlider,
+    FilterBlock,
   },
   methods: {
-    dimFilterChange() {
+    resetSpeciesFilterMenu() {
+      this.$emit("removeAllSpeciesFilters")
+    },
+    resetDimFilterMenu() {
+      this.sliderValues = Object.assign({}, this.sliderValueDefaults)
       this.$emit("dimFilterChange", this.sliderValues)
+    },
+    resetTagFilterMenu() {
+      this.$emit("removeAllTagFilters")
+    },
+    closeSpeciesFilterMenu() {
+      this.showSpeciesFilterMenu = false
+      this.resetSpeciesFilterMenu()
     },
     closeDimFilterMenu() {
       this.showDimFilterMenu = false
-      this.sliderValues = this.sliderValueDefaults
-      this.$emit("dimFilterChange", this.sliderValues)
+      this.resetDimFilterMenu()
     },
-    turnOffInstructions() {
-      this.show_filter_instructions = !this.show_filter_instructions
-      this.$cookies.set('show_filter_instructions',this.show_filter_instructions)
+    closeTagFilterMenu() {
+      this.showTagFilterMenu = false
+      this.resetTagFilterMenu()
+    },
+    dimFilterChange() {
+      this.$emit("dimFilterChange", this.sliderValues)
     },
     populateSpeciesMenu() {
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/public/get_species_menu'
@@ -166,12 +189,14 @@ export default {
 
   },
   props: {
-    tag_filters: Array,
-    species_filters: Array,
+    tagFilters: {type: Array, default: () => []},
+    speciesFilters: {type: Array, default: () => []},
     resultsCount: Number,
     sliderValueDefaults: Object,
     setSliderValues: Object,
-    showSliders: Boolean
+    initialShowSpeciesFilterMenu: Boolean,
+    initialShowTagFilterMenu: Boolean,
+    initialShowDimFilterMenu: Boolean,
   },
   data () {
     return {
@@ -179,8 +204,9 @@ export default {
       multiValue: [],
       options: [],
       tag_menu: [],
-      show_filter_instructions: true,
-      showDimFilterMenu: this.showSliders
+      showSpeciesFilterMenu: this.initialShowSpeciesFilterMenu,
+      showTagFilterMenu: this.initialShowTagFilterMenu,
+      showDimFilterMenu: this.initialShowDimFilterMenu,
     }
   },
   watch: {
@@ -191,14 +217,21 @@ export default {
     do it on 'mounted' since this components gets mounted before
     the tileview gets to update its data based on the URL.
     */
-    species_filters: function () {
+    speciesFilters: function () {
+      if (this.speciesFilters.length > 0)
+        this.showSpeciesFilterMenu = true
+
       this.multiValue = []
-      this.species_filters.forEach(element => {
+      this.speciesFilters.forEach(element => {
         this.multiValue.push({
           'name': this.cleanTagSpecies(element),
           'name_for_url': element
         })
       })
+    },
+    tagFilters: function () {
+      if (this.tagFilters.length > 0)
+        this.showTagFilterMenu = true
     },
     setSliderValues: function () {
       this.sliderValues = Object.assign({}, this.setSliderValues);
@@ -207,11 +240,6 @@ export default {
   mounted() {
     this.populateSpeciesMenu()
     this.populateTagMenu()
-    if (this.$cookies.isKey("show_filter_instructions")) {
-      this.show_filter_instructions = (this.$cookies.get("show_filter_instructions") == 'true')
-    } else {
-      this.$cookies.set("show_filter_instructions",this.show_filter_instructions)
-    }
   },
 };
 
@@ -268,22 +296,22 @@ export default {
   .results-count {
     border-bottom:1px solid rgb(235,235,235);
   }
-  .dimFilterMenu {
+  .filter-menu-block {
     background-color: rgb(247,247,247);
-    border-radius:.75rem;
+    border-radius: 0em 0em 0.5em 0.5em;
+    position: relative;
+    margin: 0em 0.5em 2em 0.5em;
+    padding: 1em 2em;
   }
-  .filter-menu-close-button {
+  .filter-block-close-button {
     cursor: pointer;
-    position: absolute;
-    color: #666;
-    top: 0.2em;
-    right: 1em;
-    font-size: 1em;
   }
-  .filter-menu-close-button:after {
-    content: '\D7';
-    font-size: 1.6em;
-    margin-left: 0.2em;
+  .filter-block-title-line {
+    background-color: #888;
+    border-radius: 0.5em 0.5em 0em 0em;
+    color: #FFF;
+    margin: 2em 0.5em 0em 0.5em;
+    padding: 1em;
   }
 </style>
 
