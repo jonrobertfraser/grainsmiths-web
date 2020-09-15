@@ -36,7 +36,7 @@
           <!-- DIMENSION MENU -->
           <FilterBlock
             :showFilterMenu="showDimFilterMenu"
-            openTitle="Choose your max and min dimensions"
+            openTitle="Choose dimension ranges"
             closedTitle="Search for board dimensions"
             @openFilterMenu="showDimFilterMenu = true"
             @closeFilterMenu="closeDimFilterMenu"
