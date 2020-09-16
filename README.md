@@ -22,7 +22,16 @@
 * `$ npm install --save vue-gtag` // Google analytics
 * `$ npm install --save vue-slider-component` // Dimension sliders
 * `$ npm install --save vue-meta` // Meta information for sharing
-* `$ npm install --save prerender-spa-plugin`
+* `$ npm install --save prerender-spa-plugin` // See notes below...
+
+## Pre-rendering
+
+Add the following buildpack to heroku *before* the Node buildpack: https://github.com/jontewks/puppeteer-heroku-buildpack
+
+This in conjunction with prerender-spa-plugin above and settings found in vue.config.js file I am able to pre-render certain pages on the site. The primary purpose is to have the page include pre-rendered meta data that can be extracted by sites like Facebook and Twitter when sharing. Those sites do *not* render javascript so basically they get a blank site when they get a link posted on there.
+
+tl;dr Without pre-rendering "view source" will be essentially blank. With pre-rendering you have a bunch of content that can be extracted by bots.
+
 
 ## Deploying Vue via command line
 
