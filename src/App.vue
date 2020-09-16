@@ -32,9 +32,33 @@ import AppFooter from './components/AppFooter.vue'
 
 export default {
   name: 'App',
+  metaInfo: {
+    meta: [
+      { charset: 'utf-8' },
+      // Twitter Card
+      {name: 'twitter:card', content: "Grainsmiths Wood Finder"},
+      {name: 'twitter:title', content: "Grainsmiths Wood Finder"},
+      {name: 'twitter:description', content: "The world's largest catalog of specialty wood products."},
+      // image must be an absolute path
+      {name: 'twitter:image', content: "https://grainsmiths-images.s3.us-east-2.amazonaws.com/other-assets/logo_grainsmiths_bsb_1000x1000.png"},
+      // Facebook OpenGraph
+      {property: 'og:title', content: "Grainsmiths Wood Finder"},
+      {property: 'og:site_name', content: "Grainsmiths Wood Finder"},
+      {property: 'og:type', content: 'website'},
+      {property: 'og:image', content:  "https://grainsmiths-images.s3.us-east-2.amazonaws.com/other-assets/logo_grainsmiths_bsb_1000x1000.png"},
+      {property: 'og:description', content: "The world's largest catalog of specialty wood products."},
+    ],
+  },
   components: {
     AppHeader,
     AppFooter
+  },
+  data () {
+    return {
+      siteLogoSrc: "https://grainsmiths-images.s3.us-east-2.amazonaws.com/other-assets/logo_grainsmiths_bsb_1000x1000.png",
+      siteDescription: "The world's largest catalog of specialty wood products.",
+      siteTitle: "Grainsmiths Wood Finder",
+    }
   },
   methods: {
     // Log the user in

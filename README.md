@@ -21,7 +21,7 @@
 * `$ npm install --save vue-drift` // Drift Chat
 * `$ npm install --save vue-gtag` // Google analytics
 * `$ npm install --save vue-slider-component` // Dimension sliders
-
+* `$ npm install --save vue-meta` // Meta information for sharing
 
 ## Deploying Vue via command line
 
