@@ -6,7 +6,7 @@
           <!-- spacer -->
         </div>
         <div class="hero-text col-sm-8">
-          The world's largest and fastest growing online catalog of specialty wood products.
+          The world's largest catalog of specialty wood products.
         </div>
       </div>
       <div class="row py-5 px-0 justify-content-center">
