@@ -29,7 +29,7 @@ export default {
     };
   },
   mounted() {
-    this.$drift.show();
+    this.$drift.showWelcomeMessage("Hey! I'm the creator of Grainsmiths. What's up?");
   }
 }
 
