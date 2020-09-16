@@ -10,6 +10,10 @@ import ProductImage from "./pages/ProductImage.vue"
 
 Vue.use(VueRouter)
 
+import VueMeta from 'vue-meta';
+Vue.use(VueMeta);
+
+
 import { getInstance } from "./auth/index.js";
 
 export const authGuard = (to, from, next) => {
