@@ -22,6 +22,11 @@
             </a>
           </li>
           <li class="nav-item">
+            <router-link class="nav-link" :to="{'name': 'ContactPage'}" data-toggle="collapse" data-target=".navbar-collapse.show">
+              Contact Us
+            </router-link>
+          </li>
+          <li class="nav-item">
           <!-- <li class="nav-item" v-if="!$auth.loading && $auth.isAuthenticated"> -->
             <router-link class="nav-link" :to="{'name': 'ExplorePage'}" data-toggle="collapse" data-target=".navbar-collapse.show">
               Explore

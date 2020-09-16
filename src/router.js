@@ -3,7 +3,7 @@ import VueRouter from "vue-router"
 import ProductPage from "./pages/ProductPage.vue"
 import ExplorePage from "./pages/ExplorePage.vue"
 import FavoritesPage from "./pages/FavoritesPage.vue"
-import AboutPage from "./pages/AboutPage.vue"
+import ContactPage from "./pages/ContactPage.vue"
 import NotFound from "./pages/NotFound.vue"
 import HomePage from "./pages/HomePage.vue"
 import ProductImage from "./pages/ProductImage.vue"
@@ -82,11 +82,11 @@ const router = new VueRouter({
       }
     },
     {
-      path: '/about',
-      name: 'AboutPage',
-      component: AboutPage,
+      path: '/contact',
+      name: 'ContactPage',
+      component: ContactPage,
       meta: {
-        title: 'About Grainsmiths',
+        title: 'Contact Grainsmiths',
       }
     },
     {

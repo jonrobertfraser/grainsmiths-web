@@ -4,11 +4,11 @@
         <div class="col-sm-12 footer-brand-image text-center">
           <img src="../assets/logo-build-something-beautiful-grey.svg" alt="">
 
-            <!-- <router-link class="nav-link" :to="{'name': 'AboutPage'}">
-              About Grainsmiths
-            </router-link> -->
+            <router-link class="nav-link my-2" :to="{'name': 'ContactPage'}">
+              Contact Grainsmiths
+            </router-link>
 
-          <div class="mt-4 mb-3">
+          <div class="my-3">
             &copy; Grainsmiths {{ new Date().getFullYear() }}
           </div>
         </div>
