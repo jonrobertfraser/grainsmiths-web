@@ -19,7 +19,7 @@ module.exports = {
 }
 
 if (process.env.VUE_APP_ENVIRONMENT != 'DEVELOPMENT') {
-  modules.exports['configureWebpack']= {
+  module.exports['configureWebpack']= {
     plugins: [
       new PrerenderSPAPlugin({
         staticDir: path.join(__dirname, 'dist/'), // The path to the folder where index.html is.
