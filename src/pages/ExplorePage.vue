@@ -49,6 +49,11 @@ export default {
   },
   methods: {
     addMoreProducts($state) {
+      this.page += 1
+
+      if (this.page > 1)
+        this.$router.replace({query: {p: this.page}})
+
       let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/public/get_active_products'
       var maxLength = this.dimFilters.length[1]
       var maxWidth = this.dimFilters.width[1]
@@ -81,12 +86,12 @@ export default {
         })
         .then(response => {
           this.resultsCount = response.data.count
+          this.products.push(...response.data.products)
           if (response.data.products.length == 0) {
             $state.complete()
           } else {
             $state.loaded()
           }
-          this.products.push(...response.data.products)
         })
       this.offset += this.apiCallLimit;
     },
@@ -181,6 +186,7 @@ export default {
     let maxThickness = 10
 
     return {
+      page: 0,
       products: [],
       speciesFilters: [],
       tagFilters: [],
@@ -244,21 +250,25 @@ export default {
     }
   },
   mounted() {
+    console.log("Mounted.")
     this.seed = Math.ceil(Math.random() * 10)
     this.updateDataFromRoute()
+    this.page = 0
+    if (Object.entries(this.$route.query).length != 0) {
+      this.$router.replace({query: {}})
+    }
   },
   watch: {
-    '$route'() {
-
-      this.updateDataFromRoute()
-      this.products = []
-      this.infiniteId += 1
-      this.offset = 0
-      this.resultsCount = null
+    '$route'(to, from) {
+      if (to.path != from.path) {
+        this.updateDataFromRoute()
+        this.products = []
+        this.infiniteId += 1
+        this.offset = 0
+        this.resultsCount = null
+        this.page = 0
+      }
     },
-    'tagFilters'() {
-      console.log(this.tagFilters)
-    }
   },
 };
 </script>
