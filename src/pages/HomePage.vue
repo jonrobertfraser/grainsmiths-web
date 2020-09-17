@@ -10,8 +10,9 @@
         </div>
       </div>
       <div class="row py-5 px-0 justify-content-center">
-        <div id="" class="text-left home-hero-search col-md-12 mb-5">
-          <div class="mb-2 font-weight-light">
+        <div id="" class="text-center home-hero-search col-md-12 mb-5">
+          <router-link class="button btn btn-primary my-2" :to="{name: 'ExplorePage', query: {s:'1'}}">Start Exploring</router-link>
+          <!-- <div class="mb-2 font-weight-light">
             Get started here.
           </div>
           <multiselect
@@ -24,7 +25,7 @@
             label="name"
             @select="selectedSpecies"
             >
-          </multiselect>
+          </multiselect> -->
         </div>
       </div>
     </div>
@@ -51,9 +52,7 @@
           <p>
             Want to add a sawmill or wood lumber yard? Chat with us and tell us more.
           </p>
-          <p>
-            We're {{ daysOld }} days old!
-          </p>
+          <router-link class="button btn btn-primary my-2" :to="{name: 'ExplorePage', query: {s:'2'}}">Start Exploring</router-link>
         </div>
       </div>
     </div>
@@ -63,12 +62,12 @@
 <script>
 
 import axios from 'axios'
-import Multiselect from 'vue-multiselect'
+//import Multiselect from 'vue-multiselect'
 
 export default {
   name: "HomePage",
   components: {
-    Multiselect,
+    //Multiselect,
   },
   methods: {
     populateSpeciesMenu() {
@@ -142,10 +141,10 @@ export default {
     text-align: right;
   }
   .home-hero-search {
-    padding: 3em 2.5em 3.5em 2.5em;
+    padding: 1em 2.5em 1em 2.5em;
     background-color:rgba(0,0,0,0.3);
     color: #FFF;
-    font-size: 2em;
+    font-size: 3em;
   }
 
 </style>
