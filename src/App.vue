@@ -1,5 +1,8 @@
 <template>
   <div id="app">
+    <FlashMessage class="flash-message"/>
+
+
     <b-modal
       id="requires-login"
       title=""
@@ -16,9 +19,11 @@
       </div>
     </b-modal>
     <div class="d-flex flex-column min-vh-100">
-      <AppHeader v-if="$route.name != 'ProductImage'" />
+      <AppHeader v-if="$route.name != 'ProductImage'" :shoppingCartCount="shoppingCartCount"/>
       <div v-bind:class="{'container-fluid': $route.name != 'HomePage'}">
-        <router-view />
+        <router-view
+          @addToCart="addToCart"
+        />
       </div>
       <AppFooter v-if="$route.name != 'ProductImage'"/>
     </div>
@@ -55,6 +60,7 @@ export default {
   },
   data () {
     return {
+      shoppingCartCount: 0,
       siteLogoSrc: "https://grainsmiths-images.s3.us-east-2.amazonaws.com/other-assets/logo_grainsmiths_bsb_1000x1000.png",
       siteDescription: "The world's largest catalog of specialty wood products.",
       siteTitle: "Grainsmiths Wood Finder",
@@ -65,6 +71,26 @@ export default {
     login() {
       this.$auth.loginWithRedirect();
     },
+    setShoppingCartCount() {
+      if (!localStorage.getItem('cart')) {
+        localStorage.setItem('cart', JSON.stringify([]))
+      }
+      var cart = JSON.parse(localStorage.getItem('cart'))
+      this.shoppingCartCount = cart.length
+    },
+    addToCart() {
+      this.setShoppingCartCount()
+      this.flashMessage.show({
+        status: 'success',
+        message: 'Added to cart...',
+        blockClass: 'flash-message',
+        contentClass: 'flash-message',
+        wrapperClass: 'flash-message'
+      });
+    },
+  },
+  mounted() {
+    this.setShoppingCartCount();
   }
 }
 </script>
@@ -90,4 +116,15 @@ export default {
     background-color: rgb(51,51,51);
     color: #FFFFFF!important;
   }
+  .flash-message {
+    width: 100%;
+    position: fixed;
+    background-color: #000;
+    bottom: 0;
+    z-index: 100;
+    opacity: 1;
+    font-size: 1.5em;
+
+  }
 </style>
+

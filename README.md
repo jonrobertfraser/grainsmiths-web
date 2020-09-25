@@ -23,6 +23,7 @@
 * `$ npm install --save vue-slider-component` // Dimension sliders
 * `$ npm install --save vue-meta` // Meta information for sharing
 * `$ npm install --save prerender-spa-plugin` // See notes below...
+* `$ npm install --save @smartweb/vue-flash-message`
 
 ## Pre-rendering
 

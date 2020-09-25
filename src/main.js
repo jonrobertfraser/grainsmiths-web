@@ -21,6 +21,7 @@ import router from './router'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faInstagram, faRedditAlien } from '@fortawesome/free-brands-svg-icons'
 import {
+  faShoppingCart,
   faHeart as faHeartSolid, faExternalLinkAlt,
   faInfoCircle, faSearchPlus, faSignOutAlt,
   faChevronUp, faChevronDown, faFilter,
@@ -30,6 +31,7 @@ import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
+library.add(faShoppingCart)
 library.add(faUndo)
 library.add(faTimes)
 library.add(faExternalLinkAlt)
@@ -96,6 +98,9 @@ if (process.env.VUE_APP_ENVIRONMENT == 'PRODUCTION') {
     appName: 'Grainsmiths',
   }, router);
 }
+
+import FlashMessage from '@smartweb/vue-flash-message';
+Vue.use(FlashMessage);
 
 new Vue({
   router,

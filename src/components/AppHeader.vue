@@ -2,16 +2,16 @@
     <nav class="navbar navbar-expand-md navbar-light">
 
       <router-link class="navbar-brand" :to="{'name': 'HomePage'}">
-          <img style="height:35px;" src="../assets/logo-grainsmiths-wood-finder.svg" alt="">
+          <img style="height:35px;" src="../assets/logo-grainsmiths.svg" alt="">
       </router-link>
 
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#gsNavbar" aria-controls="gsNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="ml-auto navbar-toggler" type="button" data-toggle="collapse" data-target="#gsNavbar" aria-controls="gsNavbar" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse text-center" id="gsNavbar">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link" href="https://instagram.com/grainsmiths" target="_blank">
               <font-awesome-icon size="lg" :icon="['fab', 'instagram']" />
             </a>
@@ -20,16 +20,20 @@
             <a class="nav-link" href="https://reddit.com/r/grainsmiths" target="_blank">
               <font-awesome-icon size="lg" :icon="['fab', 'reddit-alien']" />
             </a>
-          </li>
+          </li> -->
           <li class="nav-item">
             <router-link class="nav-link" :to="{'name': 'ContactPage'}" data-toggle="collapse" data-target=".navbar-collapse.show">
               Contact Us
             </router-link>
           </li>
           <li class="nav-item">
-          <!-- <li class="nav-item" v-if="!$auth.loading && $auth.isAuthenticated"> -->
             <router-link class="nav-link" :to="{'name': 'ExplorePage'}" data-toggle="collapse" data-target=".navbar-collapse.show">
-              Explore
+              Specialty Boards
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" :to="{'name': 'BlanksPage'}" data-toggle="collapse" data-target=".navbar-collapse.show">
+              Premium Blanks
             </router-link>
           </li>
           <li class="nav-item" v-if="!$auth.loading && !$auth.isAuthenticated">
@@ -58,13 +62,21 @@
                 </div>
               </div>
             </div>
+
             <!-- show picture and logout when authenticated -->
           </li>
 
 
 
+
         </ul>
+
       </div>
+
+      <router-link to="/shopping-cart" class="ml-3 px-0 shopping-cart-link">
+        <font-awesome-icon size="lg" :icon="['fas', 'shopping-cart']" /><span class="ml-1">{{ shoppingCartCount }}</span>
+      </router-link>
+
 
 
     </nav>
@@ -87,6 +99,14 @@ export default {
       });
     }
   },
+  data () {
+    return {
+
+    }
+  },
+  props: {
+    shoppingCartCount: {type: Number, default: 0}
+  }
 };
 </script>
 
@@ -136,6 +156,9 @@ export default {
   .menu-button:hover {
     background-color: rgb(51,51,51);
     color: #FFFFFF!important;
+  }
+  .shopping-cart-link {
+    color: #333;
   }
 
 </style>
