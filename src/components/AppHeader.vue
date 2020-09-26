@@ -73,8 +73,8 @@
 
       </div>
 
-      <router-link to="/shopping-cart" class="ml-3 px-0 shopping-cart-link">
-        <font-awesome-icon size="lg" :icon="['fas', 'shopping-cart']" /><span class="ml-1">{{ shoppingCartCount }}</span>
+      <router-link to="/shopping-cart" class="ml-3 my-3 px-0 shopping-cart-link">
+        <font-awesome-icon size="lg" :icon="['fas', 'shopping-cart']"/><span class="ml-1">{{ shoppingCartCount }}</span>
       </router-link>
 
 

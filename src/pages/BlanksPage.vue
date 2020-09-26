@@ -5,16 +5,6 @@
 
     <div class="col-md-9 col-lg-6">
 
-      <!-- <div class="row">
-        <div class="col-12">
-          {{ cart }}
-        </div>
-        <br />
-        <div v-on:click="clearLocalStorage" class="col-12">
-          Clear
-        </div>
-      </div> -->
-
       <div class="d-flex mt-5">
         <div>
           <div class="title">
@@ -29,27 +19,7 @@
         </div>
       </div>
       <hr>
-      <!-- BIG BUTTONS -->
-      <div class="row mt-3">
-        <div class="col-12 col-md-6 my-1">
-          <div class="big-button d-flex">
-            <img src="../assets/shipping-truck.svg">
-            <div class="big-button-text">
-              Same day shipping guarantee. Free shipping on orders over $20.
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12 col-md-6 my-1">
-          <div class="big-button d-flex">
-            <img src="../assets/money-back-guarantee.svg">
-            <div class="big-button-text">
-              No questions asked return policy.
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- BIG BUTTONS -->
+      <PromoBadges />
       <hr>
       <h4 class="mb-4  mt-5">
         Choose your length
@@ -74,17 +44,17 @@
 
       <div class="size-table mb-5">
         <div class="d-flex size-row" v-for="(size, index) in sizes" v-bind:key="index">
-          <div v-html="makeFullName(size.name)" class="size-name">
-
+          <div class="py-2">
+            <div v-html="makeFullName(size.name)" class="size-name my-1">
+            </div>
+            <select class="qty-box btn btn-mini" v-model="qtyInput[index]">
+              <option v-for="qtyOption in qtyOptions" :value="qtyOption" v-bind:key="qtyOption">{{ qtyOption }} <span v-if="qtyOption == 1">piece</span><span v-else>pieces</span></option>
+            </select>
           </div>
           <div class="ml-auto price">
-            ${{ price(size.widthTimesThickness) }}
-          </div>
-          <select class="qty-box" v-model="qtyInput[index]">
-            <option v-for="qtyOption in qtyOptions" :value="qtyOption" v-bind:key="qtyOption">Qty {{ qtyOption }}</option>
-
-          </select>
-          <div class="add-to-cart" v-on:click="addToCart(index)">
+              ${{ price(size.widthTimesThickness) }}
+            </div>
+          <div class="ml-3 add-to-cart" v-on:click="addToCart(index)">
             Add to Cart
           </div>
         </div>
@@ -101,12 +71,15 @@
       <router-link :to="{name: 'BlanksPage', params: { species: species }}" v-for="(species, index) in speciesList" v-bind:key="index" class="species-button">
         {{ cleanTagSpecies(species) }} <img class="tiny-species-image" :src="getSpeciesImage(species)">
       </router-link>
+
     </div>
   </div>
 </template>
 
 <script>
 import speciesPricesPerBdft from '../data/speciesPricesPerBdft.json'
+
+import PromoBadges from '../components/PromoBadges.vue'
 
 import axios from 'axios'
 
@@ -117,7 +90,9 @@ import 'vue-slider-component/theme/default.css'
 export default {
   name: "BlankSelector",
   components: {
+    PromoBadges,
     VueSlider,
+
   },
   data () {
     return {
@@ -207,19 +182,21 @@ export default {
 .size-row {
   margin: 1em 0em;
   border-color: #CCC;
-  border-width: 1px 0px;
+  border-width: 1px 0px 1px 1px;
   border-style: solid;
-  padding-left: 1em;
   font-size: 1.1em;
+  padding-left: 0.75em;
 }
 .price {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #B12704!important;
+  font-weight: 700;
 }
 .title {
   padding-right: 1em;
-  font-size: 3em;
+  font-size: 2em;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -263,6 +240,9 @@ export default {
   color: #FFF;
   cursor: pointer;
   padding: 0.3em 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .add-to-cart:hover {
   background-color: #CCC;
@@ -273,11 +253,14 @@ export default {
 }
 .qty-box {
   padding-right: 0.5em;
-  margin-left: 1em;
+
   padding-left: 0.5em;
   margin-right: 0em;
   border-color: #CCC;
-  border-width: 0px 0px 0px 1px;
+
+  background-color: #FFF;
+
+  border-radius: 0em;
 }
 .see-all-button {
   display: inline-block;
@@ -294,25 +277,5 @@ export default {
 .see-all-button:hover {
   background-color: #000;
   color: #FFF;
-}
-.big-button {
-  padding: 1em;
-  border-color: #666;
-  border-width: 1px 1px;
-  border-style: solid;
-  border-radius: 0.5em;
-  min-height: 100%;
-  height: 100%;
-}
-.big-button img {
-  height: 50px;
-  width: 50px;
-
-}
-.big-button-text {
-  padding: 0em 0em 0em 1em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 </style>

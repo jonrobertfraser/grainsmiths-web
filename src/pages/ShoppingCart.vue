@@ -10,27 +10,10 @@
         </div>
       </div>
       <hr>
-      <!-- BIG BUTTONS -->
-      <div class="row mt-3">
-        <div class="col-12 col-md-6 my-1">
-          <div class="big-button d-flex">
-            <img src="../assets/shipping-truck.svg">
-            <div class="big-button-text">
-              Same day shipping guarantee
-            </div>
-          </div>
-        </div>
 
-        <div class="col-12 col-md-6 my-1">
-          <div class="big-button d-flex">
-            <img src="../assets/money-back-guarantee.svg">
-            <div class="big-button-text">
-              No questions asked return policy
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- BIG BUTTONS -->
+      <PromoBadges />
+
+
       <hr>
 
       <div class="size-table">
@@ -76,7 +59,7 @@
         </div>
 
       </div>
-      <div v-else class="text-center">
+      <div v-else class="text-center my-5">
         Nothing in your cart.
       </div>
 
@@ -92,13 +75,14 @@
 
 <script>
 
-import 'vue-slider-component/theme/default.css'
 import axios from 'axios'
+
+import PromoBadges from '../components/PromoBadges.vue'
 
 export default {
   name: "BlankSelector",
   components: {
-
+    PromoBadges,
   },
   data () {
     return {
