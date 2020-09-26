@@ -102,6 +102,9 @@ if (process.env.VUE_APP_ENVIRONMENT == 'PRODUCTION') {
 import FlashMessage from '@smartweb/vue-flash-message';
 Vue.use(FlashMessage);
 
+var VueScrollTo = require('vue-scrollto');
+Vue.use(VueScrollTo)
+
 new Vue({
   router,
   render: h => h(App),

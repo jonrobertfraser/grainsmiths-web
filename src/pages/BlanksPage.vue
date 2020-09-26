@@ -21,7 +21,7 @@
       <hr>
       <PromoBadges />
       <hr>
-      <h4 class="mb-4  mt-5">
+      <h4 id="choose-your-length" class="mb-4 pt-4">
         Choose your length
       </h4>
       <vue-slider class="mt-3 mb-5 pt-2"
@@ -60,12 +60,16 @@
         </div>
 
       </div>
+      <a class="choose-your-length-button" href="#" v-scroll-to="'#choose-your-length'">Choose your length</a>
     </div>
+
   </div>
+
+
   <div v-else class="mb-5 justify-content-center d-flex text-center">
     <div class="col-md-9 justify-content-center">
       <div class="title px-1 mt-5 mb-5">
-        Turning and Carving Blanks
+        Premium and Exotic Blanks
       </div>
 
       <router-link :to="{name: 'BlanksPage', params: { species: species }}" v-for="(species, index) in speciesList" v-bind:key="index" class="species-button">
@@ -100,7 +104,7 @@ export default {
       count: null,
       qtyOptions: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,20,25,30,35,40,45,50],
       qtyInput: [1,1,1,1,1,1,1,1],
-      margin: 0.5,
+      margin: 0,
       length: 12,
       speciesList: Object.keys(speciesPricesPerBdft),
       pricePerBdft: speciesPricesPerBdft[this.species],
@@ -264,18 +268,37 @@ export default {
 }
 .see-all-button {
   display: inline-block;
-  border-color: #666;
-  padding: 0.25em 1em;
+  padding: 1em 1.5em;
   width: auto;
+  border-width: 1px 1px;
+
+  border-radius: 1em;
+  background-color: #DDD;
+  margin-top: 1em;
+  cursor: pointer;
+  color: #000;
+  font-size: 1.1em;
+}
+.see-all-button:hover {
+  background-color: #000;
+  color: #FFF;
+}
+.choose-your-length-button {
+  display: block;
+  border-color: #666;
   border-width: 1px 1px;
   border-style: solid;
   border-radius: 0.5em;
   margin-top: 1em;
   cursor: pointer;
-  color: #000;
-}
-.see-all-button:hover {
-  background-color: #000;
   color: #FFF;
+  background-color: #333;
+  padding: 1em;
+  text-align: center;
+  margin: 2em;
+}
+.choose-your-length-button:hover {
+  color: #000;
+  background-color: #FFF;
 }
 </style>

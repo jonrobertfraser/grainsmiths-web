@@ -11,7 +11,7 @@
       </div>
       <div class="row py-5 px-0 justify-content-center">
         <div id="" class="text-center home-hero-search col-md-12 mb-5">
-          <router-link class="button btn btn-primary my-2" :to="{name: 'ExplorePage', query: {s:'1'}}">Start Exploring</router-link>
+          <router-link class="button btn btn-primary my-2" :to="{name: 'BlanksPage', query: {s:'1'}}">Start Exploring</router-link>
           <!-- <div class="mb-2 font-weight-light">
             Get started here.
           </div>
@@ -38,7 +38,7 @@
         </div>
         <div class="col-md-6">
           <h1 class="mb-5">
-            No ads. No BS.
+            All wood and no fluff.
           </h1>
           <p>
             Just lightning fast access to tens of thousands of wood products (and growing).
@@ -52,7 +52,7 @@
           <p>
             Want to add a sawmill or wood lumber yard? Chat with us and tell us more.
           </p>
-          <router-link class="button btn btn-primary my-2" :to="{name: 'ExplorePage', query: {s:'2'}}">Start Exploring</router-link>
+          <router-link class="button btn btn-primary my-2" :to="{name: 'BlanksPage', query: {s:'2'}}">Start Exploring</router-link>
         </div>
       </div>
     </div>
