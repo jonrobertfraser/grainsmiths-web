@@ -26,11 +26,11 @@
               Contact Us
             </router-link>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link class="nav-link" :to="{'name': 'ExplorePage'}" data-toggle="collapse" data-target=".navbar-collapse.show">
               Specialty Boards
             </router-link>
-          </li>
+          </li> -->
           <li class="nav-item">
             <router-link class="nav-link" :to="{'name': 'BlanksPage'}" data-toggle="collapse" data-target=".navbar-collapse.show">
               Premium Blanks

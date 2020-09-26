@@ -35,7 +35,7 @@
           <div class="big-button d-flex">
             <img src="../assets/shipping-truck.svg">
             <div class="big-button-text">
-              Same day shipping guarantee
+              Same day shipping guarantee. Free shipping on orders over $20.
             </div>
           </div>
         </div>
@@ -44,7 +44,7 @@
           <div class="big-button d-flex">
             <img src="../assets/money-back-guarantee.svg">
             <div class="big-button-text">
-              No questions asked return policy
+              No questions asked return policy.
             </div>
           </div>
         </div>
@@ -108,6 +108,8 @@
 <script>
 import speciesPricesPerBdft from '../data/speciesPricesPerBdft.json'
 
+import axios from 'axios'
+
 import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/default.css'
 
@@ -141,14 +143,23 @@ export default {
   },
   methods: {
     addToCart(index) {
-      this.cart.push({
+      let thisItem = {
         species: this.species,
         name: this.makeFullName(this.sizes[index].name),
         price: this.price(this.sizes[index].widthTimesThickness),
         qty: this.qtyInput[index],
-      })
+      }
+      this.cart.push(thisItem)
       localStorage.setItem('cart', JSON.stringify(this.cart))
-      this.$emit('addToCart')
+      this.$emit('updatedCart')
+
+      let url = process.env.VUE_APP_GRAINSMITHS_API_HOST+'/public/update_cart'
+      let query_params = {
+        'visitor': localStorage.getItem('visitor'),
+        'action': 'add_to_cart',
+        'data': thisItem,
+      }
+      axios.post(url, query_params)
     },
     clearLocalStorage() {
       localStorage.removeItem('cart')
@@ -290,10 +301,13 @@ export default {
   border-width: 1px 1px;
   border-style: solid;
   border-radius: 0.5em;
+  min-height: 100%;
+  height: 100%;
 }
 .big-button img {
   height: 50px;
   width: 50px;
+
 }
 .big-button-text {
   padding: 0em 0em 0em 1em;

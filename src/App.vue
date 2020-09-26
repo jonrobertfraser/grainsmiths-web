@@ -22,7 +22,7 @@
       <AppHeader v-if="$route.name != 'ProductImage'" :shoppingCartCount="shoppingCartCount"/>
       <div v-bind:class="{'container-fluid': $route.name != 'HomePage'}">
         <router-view
-          @addToCart="addToCart"
+          @updatedCart="updatedCart"
         />
       </div>
       <AppFooter v-if="$route.name != 'ProductImage'"/>
@@ -78,11 +78,11 @@ export default {
       var cart = JSON.parse(localStorage.getItem('cart'))
       this.shoppingCartCount = cart.length
     },
-    addToCart() {
+    updatedCart() {
       this.setShoppingCartCount()
       this.flashMessage.show({
         status: 'success',
-        message: 'Added to cart...',
+        message: 'Updated shopping cart...',
         blockClass: 'flash-message',
         contentClass: 'flash-message',
         wrapperClass: 'flash-message'
@@ -91,6 +91,11 @@ export default {
   },
   mounted() {
     this.setShoppingCartCount();
+    if (!localStorage.getItem('visitor')) {
+      let visitor = Math.floor(Math.random() * Math.floor(10000))
+      localStorage.setItem('visitor', visitor)
+    }
+
   }
 }
 </script>
