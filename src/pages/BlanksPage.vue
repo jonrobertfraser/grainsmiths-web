@@ -233,9 +233,11 @@ export default {
   justify-content: center;
   align-items: center;
 }
-.add-to-cart:hover {
-  background-color: #CCC;
-  color: #000;
+@media (hover: hover) {
+  .add-to-cart:hover {
+    background-color: #CCC;
+    color: #000;
+  }
 }
 .added-to-cart {
   background-color: #CCC;
