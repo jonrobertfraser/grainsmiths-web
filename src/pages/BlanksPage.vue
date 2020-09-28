@@ -21,46 +21,36 @@
       <hr>
       <PromoBadges />
       <hr>
-      <h4 id="choose-your-length" class="mb-4 pt-4">
-        Choose your length
-      </h4>
-      <vue-slider class="mt-3 mb-5 pt-2"
-        v-model="length"
-        :dotSize="[40, 40]"
-        :height="10"
-        :lazy="true"
-        :max="96"
-        :min="4"
-        width="auto"
-        :interval="1"
-        :enable-cross="false"
-        tooltip="always"
-        :tooltipPlacement="'bottom'"
-        :contained="true"
-        :tooltip-formatter="val => {return val+' in'}"
-      >
-      </vue-slider>
 
 
       <div class="size-table mb-5">
         <div class="d-flex size-row" v-for="(size, index) in sizes" v-bind:key="index">
           <div class="py-2">
-            <div v-html="makeFullName(size.name)" class="size-name my-1">
+            <div v-html="size.name+' inch'" class="size-name my-1">
             </div>
-            <select class="qty-box btn btn-mini" v-model="qtyInput[index]">
-              <option v-for="qtyOption in qtyOptions" :value="qtyOption" v-bind:key="qtyOption">{{ qtyOption }} <span v-if="qtyOption == 1">piece</span><span v-else>pieces</span></option>
-            </select>
+            <div class="my-1">
+              <select class="qty-box btn btn-mini" v-model="lengthInput[index]">
+                <option v-for="lengthOption in lengthOptions" :value="lengthOption" v-bind:key="lengthOption">{{ lengthOption }} inches long
+                </option>
+              </select>
+            </div>
+            <div class="my-1">
+              <select class="qty-box btn btn-mini" v-model="qtyInput[index]">
+                <option v-for="qtyOption in qtyOptions" :value="qtyOption" v-bind:key="qtyOption">{{ qtyOption }} <span v-if="qtyOption == 1">piece</span><span v-else>pieces</span></option>
+              </select>
+            </div>
+
           </div>
           <div class="ml-auto price">
-              ${{ price(size.widthTimesThickness) }}
-            </div>
+            ${{ price(size.widthTimesThickness, index) }}
+          </div>
           <div class="ml-3 add-to-cart" v-on:click="addToCart(index)">
             Add to Cart
           </div>
+
         </div>
 
       </div>
-      <a class="choose-your-length-button" href="#" v-scroll-to="'#choose-your-length'">Choose your length</a>
     </div>
 
   </div>
@@ -87,15 +77,15 @@ import PromoBadges from '../components/PromoBadges.vue'
 
 import axios from 'axios'
 
-import VueSlider from 'vue-slider-component'
-import 'vue-slider-component/theme/default.css'
+/*import VueSlider from 'vue-slider-component'
+import 'vue-slider-component/theme/default.css'*/
 
 
 export default {
   name: "BlankSelector",
   components: {
     PromoBadges,
-    VueSlider,
+    //VueSlider,
 
   },
   data () {
@@ -103,9 +93,10 @@ export default {
       cart: [],
       count: null,
       qtyOptions: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,20,25,30,35,40,45,50],
-      qtyInput: [1,1,1,1,1,1,1,1],
-      margin: 0,
-      length: 12,
+      qtyInput: [1,1,1,1,1,1,],
+      lengthOptions: [4,5,6,7,8,9,10,12,14,16,18,20,25,30],
+      lengthInput: [6,6,6,6,6,6,],
+      margin: 1,
       speciesList: Object.keys(speciesPricesPerBdft),
       pricePerBdft: speciesPricesPerBdft[this.species],
       sizes: [
@@ -115,8 +106,6 @@ export default {
         {widthTimesThickness: 4, name: "2 &times; 2"},
         {widthTimesThickness: 9, name: "3 &times; 3"},
         {widthTimesThickness: 16, name: "4 &times; 4"},
-        {widthTimesThickness: 25, name: "5 &times; 5"},
-        {widthTimesThickness: 36, name: "6 &times; 6"},
       ],
     }
   },
@@ -124,8 +113,8 @@ export default {
     addToCart(index) {
       let thisItem = {
         species: this.species,
-        name: this.makeFullName(this.sizes[index].name),
-        price: this.price(this.sizes[index].widthTimesThickness),
+        name: this.makeFullName(this.sizes[index].name, index),
+        price: this.price(this.sizes[index].widthTimesThickness, index),
         qty: this.qtyInput[index],
       }
       this.cart.push(thisItem)
@@ -148,8 +137,8 @@ export default {
       thing = thing.replace(/_/g," ").replace(/-/g," ")
       return thing.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
     },
-    price(widthTimesThickness) {
-      let price = (widthTimesThickness * this.length * this.pricePerBdft * (1+this.margin) / 144.0).toFixed();
+    price(widthTimesThickness, index) {
+      let price = (widthTimesThickness * this.lengthInput[index] * this.pricePerBdft * (1+this.margin) / 144.0).toFixed();
       if (price < 2)
         return 2;
       return price;
@@ -157,8 +146,8 @@ export default {
     getSpeciesImage(species) {
       return "https://grainsmiths-images.s3.amazonaws.com/static-assets/species/"+species+".jpg"
     },
-    makeFullName(name) {
-      return name+" &times; "+this.length+" in"
+    makeFullName(name, index) {
+      return name+" &times; "+this.lengthInput[index]+" in"
     },
   },
   props: {
@@ -168,7 +157,7 @@ export default {
     '$route'() {
       window.scrollTo(0, 0);
       this.pricePerBdft = speciesPricesPerBdft[this.species]
-      this.length = 12;
+      this.lengthInput = [6,6,6,6,6,6,]
     },
   },
   mounted() {
@@ -205,11 +194,7 @@ export default {
   justify-content: center;
   align-items: center;
 }
-.size-name {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 .species-image {
   margin-top: 1em;
   height: 100px;
