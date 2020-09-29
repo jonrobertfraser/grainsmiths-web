@@ -5,13 +5,19 @@
         <div class="col-sm-4">
           <!-- spacer -->
         </div>
-        <div class="hero-text col-sm-8">
-          The world's largest catalog of specialty wood products.
+        <div class="col-sm-8">
+          <div class="hero-text">
+            The world's largest catalog of specialty wood products.
+          </div>
+          <div class="text-white text-right mt-5 sub-header">
+              We are in the process of launching so bear with us as we work out all the kinks on our site.
+
+          </div>
         </div>
       </div>
       <div class="row py-5 px-0 justify-content-center">
         <div id="" class="text-center home-hero-search col-md-12 mb-5">
-          <router-link class="button btn btn-primary my-2" :to="{name: 'BlanksPage', query: {s:'1'}}">Start Exploring</router-link>
+          <router-link class="button btn btn-primary my-2" :to="{name: 'ExplorePage', query: {s:'1'}}">Start Exploring</router-link>
           <!-- <div class="mb-2 font-weight-light">
             Get started here.
           </div>
@@ -52,7 +58,7 @@
           <p>
             Want to add a sawmill or wood lumber yard? Chat with us and tell us more.
           </p>
-          <router-link class="button btn btn-primary my-2" :to="{name: 'BlanksPage', query: {s:'2'}}">Start Exploring</router-link>
+          <router-link class="button btn btn-primary my-2" :to="{name: 'ExplorePage', query: {s:'2'}}">Start Exploring</router-link>
         </div>
       </div>
     </div>
@@ -145,6 +151,10 @@ export default {
     background-color:rgba(0,0,0,0.3);
     color: #FFF;
     font-size: 3em;
+  }
+  .sub-header {
+    font-size: 1.3em;
+    font-weight: 100;
   }
 
 </style>
