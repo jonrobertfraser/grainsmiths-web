@@ -83,13 +83,13 @@ Vue.$cookies.config('7d')
 
 Vue.config.productionTip = false
 
-let driftAppId = process.env.VUE_APP_DRIFT_APP_ID
+/*let driftAppId = process.env.VUE_APP_DRIFT_APP_ID
 
 import VueDrift from 'vue-drift'
 Vue.use(VueDrift, {
   appId: driftAppId,
   development: false,
-})
+})*/
 
 import VueGtag from "vue-gtag";
 if (process.env.VUE_APP_ENVIRONMENT == 'PRODUCTION') {
