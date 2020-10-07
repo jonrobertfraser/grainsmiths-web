@@ -3,10 +3,10 @@ import VueRouter from "vue-router"
 import ProductPage from "./pages/ProductPage.vue"
 import ExplorePage from "./pages/ExplorePage.vue"
 import FavoritesPage from "./pages/FavoritesPage.vue"
-//import BlanksPage from "./pages/BlanksPage.vue"
-//import ShoppingCart from "./pages/ShoppingCart.vue"
+import BlanksPage from "./pages/BlanksPage.vue"
+import ShoppingCart from "./pages/ShoppingCart.vue"
 import ContactPage from "./pages/ContactPage.vue"
-//import CheckoutPage from "./pages/CheckoutPage.vue"
+import CheckoutPage from "./pages/CheckoutPage.vue"
 import NotFound from "./pages/NotFound.vue"
 import HomePage from "./pages/HomePage.vue"
 import ProductImage from "./pages/ProductImage.vue"
@@ -59,7 +59,7 @@ const router = new VueRouter({
         title: 'Grainsmiths',
       },
     },
-    /*{
+    {
       path: '/blanks/:species?',
       name: 'BlanksPage',
       component: BlanksPage,
@@ -83,7 +83,7 @@ const router = new VueRouter({
       meta: {
         title: 'Grainsmiths Shopping Cart',
       },
-    },*/
+    },
     {
       path: '/product/:productId',
       name: 'ProductPage',

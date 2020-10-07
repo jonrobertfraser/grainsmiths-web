@@ -4,9 +4,9 @@
         <div class="col-sm-12 footer-brand-image text-center">
           <img src="../assets/logo-build-something-beautiful-grey.svg" alt="">
 
-            <router-link class="nav-link my-2" :to="{'name': 'ContactPage'}">
+            <!-- <router-link class="nav-link my-2" :to="{'name': 'ContactPage'}">
               Contact Grainsmiths
-            </router-link>
+            </router-link> -->
 
           <div class="my-3">
             &copy; Grainsmiths {{ new Date().getFullYear() }}

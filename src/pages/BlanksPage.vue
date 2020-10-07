@@ -96,7 +96,7 @@ export default {
       qtyInput: [1,1,1,1,1,1,],
       lengthOptions: [4,5,6,7,8,9,10,12,14,16,18,20,25,30],
       lengthInput: [6,6,6,6,6,6,],
-      margin: 1,
+      margin: 2,
       speciesList: Object.keys(speciesPricesPerBdft),
       pricePerBdft: speciesPricesPerBdft[this.species],
       sizes: [
@@ -139,8 +139,8 @@ export default {
     },
     price(widthTimesThickness, index) {
       let price = (widthTimesThickness * this.lengthInput[index] * this.pricePerBdft * (1+this.margin) / 144.0).toFixed();
-      if (price < 2)
-        return 2;
+      if (price < 1)
+        return 1;
       return price;
     },
     getSpeciesImage(species) {

@@ -31,11 +31,11 @@
               Specialty Boards
             </router-link>
           </li>
-          <!-- <li class="nav-item">
+          <li class="nav-item">
             <router-link class="nav-link" :to="{'name': 'BlanksPage'}" data-toggle="collapse" data-target=".navbar-collapse.show">
               Premium Blanks
             </router-link>
-          </li> -->
+          </li>
           <li class="nav-item" v-if="!$auth.loading && !$auth.isAuthenticated">
             <!-- show login when not authenticated -->
             <div class="nav-link auth-link menu-button" @click="login" data-toggle="collapse"  data-target=".navbar-collapse.show">
@@ -73,9 +73,9 @@
 
       </div>
 
-      <!-- <router-link to="/shopping-cart" class="ml-3 my-3 px-0 shopping-cart-link">
+      <router-link to="/shopping-cart" class="ml-3 my-3 px-0 shopping-cart-link">
         <font-awesome-icon size="lg" :icon="['fas', 'shopping-cart']"/><span class="ml-1">{{ shoppingCartCount }}</span>
-      </router-link> -->
+      </router-link>
 
 
 

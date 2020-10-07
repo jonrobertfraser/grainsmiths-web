@@ -1,10 +1,10 @@
 <template>
   <WrittenContent>
     <template v-slot:header>
-      Something went wrong...
+      Not available
     </template>
     <p>
-      Sorry, there was an error. Please try again later.
+      Sorry, you can't checkout on Grainsmiths yet.
     </p>
   </WrittenContent>
 </template>

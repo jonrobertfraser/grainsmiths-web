@@ -9,15 +9,12 @@
           <div class="hero-text">
             The world's largest catalog of specialty wood products.
           </div>
-          <div class="text-white text-right mt-5 sub-header">
-              We are in the process of launching so bear with us as we work out all the kinks on our site.
-
-          </div>
         </div>
       </div>
       <div class="row py-5 px-0 justify-content-center">
         <div id="" class="text-center home-hero-search col-md-12 mb-5">
-          <router-link class="button btn btn-primary my-2" :to="{name: 'ExplorePage', query: {s:'1'}}">Start Exploring</router-link>
+          <router-link class="button btn btn-primary my-2 mx-4" :to="{name: 'ExplorePage', query: {s:'1'}}">Specialty Boards</router-link>
+          <router-link class="button btn btn-primary my-2 mx-4" :to="{name: 'BlanksPage', query: {s:'1'}}">Premium Blanks</router-link>
           <!-- <div class="mb-2 font-weight-light">
             Get started here.
           </div>
